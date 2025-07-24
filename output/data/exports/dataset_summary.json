@@ -1,0 +1,85 @@
+{
+  "dataset_summary": {
+    "generation_date": "2025-07-23T15:30:00",
+    "data_source": "RBL8-15min.csv",
+    "total_records": 5387,
+    "timeframe": "15min",
+    "date_range": {
+      "start": "2019-02-11T21:30:00",
+      "end": "2025-07-23T15:18:22"
+    }
+  },
+  "detection_statistics": {
+    "current_execution": {
+      "flagpoles_detected": 11,
+      "flag_patterns": 0,
+      "pennant_patterns": 0,
+      "confidence_threshold": 0.3
+    },
+    "historical_patterns": {
+      "total_flag_patterns": 2,
+      "total_pennant_patterns": 0,
+      "avg_confidence": 0.739,
+      "quality_distribution": {
+        "high": 1,
+        "medium": 1,
+        "low": 0
+      }
+    }
+  },
+  "pattern_records": [
+    {
+      "id": "ec318847-cea9-479f-bf3e-ee81be2d0245",
+      "symbol": "RBL8",
+      "type": "flag",
+      "direction": "up",
+      "flagpole_start": "2023-01-20T14:45:00",
+      "flagpole_end": "2023-01-30T09:15:00",
+      "height_percent": 2.25,
+      "confidence": 0.773,
+      "quality": "high",
+      "volume_ratio": 2.79
+    },
+    {
+      "id": "d8276f67-42cf-490b-84fe-da6eda6c0d33",
+      "symbol": "RBL8",
+      "type": "flag",
+      "direction": "up",
+      "flagpole_start": "2023-05-12T15:00:00",
+      "flagpole_end": "2023-05-12T22:15:00",
+      "height_percent": 3.19,
+      "confidence": 0.706,
+      "quality": "medium",
+      "volume_ratio": 2.02
+    }
+  ],
+  "algorithm_info": {
+    "version": "2.0",
+    "architecture": "multi_timeframe",
+    "supported_patterns": ["flag", "pennant"],
+    "timeframe_categories": {
+      "ultra_short": ["1m", "3m", "5m"],
+      "short": ["15m", "30m", "1h"],
+      "medium_long": ["4h", "1d", "1w"]
+    },
+    "improvements": [
+      "正确的Pennant收敛检测算法",
+      "多周期自适应参数",
+      "统一的检测接口",
+      "策略模式架构",
+      "移除Triangle Flag旧名称"
+    ]
+  },
+  "output_files": {
+    "charts": [
+      "output/charts/flag/RBL8_20230120_1445_上升旗形.png",
+      "output/charts/flag/RBL8_20230512_1500_上升旗形.png"
+    ],
+    "data": [
+      "output/data/patterns/RBL8_20230120_1445_上升旗形.json",
+      "output/data/patterns/RBL8_20230512_1500_上升旗形.json"
+    ],
+    "database": "output/data/patterns.db",
+    "reports": "output/reports/pattern_scout_execution_report.md"
+  }
+}

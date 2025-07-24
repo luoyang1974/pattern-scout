@@ -1,0 +1,41 @@
+{
+  "id": "90fac963-0083-4fde-a124-f12b8398cb25",
+  "symbol": "RBL8",
+  "pattern_type": "flag",
+  "detection_date": "2025-07-23T15:42:40.465867",
+  "flagpole": {
+    "start_time": "2025-04-03T15:00:00",
+    "end_time": "2025-04-07T09:45:00",
+    "start_price": 3164,
+    "end_price": 3072,
+    "height_percent": 2.9077117572692797,
+    "direction": "down",
+    "volume_ratio": 2.415844148437983
+  },
+  "pattern_boundaries": [
+    {
+      "start_time": "2025-04-07T10:00:00",
+      "end_time": "2025-04-08T09:15:00",
+      "start_price": 3082.8571428571427,
+      "end_price": 3178.142857142857,
+      "slope": 19.057142857142857,
+      "r_squared": 0.8007001124859392
+    },
+    {
+      "start_time": "2025-04-07T10:00:00",
+      "end_time": "2025-04-08T09:15:00",
+      "start_price": 3059.607142857143,
+      "end_price": 3153.2500000000005,
+      "slope": 15.607142857142856,
+      "r_squared": 0.6786582418832089
+    }
+  ],
+  "pattern_duration": 20,
+  "breakthrough_date": null,
+  "breakthrough_price": null,
+  "result_type": null,
+  "confidence_score": 0.8151182828749912,
+  "pattern_quality": "high",
+  "chart_path": null,
+  "data_path": null
+}

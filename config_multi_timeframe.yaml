@@ -1,0 +1,212 @@
+# PatternScout 多周期配置系统
+# 支持不同时间周期的自适应形态检测
+
+# 全局设置
+global:
+  min_data_points: 60               # 最少数据点数
+  enable_multi_timeframe: false     # 是否启用多周期检测
+  default_timeframe: "auto"         # 默认时间周期（auto表示自动检测）
+
+# 数据源配置
+data_sources:
+  csv:
+    enabled: true
+    directory: "data/csv/"
+  mongodb:
+    enabled: false
+    host: "localhost"
+    port: 27017
+    database: "market_data"
+    collection: "ohlcv"
+
+# 时间周期分类
+timeframe_categories:
+  ultra_short:
+    description: "超短周期（1-5分钟）"
+    timeframes: ["1m", "3m", "5m"]
+  short:
+    description: "短周期（15分钟-1小时）"
+    timeframes: ["15m", "30m", "1h"]
+  medium_long:
+    description: "中长周期（4小时-日线）"
+    timeframes: ["4h", "1d", "1w"]
+
+# 形态检测参数（按周期分类）
+pattern_detection:
+  # 超短周期参数
+  ultra_short:
+    flagpole:
+      min_bars: 5
+      max_bars: 15
+      min_height_percent: 0.5
+      max_height_percent: 3.0
+      volume_surge_ratio: 1.5
+      max_retracement: 0.4
+      min_trend_strength: 0.6
+    flag:
+      min_bars: 10
+      max_bars: 40
+      min_slope_angle: 0.3
+      max_slope_angle: 8
+      retracement_range: [0.15, 0.6]
+      volume_decay_threshold: 0.8
+      parallel_tolerance: 0.25
+      min_touches: 2
+    pennant:
+      min_bars: 10
+      max_bars: 40
+      min_touches: 2
+      convergence_ratio: 0.5
+      apex_distance_range: [0.5, 3.0]
+      symmetry_tolerance: 0.4
+      volume_decay_threshold: 0.8
+    scoring:
+      min_confidence_score: 0.5
+      
+  # 短周期参数（标准）
+  short:
+    flagpole:
+      min_bars: 3
+      max_bars: 12
+      min_height_percent: 1.0
+      max_height_percent: 12.0
+      volume_surge_ratio: 1.5
+      max_retracement: 0.4
+      min_trend_strength: 0.5
+    flag:
+      min_bars: 6
+      max_bars: 35
+      min_slope_angle: 0.3
+      max_slope_angle: 12
+      retracement_range: [0.15, 0.7]
+      volume_decay_threshold: 0.8
+      parallel_tolerance: 0.25
+      min_touches: 2
+    pennant:
+      min_bars: 6
+      max_bars: 35
+      min_touches: 2
+      convergence_ratio: 0.4
+      apex_distance_range: [0.3, 3.0]
+      symmetry_tolerance: 0.5
+      volume_decay_threshold: 0.8
+    scoring:
+      min_confidence_score: 0.4
+      
+  # 中长周期参数
+  medium_long:
+    flagpole:
+      min_bars: 3
+      max_bars: 6
+      min_height_percent: 2.0
+      max_height_percent: 15.0
+      volume_surge_ratio: 2.5
+      max_retracement: 0.2
+      min_trend_strength: 0.8
+    flag:
+      min_bars: 5
+      max_bars: 20
+      min_slope_angle: 1
+      max_slope_angle: 15
+      retracement_range: [0.2, 0.5]
+      volume_decay_threshold: 0.6
+      parallel_tolerance: 0.1
+      min_touches: 4
+    pennant:
+      min_bars: 5
+      max_bars: 25
+      min_touches: 4
+      convergence_ratio: 0.7
+      apex_distance_range: [0.3, 1.5]
+      symmetry_tolerance: 0.2
+      volume_decay_threshold: 0.6
+    scoring:
+      min_confidence_score: 0.7
+
+# 质量评分权重（可按周期调整）
+scoring_weights:
+  flag:
+    ultra_short:
+      slope_direction: 0.20
+      parallel_quality: 0.20
+      volume_pattern: 0.30
+      channel_containment: 0.20
+      time_proportion: 0.10
+    short:
+      slope_direction: 0.25
+      parallel_quality: 0.25
+      volume_pattern: 0.25
+      channel_containment: 0.15
+      time_proportion: 0.10
+    medium_long:
+      slope_direction: 0.30
+      parallel_quality: 0.30
+      volume_pattern: 0.20
+      channel_containment: 0.10
+      time_proportion: 0.10
+      
+  pennant:
+    ultra_short:
+      convergence_quality: 0.25
+      symmetry: 0.20
+      volume_pattern: 0.30
+      size_proportion: 0.15
+      apex_validity: 0.10
+    short:
+      convergence_quality: 0.30
+      symmetry: 0.25
+      volume_pattern: 0.25
+      size_proportion: 0.10
+      apex_validity: 0.10
+    medium_long:
+      convergence_quality: 0.35
+      symmetry: 0.30
+      volume_pattern: 0.20
+      size_proportion: 0.05
+      apex_validity: 0.10
+
+# 技术指标
+indicators:
+  moving_averages: [5, 10, 20, 50]
+  rsi_period: 14
+  macd_fast: 12
+  macd_slow: 26
+  macd_signal: 9
+  bollinger_period: 20
+  bollinger_std: 2
+
+# 输出设置
+output:
+  base_path: "output"
+  data_path: "output/data"
+  charts_path: "output/charts"
+  reports_path: "output/reports"
+  charts:
+    format: "png"
+    width: 1200
+    height: 800
+    dpi: 300
+  dataset:
+    format: "json"
+    backup_enabled: true
+
+# 日志设置
+logging:
+  level: "INFO"
+  file: "logs/pattern_scout.log"
+  max_size: "10MB"
+  backup_count: 5
+
+# 多周期检测设置
+multi_timeframe:
+  enabled: false
+  base_timeframe: "1m"              # 基础数据周期
+  target_timeframes: ["5m", "15m", "1h", "4h"]  # 要检测的目标周期
+  require_confirmation: false       # 是否需要多周期确认
+
+# 突破分析设置
+breakthrough_analysis:
+  enabled: true
+  lookforward_bars: 20              # 向前查看的K线数
+  success_threshold: 1.5            # 成功突破的价格变化阈值（%）
+  volume_confirmation: true         # 是否需要成交量确认

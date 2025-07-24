@@ -1,0 +1,41 @@
+{
+  "id": "94785236-6324-4dfe-b86d-5ad4bc1b5d4f",
+  "symbol": "RBL8",
+  "pattern_type": "pennant",
+  "detection_date": "2025-07-23T15:43:27.724505",
+  "flagpole": {
+    "start_time": "2024-07-30T14:30:00",
+    "end_time": "2024-07-30T21:30:00",
+    "start_price": 3322,
+    "end_price": 3285,
+    "height_percent": 1.1137868753762794,
+    "direction": "down",
+    "volume_ratio": 1.7141988723122572
+  },
+  "pattern_boundaries": [
+    {
+      "start_time": "2024-07-30T21:45:00",
+      "end_time": "2024-07-31T10:15:00",
+      "start_price": 3311.2000000000003,
+      "end_price": 3347.6000000000004,
+      "slope": 9.1,
+      "r_squared": 0.4337418814163
+    },
+    {
+      "start_time": "2024-07-30T21:45:00",
+      "end_time": "2024-07-31T10:15:00",
+      "start_price": 3275.6,
+      "end_price": 3329.6,
+      "slope": 13.5,
+      "r_squared": 0.7824574961360123
+    }
+  ],
+  "pattern_duration": 10,
+  "breakthrough_date": null,
+  "breakthrough_price": null,
+  "result_type": null,
+  "confidence_score": 0.6782999942078071,
+  "pattern_quality": "medium",
+  "chart_path": null,
+  "data_path": null
+}

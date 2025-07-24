@@ -1,0 +1,1168 @@
+2025-07-22 17:20:29 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-22 17:20:29 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 17:20:29 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-22 17:20:29 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-22 17:20:29 | INFO     | __main__:__init__:51 - PatternScout initialized successfully
+2025-07-22 17:20:29 | INFO     | __main__:run:291 - Starting PatternScout execution...
+2025-07-22 17:20:29 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 17:20:29 | INFO     | __main__:_setup_data_connector:124 - Connected to csv data source
+2025-07-22 17:20:29 | INFO     | __main__:scan_patterns:151 - Starting pattern scanning...
+2025-07-22 17:20:29 | INFO     | __main__:scan_patterns:175 - Scanning patterns for RBL8-15min...
+2025-07-22 17:20:29 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 17:20:29 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5410 records for RBL8-15min from 2024-07-22 17:20:29.207182 to 2025-07-22 17:20:29.207186
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:68 - Detected 23 potential flagpoles
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 64646112-1f22-4ac1-aa69-d51dcb9db467 with confidence 0.54
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: e5495819-e5e5-41ab-878a-52fe77031c4e with confidence 0.54
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 1ad4710b-bb16-40d3-af2a-1ad38538634b with confidence 0.51
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 2223f82e-c74f-4aad-8266-81203a825abd with confidence 0.51
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: aef8f224-91e6-4b4c-b4f4-51e5a8c6fc84 with confidence 0.49
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 460e1e3f-93f3-4b18-b2e5-3ada310279c8 with confidence 0.62
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 4abc47b9-bb12-4f29-b2c5-c4e20ff667f7 with confidence 0.55
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: b488db7f-0222-4ecd-aef9-4c43bfb970e8 with confidence 0.50
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: f168f021-2246-4ddf-9b27-01395b60508c with confidence 0.66
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: f9916a78-96b7-4388-ad67-48aff10270ea with confidence 0.48
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 785f6816-c60d-4cc6-8d25-2caec3a0b450 with confidence 0.52
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 71cf63df-aab0-409e-b8e9-bd2574f15f88 with confidence 0.57
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 4c1102fc-bc30-4dc4-a0e2-3f6dbdaa4f5d with confidence 0.61
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: e59c33ff-ab0e-41fd-aecc-9b86ca68cb60 with confidence 0.50
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: c3fe4146-4f95-4e8f-ac2c-ddf93e06440b with confidence 0.50
+2025-07-22 17:20:36 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 9e0664e8-0549-4d4d-aa6b-c0a32cf23d09 with confidence 0.59
+2025-07-22 17:20:37 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 2d960c0e-b263-4bc4-aaa7-6ff79c70538e with confidence 0.43
+2025-07-22 17:20:37 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: f3801aa2-82e0-4ba3-99ae-d5c15d7ba270 with confidence 0.60
+2025-07-22 17:20:37 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 51ee5c8d-b660-4cdc-9ec2-0ace218a3e46 with confidence 0.59
+2025-07-22 17:20:37 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 944e67cb-ca78-44bb-bd64-d0f13e9bd50a with confidence 0.54
+2025-07-22 17:20:37 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 24b2c91c-8388-4e95-9e07-f952ae7e053e with confidence 0.48
+2025-07-22 17:20:37 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: fe4a50fb-3121-460a-b360-56a8140199c6 with confidence 0.60
+2025-07-22 17:20:37 | INFO     | src.patterns.detectors.flag_detector:detect_flags:89 - Total flag patterns detected: 22
+2025-07-22 17:20:37 | INFO     | __main__:scan_patterns:188 - Found 22 flag patterns for RBL8-15min
+2025-07-22 17:20:43 | INFO     | src.patterns.detectors.triangle_flag_detector:detect_triangle_flags:69 - Detected 23 potential flagpoles for triangle flags
+2025-07-22 17:20:44 | INFO     | src.patterns.detectors.triangle_flag_detector:detect_triangle_flags:90 - Total triangle flag patterns detected: 0
+2025-07-22 17:20:44 | INFO     | __main__:scan_patterns:194 - Found 0 triangle flag patterns for RBL8-15min
+2025-07-22 17:20:44 | INFO     | __main__:scan_patterns:202 - Pattern scanning completed. Total patterns found: 22
+2025-07-22 17:20:44 | INFO     | __main__:generate_reports:219 - Generating reports...
+2025-07-22 17:20:44 | INFO     | __main__:generate_reports:234 - Generating TradingView style classified charts...
+2025-07-22 17:20:44 | INFO     | __main__:generate_reports:243 - Generated 0 TradingView style charts
+2025-07-22 17:20:44 | INFO     | __main__:generate_reports:247 - Generating pattern classification summary...
+2025-07-22 17:20:44 | INFO     | __main__:generate_reports:256 - Saving patterns to dataset...
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:batch_save_patterns:240 - Starting batch save of 22 patterns
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 64646112-1f22-4ac1-aa69-d51dcb9db467 saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern e5495819-e5e5-41ab-878a-52fe77031c4e saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 1ad4710b-bb16-40d3-af2a-1ad38538634b saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 2223f82e-c74f-4aad-8266-81203a825abd saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern aef8f224-91e6-4b4c-b4f4-51e5a8c6fc84 saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 460e1e3f-93f3-4b18-b2e5-3ada310279c8 saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 4abc47b9-bb12-4f29-b2c5-c4e20ff667f7 saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern b488db7f-0222-4ecd-aef9-4c43bfb970e8 saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern f168f021-2246-4ddf-9b27-01395b60508c saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern f9916a78-96b7-4388-ad67-48aff10270ea saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 785f6816-c60d-4cc6-8d25-2caec3a0b450 saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 71cf63df-aab0-409e-b8e9-bd2574f15f88 saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 4c1102fc-bc30-4dc4-a0e2-3f6dbdaa4f5d saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern e59c33ff-ab0e-41fd-aecc-9b86ca68cb60 saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern c3fe4146-4f95-4e8f-ac2c-ddf93e06440b saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 9e0664e8-0549-4d4d-aa6b-c0a32cf23d09 saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 2d960c0e-b263-4bc4-aaa7-6ff79c70538e saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern f3801aa2-82e0-4ba3-99ae-d5c15d7ba270 saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 51ee5c8d-b660-4cdc-9ec2-0ace218a3e46 saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 944e67cb-ca78-44bb-bd64-d0f13e9bd50a saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern 24b2c91c-8388-4e95-9e07-f952ae7e053e saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:save_pattern:172 - Pattern fe4a50fb-3121-460a-b360-56a8140199c6 saved successfully
+2025-07-22 17:20:44 | INFO     | src.storage.dataset_manager:batch_save_patterns:254 - Batch save completed: {'total': 22, 'success': 22, 'errors': 0}
+2025-07-22 17:20:44 | INFO     | __main__:generate_reports:258 - Saved 22/22 patterns to dataset
+2025-07-22 17:20:44 | INFO     | __main__:generate_reports:261 - Report generation completed. Generated 0 charts
+2025-07-22 17:20:44 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-22 17:20:44 | INFO     | __main__:run:324 - PatternScout execution completed successfully
+2025-07-22 17:44:59 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-22 17:44:59 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 17:44:59 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-22 17:44:59 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-22 17:44:59 | INFO     | __main__:__init__:51 - PatternScout initialized successfully
+2025-07-22 17:44:59 | INFO     | __main__:run:291 - Starting PatternScout execution...
+2025-07-22 17:44:59 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 17:44:59 | INFO     | __main__:_setup_data_connector:124 - Connected to csv data source
+2025-07-22 17:44:59 | INFO     | __main__:scan_patterns:151 - Starting pattern scanning...
+2025-07-22 17:44:59 | INFO     | src.data.connectors.csv_connector:get_symbols:129 - Found 2 symbols in CSV directory
+2025-07-22 17:44:59 | INFO     | __main__:scan_patterns:160 - Scanning all available symbols: 2 symbols
+2025-07-22 17:44:59 | INFO     | __main__:scan_patterns:175 - Scanning patterns for EXAMPLE...
+2025-07-22 17:44:59 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\EXAMPLE.csv
+2025-07-22 17:44:59 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 0 records for EXAMPLE from 2024-07-22 17:44:59.291677 to 2025-07-22 17:44:59.291683
+2025-07-22 17:44:59 | WARNING  | __main__:scan_patterns:181 - No data found for EXAMPLE
+2025-07-22 17:44:59 | INFO     | __main__:scan_patterns:175 - Scanning patterns for RBL8-15min...
+2025-07-22 17:44:59 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 17:44:59 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5410 records for RBL8-15min from 2024-07-22 17:44:59.291677 to 2025-07-22 17:44:59.291683
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:68 - Detected 23 potential flagpoles
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 4f7207dd-7e1e-4dea-a6a8-81c64693508a with confidence 0.54
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 7a0440e0-1943-4718-ad3c-e8bf0f4799df with confidence 0.54
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 6f549a33-baea-4330-8cf5-0dc991c1cad7 with confidence 0.51
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 66419a6d-db52-4e43-909a-7fd37fd0c4e5 with confidence 0.51
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: bda55b28-7780-483e-8997-65fb1587a567 with confidence 0.49
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: d1a21b7b-96be-43af-b9da-e04de5ab9526 with confidence 0.62
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 342b29e4-f848-4b72-b5d1-74a35d67a99c with confidence 0.55
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 5d0c607b-b45e-4f0e-a2ac-75e4e422ed7e with confidence 0.50
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 7f835570-d7de-4f27-9012-cbc2f823b8cf with confidence 0.66
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: bcc29e4a-7ef3-487c-bd55-607cd4f60ef8 with confidence 0.48
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 159c310c-c8d5-48ed-bffa-3df7a865789e with confidence 0.52
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 47104fe5-35e8-4da6-9adb-fbcf62d5be9c with confidence 0.57
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 2caf72fe-01fe-4ba8-abfc-dca918c62d4d with confidence 0.61
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: b1348feb-3b2a-4e46-810b-517afa4ca81c with confidence 0.50
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 3b14ffc6-ee23-422e-9193-3363cd7e5735 with confidence 0.50
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: b787906a-1af0-4d4b-907d-de580b33bd14 with confidence 0.59
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 0dcd39b0-e68e-4a1b-95e4-1d21202e07ce with confidence 0.43
+2025-07-22 17:45:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: e9691aa6-af53-48a8-890e-20481224d933 with confidence 0.60
+2025-07-22 17:45:07 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 8b9e8ddb-eee9-4981-acea-3e5b4a5d62f6 with confidence 0.59
+2025-07-22 17:45:07 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 2632a337-aa38-4570-9d39-e16aeb91cdb1 with confidence 0.54
+2025-07-22 17:45:07 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 8a7f75b3-5999-42cc-95ff-5372095dd4eb with confidence 0.48
+2025-07-22 17:45:07 | INFO     | src.patterns.detectors.flag_detector:detect_flags:87 - Detected flag pattern: 0514131a-9acb-49b7-8031-903b28440a2f with confidence 0.60
+2025-07-22 17:45:07 | INFO     | src.patterns.detectors.flag_detector:detect_flags:89 - Total flag patterns detected: 22
+2025-07-22 17:45:07 | INFO     | __main__:scan_patterns:188 - Found 22 flag patterns for RBL8-15min
+2025-07-22 17:45:13 | INFO     | src.patterns.detectors.triangle_flag_detector:detect_triangle_flags:69 - Detected 23 potential flagpoles for triangle flags
+2025-07-22 17:45:14 | INFO     | src.patterns.detectors.triangle_flag_detector:detect_triangle_flags:90 - Total triangle flag patterns detected: 0
+2025-07-22 17:45:14 | INFO     | __main__:scan_patterns:194 - Found 0 triangle flag patterns for RBL8-15min
+2025-07-22 17:45:14 | INFO     | __main__:scan_patterns:202 - Pattern scanning completed. Total patterns found: 22
+2025-07-22 17:45:14 | INFO     | __main__:generate_reports:219 - Generating reports...
+2025-07-22 17:45:14 | INFO     | __main__:generate_reports:234 - Generating TradingView style classified charts...
+2025-07-22 17:45:14 | INFO     | __main__:generate_reports:243 - Generated 0 TradingView style charts
+2025-07-22 17:45:14 | INFO     | __main__:generate_reports:256 - Saving patterns to dataset...
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:batch_save_patterns:270 - Starting batch save of 22 patterns
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 4f7207dd-7e1e-4dea-a6a8-81c64693508a saved as RBL8_20240816_2115_上升旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 7a0440e0-1943-4718-ad3c-e8bf0f4799df saved as RBL8_20240823_2200_上升旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 6f549a33-baea-4330-8cf5-0dc991c1cad7 saved as RBL8_20240902_1445_上升旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 66419a6d-db52-4e43-909a-7fd37fd0c4e5 saved as RBL8_20240903_1015_下降旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern bda55b28-7780-483e-8997-65fb1587a567 saved as RBL8_20240909_1415_上升旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern d1a21b7b-96be-43af-b9da-e04de5ab9526 saved as RBL8_20240910_1415_下降旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 342b29e4-f848-4b72-b5d1-74a35d67a99c saved as RBL8_20240923_2300_上升旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 5d0c607b-b45e-4f0e-a2ac-75e4e422ed7e saved as RBL8_20240924_1115_上升旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 7f835570-d7de-4f27-9012-cbc2f823b8cf saved as RBL8_20240927_2300_上升旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern bcc29e4a-7ef3-487c-bd55-607cd4f60ef8 saved as RBL8_20240930_1500_上升旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 159c310c-c8d5-48ed-bffa-3df7a865789e saved as RBL8_20241008_1000_下降旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 47104fe5-35e8-4da6-9adb-fbcf62d5be9c saved as RBL8_20241009_1345_下降旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 2caf72fe-01fe-4ba8-abfc-dca918c62d4d saved as RBL8_20241017_1015_下降旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern b1348feb-3b2a-4e46-810b-517afa4ca81c saved as RBL8_20241017_1100_下降旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 3b14ffc6-ee23-422e-9193-3363cd7e5735 saved as RBL8_20241024_1345_上升旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern b787906a-1af0-4d4b-907d-de580b33bd14 saved as RBL8_20241101_2115_下降旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 0dcd39b0-e68e-4a1b-95e4-1d21202e07ce saved as RBL8_20241105_2300_下降旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern e9691aa6-af53-48a8-890e-20481224d933 saved as RBL8_20241108_0930_下降旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 8b9e8ddb-eee9-4981-acea-3e5b4a5d62f6 saved as RBL8_20241119_1045_上升旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 2632a337-aa38-4570-9d39-e16aeb91cdb1 saved as RBL8_20241209_1500_上升旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 8a7f75b3-5999-42cc-95ff-5372095dd4eb saved as RBL8_20250403_1500_下降旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 0514131a-9acb-49b7-8031-903b28440a2f saved as RBL8_20250407_1500_上升旗形.json
+2025-07-22 17:45:14 | INFO     | src.storage.dataset_manager:batch_save_patterns:284 - Batch save completed: {'total': 22, 'success': 22, 'errors': 0}
+2025-07-22 17:45:14 | INFO     | __main__:generate_reports:258 - Saved 22/22 patterns to dataset
+2025-07-22 17:45:14 | INFO     | __main__:generate_reports:261 - Report generation completed. Generated 0 charts
+2025-07-22 17:45:14 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-22 17:45:14 | INFO     | __main__:run:324 - PatternScout execution completed successfully
+2025-07-22 18:37:26 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-22 18:37:26 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 18:37:26 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-22 18:37:26 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-22 18:37:26 | INFO     | __main__:__init__:51 - PatternScout initialized successfully
+2025-07-22 18:37:26 | INFO     | __main__:run:291 - Starting PatternScout execution...
+2025-07-22 18:37:26 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 18:37:26 | INFO     | __main__:_setup_data_connector:124 - Connected to csv data source
+2025-07-22 18:37:26 | INFO     | __main__:scan_patterns:151 - Starting pattern scanning...
+2025-07-22 18:37:26 | INFO     | __main__:scan_patterns:175 - Scanning patterns for RBL8-15min...
+2025-07-22 18:37:26 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:37:26 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5945 records for RBL8-15min from 2024-01-01 00:00:00 to 2024-12-31 00:00:00
+2025-07-22 18:37:26 | ERROR    | __main__:scan_patterns:197 - Error scanning RBL8-15min: 'min_bars'
+2025-07-22 18:37:26 | ERROR    | __main__:scan_patterns:199 - Full traceback: Traceback (most recent call last):
+  File "C:\quant\strategy\PatternScout\pattern-scout\main.py", line 186, in scan_patterns
+    flag_patterns = self.flag_detector.detect_flags(df)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\flag_detector.py", line 78, in detect_flags
+    flagpoles = self._detect_flagpoles_improved(df_processed)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\flag_detector.py", line 135, in _detect_flagpoles_improved
+    min_bars = self.config['flagpole']['min_bars']
+               ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'min_bars'
+
+2025-07-22 18:37:26 | INFO     | __main__:scan_patterns:202 - Pattern scanning completed. Total patterns found: 0
+2025-07-22 18:37:26 | WARNING  | __main__:run:302 - No patterns detected
+2025-07-22 18:38:24 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-22 18:38:24 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 18:38:24 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-22 18:38:24 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-22 18:38:24 | INFO     | __main__:__init__:51 - PatternScout initialized successfully
+2025-07-22 18:38:24 | INFO     | __main__:run:291 - Starting PatternScout execution...
+2025-07-22 18:38:24 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 18:38:24 | INFO     | __main__:_setup_data_connector:124 - Connected to csv data source
+2025-07-22 18:38:24 | INFO     | __main__:scan_patterns:151 - Starting pattern scanning...
+2025-07-22 18:38:24 | INFO     | __main__:scan_patterns:175 - Scanning patterns for RBL8-15min...
+2025-07-22 18:38:24 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:38:24 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5945 records for RBL8-15min from 2024-01-01 00:00:00 to 2024-12-31 00:00:00
+2025-07-22 18:39:19 | INFO     | src.patterns.detectors.flag_detector:detect_flags:89 - Detected 14 potential flagpoles with improved algorithm
+2025-07-22 18:39:20 | INFO     | src.patterns.detectors.flag_detector:detect_flags:108 - Detected improved flag pattern: 3a6053a2-aeab-4029-bb10-470500687b5b with confidence 0.727
+2025-07-22 18:39:21 | INFO     | src.patterns.detectors.flag_detector:detect_flags:108 - Detected improved flag pattern: fa3c0fb7-fe0b-447f-8332-0888667ed804 with confidence 0.800
+2025-07-22 18:39:21 | INFO     | src.patterns.detectors.flag_detector:detect_flags:108 - Detected improved flag pattern: 0dfacdf5-608f-4ded-9376-e045f06215d4 with confidence 0.766
+2025-07-22 18:39:21 | INFO     | src.patterns.detectors.flag_detector:detect_flags:110 - Total improved flag patterns detected: 3
+2025-07-22 18:39:21 | INFO     | __main__:scan_patterns:188 - Found 3 flag patterns for RBL8-15min
+2025-07-22 18:39:21 | INFO     | __main__:scan_patterns:202 - Pattern scanning completed. Total patterns found: 3
+2025-07-22 18:39:21 | INFO     | __main__:generate_reports:219 - Generating reports...
+2025-07-22 18:39:21 | INFO     | __main__:generate_reports:256 - Saving patterns to dataset...
+2025-07-22 18:39:21 | INFO     | src.storage.dataset_manager:batch_save_patterns:270 - Starting batch save of 3 patterns
+2025-07-22 18:39:21 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 3a6053a2-aeab-4029-bb10-470500687b5b saved as RBL8_20240315_2115_下降旗形.json
+2025-07-22 18:39:21 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern fa3c0fb7-fe0b-447f-8332-0888667ed804 saved as RBL8_20240529_1415_上升旗形.json
+2025-07-22 18:39:22 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 0dfacdf5-608f-4ded-9376-e045f06215d4 saved as RBL8_20240712_2230_上升旗形.json
+2025-07-22 18:39:22 | INFO     | src.storage.dataset_manager:batch_save_patterns:284 - Batch save completed: {'total': 3, 'success': 3, 'errors': 0}
+2025-07-22 18:39:22 | INFO     | __main__:generate_reports:258 - Saved 3/3 patterns to dataset
+2025-07-22 18:39:22 | INFO     | __main__:generate_reports:261 - Report generation completed. Generated 0 charts
+2025-07-22 18:39:22 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-22 18:39:22 | INFO     | __main__:run:324 - PatternScout execution completed successfully
+2025-07-22 18:40:01 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-22 18:40:01 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 18:40:01 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-22 18:40:01 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-22 18:40:01 | INFO     | __main__:__init__:51 - PatternScout initialized successfully
+2025-07-22 18:40:01 | INFO     | __main__:run:291 - Starting PatternScout execution...
+2025-07-22 18:40:01 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 18:40:01 | INFO     | __main__:_setup_data_connector:124 - Connected to csv data source
+2025-07-22 18:40:01 | INFO     | __main__:scan_patterns:151 - Starting pattern scanning...
+2025-07-22 18:40:01 | INFO     | __main__:scan_patterns:175 - Scanning patterns for RBL8-15min...
+2025-07-22 18:40:01 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:40:01 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5945 records for RBL8-15min from 2024-01-01 00:00:00 to 2024-12-31 00:00:00
+2025-07-22 18:40:53 | INFO     | src.patterns.detectors.flag_detector:detect_flags:89 - Detected 14 potential flagpoles with improved algorithm
+2025-07-22 18:40:54 | INFO     | src.patterns.detectors.flag_detector:detect_flags:108 - Detected improved flag pattern: 2dbf9018-a6a1-4993-ad4a-d5474a40b531 with confidence 0.727
+2025-07-22 18:40:55 | INFO     | src.patterns.detectors.flag_detector:detect_flags:108 - Detected improved flag pattern: 7a5d5a52-ff27-4c94-9eca-c41e381e8474 with confidence 0.800
+2025-07-22 18:40:55 | INFO     | src.patterns.detectors.flag_detector:detect_flags:108 - Detected improved flag pattern: ff4f00ff-0e43-4812-a96d-f57944c7c901 with confidence 0.766
+2025-07-22 18:40:55 | INFO     | src.patterns.detectors.flag_detector:detect_flags:110 - Total improved flag patterns detected: 3
+2025-07-22 18:40:55 | INFO     | __main__:scan_patterns:188 - Found 3 flag patterns for RBL8-15min
+2025-07-22 18:40:55 | INFO     | __main__:scan_patterns:202 - Pattern scanning completed. Total patterns found: 3
+2025-07-22 18:40:55 | INFO     | __main__:generate_reports:219 - Generating reports...
+2025-07-22 18:40:55 | INFO     | __main__:generate_reports:234 - Generating TradingView style classified charts...
+2025-07-22 18:40:55 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:40:55 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 864 records for RBL8-15min from 2024-03-10 21:15:00 to 2024-05-04 22:15:00
+2025-07-22 18:40:58 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:40:58 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 879 records for RBL8-15min from 2024-05-24 14:15:00 to 2024-07-17 21:30:00
+2025-07-22 18:41:00 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:00 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 605 records for RBL8-15min from 2024-07-07 22:30:00 to 2024-08-10 09:45:00
+2025-07-22 18:41:02 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:02 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 505 records for RBL8-15min from 2024-08-11 21:15:00 to 2024-09-08 22:30:00
+2025-07-22 18:41:03 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:04 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 482 records for RBL8-15min from 2024-08-18 22:00:00 to 2024-09-17 09:15:00
+2025-07-22 18:41:05 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:05 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 362 records for RBL8-15min from 2024-08-28 14:45:00 to 2024-09-21 21:15:00
+2025-07-22 18:41:07 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:07 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 253 records for RBL8-15min from 2024-08-29 10:15:00 to 2024-09-12 14:15:00
+2025-07-22 18:41:08 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:08 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 249 records for RBL8-15min from 2024-09-04 14:15:00 to 2024-09-22 22:15:00
+2025-07-22 18:41:10 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:10 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 371 records for RBL8-15min from 2024-09-05 14:15:00 to 2024-10-04 22:00:00
+2025-07-22 18:41:11 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:11 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 284 records for RBL8-15min from 2024-09-18 23:00:00 to 2024-10-12 09:15:00
+2025-07-22 18:41:13 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:13 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 184 records for RBL8-15min from 2024-09-19 11:15:00 to 2024-10-04 21:15:00
+2025-07-22 18:41:14 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:14 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 483 records for RBL8-15min from 2024-09-22 23:00:00 to 2024-10-28 09:15:00
+2025-07-22 18:41:15 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:16 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 470 records for RBL8-15min from 2024-09-25 15:00:00 to 2024-10-30 09:30:00
+2025-07-22 18:41:17 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:17 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 467 records for RBL8-15min from 2024-10-03 10:00:00 to 2024-11-02 14:15:00
+2025-07-22 18:41:19 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:19 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 422 records for RBL8-15min from 2024-10-04 13:45:00 to 2024-10-31 21:15:00
+2025-07-22 18:41:21 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:21 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 473 records for RBL8-15min from 2024-10-12 10:15:00 to 2024-11-08 10:45:00
+2025-07-22 18:41:22 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:22 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 329 records for RBL8-15min from 2024-10-12 11:00:00 to 2024-10-31 15:00:00
+2025-07-22 18:41:23 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:24 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 278 records for RBL8-15min from 2024-10-19 13:45:00 to 2024-11-04 21:45:00
+2025-07-22 18:41:25 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:25 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 526 records for RBL8-15min from 2024-10-27 21:15:00 to 2024-11-25 22:30:00
+2025-07-22 18:41:27 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:27 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 231 records for RBL8-15min from 2024-10-31 23:00:00 to 2024-11-14 11:15:00
+2025-07-22 18:41:28 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:28 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 615 records for RBL8-15min from 2024-11-03 09:30:00 to 2024-12-06 11:30:00
+2025-07-22 18:41:30 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:30 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 316 records for RBL8-15min from 2024-11-14 10:45:00 to 2024-12-01 14:30:00
+2025-07-22 18:41:31 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:31 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 293 records for RBL8-15min from 2024-12-04 15:00:00 to 2024-12-20 21:15:00
+2025-07-22 18:41:33 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:33 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 246 records for RBL8-15min from 2025-03-29 15:00:00 to 2025-04-16 09:15:00
+2025-07-22 18:41:34 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:41:34 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 408 records for RBL8-15min from 2025-04-02 15:00:00 to 2025-04-29 21:15:00
+2025-07-22 18:41:36 | INFO     | __main__:generate_reports:243 - Generated 25 TradingView style charts
+2025-07-22 18:41:36 | INFO     | __main__:generate_reports:256 - Saving patterns to dataset...
+2025-07-22 18:41:36 | INFO     | src.storage.dataset_manager:batch_save_patterns:270 - Starting batch save of 3 patterns
+2025-07-22 18:41:36 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 2dbf9018-a6a1-4993-ad4a-d5474a40b531 saved as RBL8_20240315_2115_下降旗形.json
+2025-07-22 18:41:36 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 7a5d5a52-ff27-4c94-9eca-c41e381e8474 saved as RBL8_20240529_1415_上升旗形.json
+2025-07-22 18:41:36 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern ff4f00ff-0e43-4812-a96d-f57944c7c901 saved as RBL8_20240712_2230_上升旗形.json
+2025-07-22 18:41:36 | INFO     | src.storage.dataset_manager:batch_save_patterns:284 - Batch save completed: {'total': 3, 'success': 3, 'errors': 0}
+2025-07-22 18:41:36 | INFO     | __main__:generate_reports:258 - Saved 3/3 patterns to dataset
+2025-07-22 18:41:36 | INFO     | __main__:generate_reports:261 - Report generation completed. Generated 25 charts
+2025-07-22 18:41:36 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-22 18:41:36 | INFO     | __main__:run:324 - PatternScout execution completed successfully
+2025-07-22 18:50:27 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-22 18:50:27 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 18:50:27 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-22 18:50:27 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-22 18:50:27 | INFO     | __main__:__init__:51 - PatternScout initialized successfully
+2025-07-22 18:50:27 | INFO     | __main__:run:291 - Starting PatternScout execution...
+2025-07-22 18:50:27 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 18:50:27 | INFO     | __main__:_setup_data_connector:124 - Connected to csv data source
+2025-07-22 18:50:27 | INFO     | __main__:scan_patterns:151 - Starting pattern scanning...
+2025-07-22 18:50:27 | INFO     | __main__:scan_patterns:175 - Scanning patterns for AAPL...
+2025-07-22 18:50:27 | ERROR    | __main__:scan_patterns:197 - Error scanning AAPL: No CSV file found for symbol: AAPL
+2025-07-22 18:50:27 | ERROR    | __main__:scan_patterns:199 - Full traceback: Traceback (most recent call last):
+  File "C:\quant\strategy\PatternScout\pattern-scout\main.py", line 178, in scan_patterns
+    df = self.data_connector.get_data(symbol, start_date, end_date)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\data\connectors\csv_connector.py", line 60, in get_data
+    raise FileNotFoundError(f"No CSV file found for symbol: {symbol}")
+FileNotFoundError: No CSV file found for symbol: AAPL
+
+2025-07-22 18:50:27 | INFO     | __main__:scan_patterns:202 - Pattern scanning completed. Total patterns found: 0
+2025-07-22 18:50:27 | WARNING  | __main__:run:302 - No patterns detected
+2025-07-22 18:50:52 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-22 18:50:52 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 18:50:52 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-22 18:50:52 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-22 18:50:52 | INFO     | __main__:__init__:51 - PatternScout initialized successfully
+2025-07-22 18:50:52 | INFO     | __main__:run:291 - Starting PatternScout execution...
+2025-07-22 18:50:52 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-22 18:50:52 | INFO     | __main__:_setup_data_connector:124 - Connected to csv data source
+2025-07-22 18:50:52 | INFO     | __main__:scan_patterns:151 - Starting pattern scanning...
+2025-07-22 18:50:52 | INFO     | __main__:scan_patterns:175 - Scanning patterns for RBL8...
+2025-07-22 18:50:52 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:50:52 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5923 records for RBL8 from 2023-01-01 00:00:00 to 2023-12-31 00:00:00
+2025-07-22 18:51:44 | INFO     | src.patterns.detectors.flag_detector:detect_flags:89 - Detected 16 potential flagpoles with improved algorithm
+2025-07-22 18:51:45 | INFO     | src.patterns.detectors.flag_detector:detect_flags:108 - Detected improved flag pattern: 9b44886d-ebf1-45bc-8237-d394df7fe49b with confidence 0.706
+2025-07-22 18:51:46 | INFO     | src.patterns.detectors.flag_detector:detect_flags:108 - Detected improved flag pattern: a5464990-b945-4405-bb1a-7fceedafc4e7 with confidence 0.773
+2025-07-22 18:51:46 | INFO     | src.patterns.detectors.flag_detector:detect_flags:110 - Total improved flag patterns detected: 2
+2025-07-22 18:51:46 | INFO     | __main__:scan_patterns:188 - Found 2 flag patterns for RBL8
+2025-07-22 18:51:46 | INFO     | __main__:scan_patterns:202 - Pattern scanning completed. Total patterns found: 2
+2025-07-22 18:51:46 | INFO     | __main__:generate_reports:219 - Generating reports...
+2025-07-22 18:51:46 | INFO     | __main__:generate_reports:234 - Generating TradingView style classified charts...
+2025-07-22 18:51:46 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:51:46 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 864 records for RBL8-15min from 2024-03-10 21:15:00 to 2024-05-04 22:15:00
+2025-07-22 18:51:48 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:51:49 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 879 records for RBL8-15min from 2024-05-24 14:15:00 to 2024-07-17 21:30:00
+2025-07-22 18:51:51 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-22 18:51:51 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 605 records for RBL8-15min from 2024-07-07 22:30:00 to 2024-08-10 09:45:00
+2025-07-22 18:51:53 | INFO     | __main__:generate_reports:243 - Generated 3 TradingView style charts
+2025-07-22 18:51:53 | INFO     | __main__:generate_reports:247 - Generating pattern classification summary...
+2025-07-22 18:51:53 | INFO     | __main__:generate_reports:256 - Saving patterns to dataset...
+2025-07-22 18:51:53 | INFO     | src.storage.dataset_manager:batch_save_patterns:270 - Starting batch save of 2 patterns
+2025-07-22 18:51:53 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 9b44886d-ebf1-45bc-8237-d394df7fe49b saved as RBL8_20230512_1500_上升旗形.json
+2025-07-22 18:51:53 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern a5464990-b945-4405-bb1a-7fceedafc4e7 saved as RBL8_20230120_1445_上升旗形.json
+2025-07-22 18:51:53 | INFO     | src.storage.dataset_manager:batch_save_patterns:284 - Batch save completed: {'total': 2, 'success': 2, 'errors': 0}
+2025-07-22 18:51:53 | INFO     | __main__:generate_reports:258 - Saved 2/2 patterns to dataset
+2025-07-22 18:51:53 | INFO     | __main__:generate_reports:261 - Report generation completed. Generated 3 charts
+2025-07-22 18:51:53 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-22 18:51:53 | INFO     | __main__:run:324 - PatternScout execution completed successfully
+2025-07-23 08:57:13 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-23 08:57:13 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 08:57:13 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-23 08:57:14 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-23 08:57:14 | INFO     | __main__:__init__:51 - PatternScout initialized successfully
+2025-07-23 08:57:14 | INFO     | __main__:run:291 - Starting PatternScout execution...
+2025-07-23 08:57:14 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 08:57:14 | INFO     | __main__:_setup_data_connector:124 - Connected to csv data source
+2025-07-23 08:57:14 | INFO     | __main__:scan_patterns:151 - Starting pattern scanning...
+2025-07-23 08:57:14 | INFO     | __main__:scan_patterns:175 - Scanning patterns for RBL8...
+2025-07-23 08:57:14 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 08:57:14 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5923 records for RBL8 from 2023-01-01 00:00:00 to 2023-12-31 00:00:00
+2025-07-23 08:58:04 | INFO     | src.patterns.detectors.flag_detector:detect_flags:89 - Detected 16 potential flagpoles with improved algorithm
+2025-07-23 08:58:06 | INFO     | src.patterns.detectors.flag_detector:detect_flags:108 - Detected improved flag pattern: baea8948-9607-444a-ac5d-794ab0387938 with confidence 0.706
+2025-07-23 08:58:07 | INFO     | src.patterns.detectors.flag_detector:detect_flags:108 - Detected improved flag pattern: 80f2d2e7-72ae-42e2-ba9f-f107b50d81f7 with confidence 0.773
+2025-07-23 08:58:07 | INFO     | src.patterns.detectors.flag_detector:detect_flags:110 - Total improved flag patterns detected: 2
+2025-07-23 08:58:07 | INFO     | __main__:scan_patterns:188 - Found 2 flag patterns for RBL8
+2025-07-23 08:58:07 | INFO     | __main__:scan_patterns:202 - Pattern scanning completed. Total patterns found: 2
+2025-07-23 08:58:07 | INFO     | __main__:generate_reports:219 - Generating reports...
+2025-07-23 08:58:07 | INFO     | __main__:generate_reports:234 - Generating TradingView style classified charts...
+2025-07-23 08:58:07 | INFO     | __main__:generate_reports:243 - Generated 0 TradingView style charts
+2025-07-23 08:58:07 | INFO     | __main__:generate_reports:247 - Generating pattern classification summary...
+2025-07-23 08:58:07 | INFO     | __main__:generate_reports:256 - Saving patterns to dataset...
+2025-07-23 08:58:07 | INFO     | src.storage.dataset_manager:batch_save_patterns:270 - Starting batch save of 2 patterns
+2025-07-23 08:58:07 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern baea8948-9607-444a-ac5d-794ab0387938 saved as RBL8_20230512_1500_上升旗形.json
+2025-07-23 08:58:07 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 80f2d2e7-72ae-42e2-ba9f-f107b50d81f7 saved as RBL8_20230120_1445_上升旗形.json
+2025-07-23 08:58:07 | INFO     | src.storage.dataset_manager:batch_save_patterns:284 - Batch save completed: {'total': 2, 'success': 2, 'errors': 0}
+2025-07-23 08:58:07 | INFO     | __main__:generate_reports:258 - Saved 2/2 patterns to dataset
+2025-07-23 08:58:07 | INFO     | __main__:generate_reports:261 - Report generation completed. Generated 0 charts
+2025-07-23 08:58:07 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-23 08:58:07 | INFO     | __main__:run:324 - PatternScout execution completed successfully
+2025-07-23 09:17:42 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-23 09:17:42 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 09:17:42 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-23 09:17:42 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-23 09:17:42 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 09:17:42 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 09:17:42 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 09:17:42 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 09:17:42 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 09:17:42 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 09:17:42 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 09:17:42 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5923 records for RBL8 from 2023-01-01 00:00:00 to 2023-12-31 00:00:00
+2025-07-23 09:18:33 | INFO     | src.patterns.detectors.flag_detector:detect_flags:88 - Detected 16 potential flagpoles with improved algorithm
+2025-07-23 09:18:34 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: 17db176a-800e-4910-9821-5cb0b9fdaab1 with confidence 0.706
+2025-07-23 09:18:35 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: f4250088-1d05-48df-84f8-0d46a6bcf95f with confidence 0.773
+2025-07-23 09:18:35 | INFO     | src.patterns.detectors.flag_detector:detect_flags:109 - Total improved flag patterns detected: 2
+2025-07-23 09:18:35 | INFO     | __main__:scan_patterns:187 - Found 2 flag patterns for RBL8
+2025-07-23 09:18:35 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 2
+2025-07-23 09:18:35 | INFO     | __main__:generate_reports:218 - Generating reports...
+2025-07-23 09:18:35 | INFO     | __main__:generate_reports:233 - Generating TradingView style classified charts...
+2025-07-23 09:18:35 | INFO     | src.visualization.chart_generator:generate_classified_charts:714 - Generating 2 flag charts...
+2025-07-23 09:18:35 | INFO     | src.visualization.chart_generator:generate_classified_charts:727 - Generating 1/2 flag chart: RBL8_20230120_1445_上升旗形
+2025-07-23 09:18:35 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 09:18:35 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 216 records for RBL8 from 2023-01-17 14:45:00 to 2023-02-04 09:15:00
+2025-07-23 09:18:37 | INFO     | src.visualization.chart_generator:generate_pattern_chart_from_data:676 - TradingView style chart saved: charts\flag\RBL8_20230120_1445_上升旗形.png
+2025-07-23 09:18:37 | INFO     | src.visualization.chart_generator:generate_classified_charts:733 - TradingView style chart saved: charts\flag\RBL8_20230120_1445_上升旗形.png
+2025-07-23 09:18:37 | INFO     | src.visualization.chart_generator:generate_classified_charts:727 - Generating 2/2 flag chart: RBL8_20230512_1500_上升旗形
+2025-07-23 09:18:37 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 09:18:37 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 144 records for RBL8 from 2023-05-09 15:00:00 to 2023-05-17 22:15:00
+2025-07-23 09:18:38 | INFO     | src.visualization.chart_generator:generate_pattern_chart_from_data:676 - TradingView style chart saved: charts\flag\RBL8_20230512_1500_上升旗形.png
+2025-07-23 09:18:38 | INFO     | src.visualization.chart_generator:generate_classified_charts:733 - TradingView style chart saved: charts\flag\RBL8_20230512_1500_上升旗形.png
+2025-07-23 09:18:38 | INFO     | src.visualization.chart_generator:generate_classified_charts:742 - Classification chart generation completed. Generated 2 charts
+2025-07-23 09:18:38 | INFO     | __main__:generate_reports:242 - Generated 2 TradingView style charts
+2025-07-23 09:18:38 | INFO     | __main__:generate_reports:246 - Generating pattern classification summary...
+2025-07-23 09:18:38 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-23 09:18:38 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-23 09:18:38 | ERROR    | src.visualization.chart_generator:create_summary_report:826 - Failed to create summary report: 'DatasetManager' object has no attribute 'load_all_patterns'
+2025-07-23 09:18:38 | INFO     | __main__:generate_reports:255 - Saving patterns to dataset...
+2025-07-23 09:18:38 | INFO     | src.storage.dataset_manager:batch_save_patterns:270 - Starting batch save of 2 patterns
+2025-07-23 09:18:38 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 17db176a-800e-4910-9821-5cb0b9fdaab1 saved as RBL8_20230512_1500_上升旗形.json
+2025-07-23 09:18:38 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern f4250088-1d05-48df-84f8-0d46a6bcf95f saved as RBL8_20230120_1445_上升旗形.json
+2025-07-23 09:18:38 | INFO     | src.storage.dataset_manager:batch_save_patterns:284 - Batch save completed: {'total': 2, 'success': 2, 'errors': 0}
+2025-07-23 09:18:38 | INFO     | __main__:generate_reports:257 - Saved 2/2 patterns to dataset
+2025-07-23 09:18:38 | INFO     | __main__:generate_reports:260 - Report generation completed. Generated 2 charts
+2025-07-23 09:18:38 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-23 09:18:38 | INFO     | __main__:run:323 - PatternScout execution completed successfully
+2025-07-23 09:20:32 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-23 09:20:32 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 09:20:32 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-23 09:20:32 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-23 09:20:32 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 09:20:32 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 09:20:32 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 09:20:32 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 09:20:32 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 09:20:32 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 09:20:32 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 09:20:32 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5923 records for RBL8 from 2023-01-01 00:00:00 to 2023-12-31 00:00:00
+2025-07-23 09:21:21 | INFO     | src.patterns.detectors.flag_detector:detect_flags:88 - Detected 16 potential flagpoles with improved algorithm
+2025-07-23 09:21:23 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: 2e7a2f12-e0a1-4a01-8464-e0a263dd6c92 with confidence 0.706
+2025-07-23 09:21:23 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: 4c23865f-cb9f-4b20-8b31-ead8fc093d25 with confidence 0.773
+2025-07-23 09:21:23 | INFO     | src.patterns.detectors.flag_detector:detect_flags:109 - Total improved flag patterns detected: 2
+2025-07-23 09:21:23 | INFO     | __main__:scan_patterns:187 - Found 2 flag patterns for RBL8
+2025-07-23 09:21:23 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 2
+2025-07-23 09:21:23 | INFO     | __main__:generate_reports:218 - Generating reports...
+2025-07-23 09:21:23 | INFO     | __main__:generate_reports:233 - Generating TradingView style classified charts...
+2025-07-23 09:21:23 | WARNING  | src.visualization.chart_generator:generate_classified_charts:694 - No pattern files found!
+2025-07-23 09:21:23 | INFO     | __main__:generate_reports:242 - Generated 0 TradingView style charts
+2025-07-23 09:21:23 | INFO     | __main__:generate_reports:246 - Generating pattern classification summary...
+2025-07-23 09:21:23 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-23 09:21:23 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-23 09:21:23 | ERROR    | src.visualization.chart_generator:create_summary_report:826 - Failed to create summary report: 'DatasetManager' object has no attribute 'load_all_patterns'
+2025-07-23 09:21:23 | INFO     | __main__:generate_reports:255 - Saving patterns to dataset...
+2025-07-23 09:21:23 | INFO     | src.storage.dataset_manager:batch_save_patterns:270 - Starting batch save of 2 patterns
+2025-07-23 09:21:23 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 2e7a2f12-e0a1-4a01-8464-e0a263dd6c92 saved as RBL8_20230512_1500_上升旗形.json
+2025-07-23 09:21:23 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 4c23865f-cb9f-4b20-8b31-ead8fc093d25 saved as RBL8_20230120_1445_上升旗形.json
+2025-07-23 09:21:23 | INFO     | src.storage.dataset_manager:batch_save_patterns:284 - Batch save completed: {'total': 2, 'success': 2, 'errors': 0}
+2025-07-23 09:21:23 | INFO     | __main__:generate_reports:257 - Saved 2/2 patterns to dataset
+2025-07-23 09:21:23 | INFO     | __main__:generate_reports:260 - Report generation completed. Generated 0 charts
+2025-07-23 09:21:23 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-23 09:21:23 | INFO     | __main__:run:323 - PatternScout execution completed successfully
+2025-07-23 09:35:24 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-23 09:35:24 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 09:35:24 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-23 09:35:24 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-23 09:35:24 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 09:35:24 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 09:35:24 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 09:35:24 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 09:35:24 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 09:35:24 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 09:35:24 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 09:35:24 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5923 records for RBL8 from 2023-01-01 00:00:00 to 2023-12-31 00:00:00
+2025-07-23 09:36:15 | INFO     | src.patterns.detectors.flag_detector:detect_flags:88 - Detected 16 potential flagpoles with improved algorithm
+2025-07-23 09:36:16 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: 9d273291-eade-4968-b4c5-c6fced043ffd with confidence 0.706
+2025-07-23 09:36:17 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: 5d9f8b54-5b18-4211-8a6f-eaf8e99739ff with confidence 0.773
+2025-07-23 09:36:17 | INFO     | src.patterns.detectors.flag_detector:detect_flags:109 - Total improved flag patterns detected: 2
+2025-07-23 09:36:17 | INFO     | __main__:scan_patterns:187 - Found 2 flag patterns for RBL8
+2025-07-23 09:36:17 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 2
+2025-07-23 09:36:17 | INFO     | __main__:generate_reports:218 - Generating reports...
+2025-07-23 09:36:17 | INFO     | __main__:generate_reports:233 - Generating TradingView style classified charts...
+2025-07-23 09:36:17 | INFO     | src.visualization.chart_generator:generate_classified_charts:714 - Generating 2 flag charts...
+2025-07-23 09:36:17 | INFO     | src.visualization.chart_generator:generate_classified_charts:727 - Generating 1/2 flag chart: RBL8_20230120_1445_上升旗形
+2025-07-23 09:36:17 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 09:36:17 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 216 records for RBL8 from 2023-01-17 14:45:00 to 2023-02-04 09:15:00
+2025-07-23 09:36:18 | INFO     | src.visualization.chart_generator:generate_pattern_chart_from_data:676 - TradingView style chart saved: charts\flag\RBL8_20230120_1445_上升旗形.png
+2025-07-23 09:36:18 | INFO     | src.visualization.chart_generator:generate_classified_charts:733 - TradingView style chart saved: charts\flag\RBL8_20230120_1445_上升旗形.png
+2025-07-23 09:36:18 | INFO     | src.visualization.chart_generator:generate_classified_charts:727 - Generating 2/2 flag chart: RBL8_20230512_1500_上升旗形
+2025-07-23 09:36:18 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 09:36:18 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 144 records for RBL8 from 2023-05-09 15:00:00 to 2023-05-17 22:15:00
+2025-07-23 09:36:19 | INFO     | src.visualization.chart_generator:generate_pattern_chart_from_data:676 - TradingView style chart saved: charts\flag\RBL8_20230512_1500_上升旗形.png
+2025-07-23 09:36:19 | INFO     | src.visualization.chart_generator:generate_classified_charts:733 - TradingView style chart saved: charts\flag\RBL8_20230512_1500_上升旗形.png
+2025-07-23 09:36:19 | INFO     | src.visualization.chart_generator:generate_classified_charts:742 - Classification chart generation completed. Generated 2 charts
+2025-07-23 09:36:19 | INFO     | __main__:generate_reports:242 - Generated 2 TradingView style charts
+2025-07-23 09:36:19 | INFO     | __main__:generate_reports:246 - Generating pattern classification summary...
+2025-07-23 09:36:19 | INFO     | src.storage.dataset_manager:_ensure_directories:58 - Dataset directories initialized at dataset
+2025-07-23 09:36:19 | INFO     | src.storage.dataset_manager:_init_database:121 - Database initialized successfully
+2025-07-23 09:36:19 | ERROR    | src.visualization.chart_generator:create_summary_report:826 - Failed to create summary report: 'DatasetManager' object has no attribute 'load_all_patterns'
+2025-07-23 09:36:19 | INFO     | __main__:generate_reports:255 - Saving patterns to dataset...
+2025-07-23 09:36:19 | INFO     | src.storage.dataset_manager:batch_save_patterns:270 - Starting batch save of 2 patterns
+2025-07-23 09:36:19 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 9d273291-eade-4968-b4c5-c6fced043ffd saved as RBL8_20230512_1500_上升旗形.json
+2025-07-23 09:36:19 | INFO     | src.storage.dataset_manager:save_pattern:202 - Pattern 5d9f8b54-5b18-4211-8a6f-eaf8e99739ff saved as RBL8_20230120_1445_上升旗形.json
+2025-07-23 09:36:19 | INFO     | src.storage.dataset_manager:batch_save_patterns:284 - Batch save completed: {'total': 2, 'success': 2, 'errors': 0}
+2025-07-23 09:36:19 | INFO     | __main__:generate_reports:257 - Saved 2/2 patterns to dataset
+2025-07-23 09:36:19 | INFO     | __main__:generate_reports:260 - Report generation completed. Generated 2 charts
+2025-07-23 09:36:19 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-23 09:36:19 | INFO     | __main__:run:323 - PatternScout execution completed successfully
+2025-07-23 10:06:21 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-23 10:06:21 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 10:06:21 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 10:06:21 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 10:06:21 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 10:06:21 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 10:06:21 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 10:06:21 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 10:06:21 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 10:06:21 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 10:06:21 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:06:21 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5923 records for RBL8 from 2023-01-01 00:00:00 to 2023-12-31 00:00:00
+2025-07-23 10:07:14 | INFO     | src.patterns.detectors.flag_detector:detect_flags:88 - Detected 16 potential flagpoles with improved algorithm
+2025-07-23 10:07:16 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: 2769acbc-db61-442f-80fc-48285900316b with confidence 0.706
+2025-07-23 10:07:16 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: f19a8db6-b29a-44f3-b579-8f87d21f4101 with confidence 0.773
+2025-07-23 10:07:16 | INFO     | src.patterns.detectors.flag_detector:detect_flags:109 - Total improved flag patterns detected: 2
+2025-07-23 10:07:16 | INFO     | __main__:scan_patterns:187 - Found 2 flag patterns for RBL8
+2025-07-23 10:07:16 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 2
+2025-07-23 10:07:16 | INFO     | __main__:generate_reports:218 - Generating reports...
+2025-07-23 10:07:16 | INFO     | __main__:generate_reports:233 - Generating TradingView style classified charts...
+2025-07-23 10:07:16 | WARNING  | src.visualization.chart_generator:generate_classified_charts:697 - No pattern files found!
+2025-07-23 10:07:16 | INFO     | __main__:generate_reports:242 - Generated 0 TradingView style charts
+2025-07-23 10:07:16 | INFO     | __main__:generate_reports:246 - Generating pattern classification summary...
+2025-07-23 10:07:16 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 10:07:16 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 10:07:16 | ERROR    | src.visualization.chart_generator:create_summary_report:829 - Failed to create summary report: 'DatasetManager' object has no attribute 'load_all_patterns'
+2025-07-23 10:07:16 | INFO     | __main__:generate_reports:255 - Saving patterns to dataset...
+2025-07-23 10:07:16 | INFO     | src.storage.dataset_manager:batch_save_patterns:268 - Starting batch save of 2 patterns
+2025-07-23 10:07:16 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 2769acbc-db61-442f-80fc-48285900316b saved as RBL8_20230512_1500_上升旗形.json
+2025-07-23 10:07:16 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern f19a8db6-b29a-44f3-b579-8f87d21f4101 saved as RBL8_20230120_1445_上升旗形.json
+2025-07-23 10:07:16 | INFO     | src.storage.dataset_manager:batch_save_patterns:282 - Batch save completed: {'total': 2, 'success': 2, 'errors': 0}
+2025-07-23 10:07:16 | INFO     | __main__:generate_reports:257 - Saved 2/2 patterns to dataset
+2025-07-23 10:07:16 | INFO     | __main__:generate_reports:260 - Report generation completed. Generated 0 charts
+2025-07-23 10:07:16 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-23 10:07:16 | INFO     | __main__:run:323 - PatternScout execution completed successfully
+2025-07-23 10:07:59 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-23 10:07:59 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 10:07:59 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 10:07:59 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 10:07:59 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 10:07:59 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 10:07:59 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 10:07:59 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 10:07:59 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 10:07:59 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 10:07:59 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:07:59 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5923 records for RBL8 from 2023-01-01 00:00:00 to 2023-12-31 00:00:00
+2025-07-23 10:08:50 | INFO     | src.patterns.detectors.flag_detector:detect_flags:88 - Detected 16 potential flagpoles with improved algorithm
+2025-07-23 10:08:52 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: 248fe8ea-b2f8-4f36-833c-f6a9601b541c with confidence 0.706
+2025-07-23 10:08:53 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: c77a355f-7b6d-4cb1-adaa-3fcb09a13ac0 with confidence 0.773
+2025-07-23 10:08:53 | INFO     | src.patterns.detectors.flag_detector:detect_flags:109 - Total improved flag patterns detected: 2
+2025-07-23 10:08:53 | INFO     | __main__:scan_patterns:187 - Found 2 flag patterns for RBL8
+2025-07-23 10:08:53 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 2
+2025-07-23 10:08:53 | INFO     | __main__:generate_reports:218 - Generating reports...
+2025-07-23 10:08:53 | INFO     | __main__:generate_reports:233 - Generating TradingView style classified charts...
+2025-07-23 10:08:53 | WARNING  | src.visualization.chart_generator:generate_classified_charts:697 - No pattern files found!
+2025-07-23 10:08:53 | INFO     | __main__:generate_reports:242 - Generated 0 TradingView style charts
+2025-07-23 10:08:53 | INFO     | __main__:generate_reports:246 - Generating pattern classification summary...
+2025-07-23 10:08:53 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 10:08:53 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 10:08:53 | ERROR    | src.visualization.chart_generator:create_summary_report:829 - Failed to create summary report: 'DatasetManager' object has no attribute 'load_all_patterns'
+2025-07-23 10:08:53 | INFO     | __main__:generate_reports:255 - Saving patterns to dataset...
+2025-07-23 10:08:53 | INFO     | src.storage.dataset_manager:batch_save_patterns:268 - Starting batch save of 2 patterns
+2025-07-23 10:08:53 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 248fe8ea-b2f8-4f36-833c-f6a9601b541c saved as RBL8_20230512_1500_上升旗形.json
+2025-07-23 10:08:53 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern c77a355f-7b6d-4cb1-adaa-3fcb09a13ac0 saved as RBL8_20230120_1445_上升旗形.json
+2025-07-23 10:08:53 | INFO     | src.storage.dataset_manager:batch_save_patterns:282 - Batch save completed: {'total': 2, 'success': 2, 'errors': 0}
+2025-07-23 10:08:53 | INFO     | __main__:generate_reports:257 - Saved 2/2 patterns to dataset
+2025-07-23 10:08:53 | INFO     | __main__:generate_reports:260 - Report generation completed. Generated 0 charts
+2025-07-23 10:08:53 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-23 10:08:53 | INFO     | __main__:run:323 - PatternScout execution completed successfully
+2025-07-23 10:33:26 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-23 10:33:26 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 10:33:26 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 10:33:26 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 10:33:26 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 10:33:26 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 10:33:26 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 10:33:26 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 10:33:26 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 10:33:26 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 10:33:27 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:33:27 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5923 records for RBL8 from 2023-01-01 00:00:00 to 2023-12-31 00:00:00
+2025-07-23 10:34:19 | INFO     | src.patterns.detectors.flag_detector:detect_flags:88 - Detected 16 potential flagpoles with improved algorithm
+2025-07-23 10:34:21 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: da14aa53-cd8d-4629-bf7e-b14eb0f238c3 with confidence 0.706
+2025-07-23 10:34:22 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: ddbb3e9a-a4e7-459f-9aeb-9c188d971037 with confidence 0.773
+2025-07-23 10:34:22 | INFO     | src.patterns.detectors.flag_detector:detect_flags:109 - Total improved flag patterns detected: 2
+2025-07-23 10:34:22 | INFO     | __main__:scan_patterns:187 - Found 2 flag patterns for RBL8
+2025-07-23 10:34:22 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 2
+2025-07-23 10:34:22 | INFO     | __main__:generate_reports:218 - Generating reports...
+2025-07-23 10:34:22 | INFO     | __main__:generate_reports:233 - Generating TradingView style classified charts...
+2025-07-23 10:34:22 | INFO     | src.visualization.chart_generator:generate_classified_charts:717 - Generating 2 flag charts...
+2025-07-23 10:34:22 | INFO     | src.visualization.chart_generator:generate_classified_charts:730 - Generating 1/2 flag chart: RBL8_20230120_1445_上升旗形
+2025-07-23 10:34:22 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:34:22 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 216 records for RBL8 from 2023-01-17 14:45:00 to 2023-02-04 09:15:00
+2025-07-23 10:34:24 | INFO     | src.visualization.chart_generator:generate_pattern_chart_from_data:679 - TradingView style chart saved: output\charts\flag\RBL8_20230120_1445_上升旗形.png
+2025-07-23 10:34:24 | INFO     | src.visualization.chart_generator:generate_classified_charts:736 - TradingView style chart saved: output\charts\flag\RBL8_20230120_1445_上升旗形.png
+2025-07-23 10:34:24 | INFO     | src.visualization.chart_generator:generate_classified_charts:730 - Generating 2/2 flag chart: RBL8_20230512_1500_上升旗形
+2025-07-23 10:34:24 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:34:24 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 144 records for RBL8 from 2023-05-09 15:00:00 to 2023-05-17 22:15:00
+2025-07-23 10:34:25 | INFO     | src.visualization.chart_generator:generate_pattern_chart_from_data:679 - TradingView style chart saved: output\charts\flag\RBL8_20230512_1500_上升旗形.png
+2025-07-23 10:34:25 | INFO     | src.visualization.chart_generator:generate_classified_charts:736 - TradingView style chart saved: output\charts\flag\RBL8_20230512_1500_上升旗形.png
+2025-07-23 10:34:25 | INFO     | src.visualization.chart_generator:generate_classified_charts:745 - Classification chart generation completed. Generated 2 charts
+2025-07-23 10:34:25 | INFO     | __main__:generate_reports:242 - Generated 2 TradingView style charts
+2025-07-23 10:34:25 | INFO     | __main__:generate_reports:246 - Generating pattern classification summary...
+2025-07-23 10:34:25 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 10:34:25 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 10:34:25 | ERROR    | src.visualization.chart_generator:create_summary_report:829 - Failed to create summary report: 'DatasetManager' object has no attribute 'load_all_patterns'
+2025-07-23 10:34:25 | INFO     | __main__:generate_reports:255 - Saving patterns to dataset...
+2025-07-23 10:34:25 | INFO     | src.storage.dataset_manager:batch_save_patterns:268 - Starting batch save of 2 patterns
+2025-07-23 10:34:26 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern da14aa53-cd8d-4629-bf7e-b14eb0f238c3 saved as RBL8_20230512_1500_上升旗形.json
+2025-07-23 10:34:26 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern ddbb3e9a-a4e7-459f-9aeb-9c188d971037 saved as RBL8_20230120_1445_上升旗形.json
+2025-07-23 10:34:26 | INFO     | src.storage.dataset_manager:batch_save_patterns:282 - Batch save completed: {'total': 2, 'success': 2, 'errors': 0}
+2025-07-23 10:34:26 | INFO     | __main__:generate_reports:257 - Saved 2/2 patterns to dataset
+2025-07-23 10:34:26 | INFO     | __main__:generate_reports:260 - Report generation completed. Generated 2 charts
+2025-07-23 10:34:26 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-23 10:34:26 | INFO     | __main__:run:323 - PatternScout execution completed successfully
+2025-07-23 10:46:08 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-23 10:46:08 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 10:46:08 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 10:46:08 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 10:46:08 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 10:46:08 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 10:46:08 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 10:46:08 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 10:46:08 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 10:46:08 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 10:46:08 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:46:08 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5923 records for RBL8 from 2023-01-01 00:00:00 to 2023-12-31 00:00:00
+2025-07-23 10:47:01 | INFO     | src.patterns.detectors.flag_detector:detect_flags:88 - Detected 16 potential flagpoles with improved algorithm
+2025-07-23 10:47:02 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: 0f461a4b-3bff-41ef-bf7b-b8b586572486 with confidence 0.706
+2025-07-23 10:47:03 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: b3a60ade-6cb1-40c0-8027-938c853350e4 with confidence 0.773
+2025-07-23 10:47:03 | INFO     | src.patterns.detectors.flag_detector:detect_flags:109 - Total improved flag patterns detected: 2
+2025-07-23 10:47:03 | INFO     | __main__:scan_patterns:187 - Found 2 flag patterns for RBL8
+2025-07-23 10:47:03 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 2
+2025-07-23 10:47:03 | INFO     | __main__:generate_reports:218 - Generating reports...
+2025-07-23 10:47:03 | INFO     | __main__:generate_reports:233 - Generating TradingView style classified charts...
+2025-07-23 10:47:03 | INFO     | src.visualization.chart_generator:generate_classified_charts:717 - Generating 2 flag charts...
+2025-07-23 10:47:03 | INFO     | src.visualization.chart_generator:generate_classified_charts:730 - Generating 1/2 flag chart: RBL8_20230120_1445_上升旗形
+2025-07-23 10:47:03 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:47:03 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 216 records for RBL8 from 2023-01-17 14:45:00 to 2023-02-04 09:15:00
+2025-07-23 10:47:05 | INFO     | src.visualization.chart_generator:generate_pattern_chart_from_data:679 - TradingView style chart saved: output\charts\flag\RBL8_20230120_1445_上升旗形.png
+2025-07-23 10:47:05 | INFO     | src.visualization.chart_generator:generate_classified_charts:736 - TradingView style chart saved: output\charts\flag\RBL8_20230120_1445_上升旗形.png
+2025-07-23 10:47:05 | INFO     | src.visualization.chart_generator:generate_classified_charts:730 - Generating 2/2 flag chart: RBL8_20230512_1500_上升旗形
+2025-07-23 10:47:05 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:47:05 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 144 records for RBL8 from 2023-05-09 15:00:00 to 2023-05-17 22:15:00
+2025-07-23 10:47:06 | INFO     | src.visualization.chart_generator:generate_pattern_chart_from_data:679 - TradingView style chart saved: output\charts\flag\RBL8_20230512_1500_上升旗形.png
+2025-07-23 10:47:06 | INFO     | src.visualization.chart_generator:generate_classified_charts:736 - TradingView style chart saved: output\charts\flag\RBL8_20230512_1500_上升旗形.png
+2025-07-23 10:47:06 | INFO     | src.visualization.chart_generator:generate_classified_charts:745 - Classification chart generation completed. Generated 2 charts
+2025-07-23 10:47:06 | INFO     | __main__:generate_reports:242 - Generated 2 TradingView style charts
+2025-07-23 10:47:06 | INFO     | __main__:generate_reports:246 - Generating pattern classification summary...
+2025-07-23 10:47:06 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 10:47:06 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 10:47:06 | ERROR    | src.visualization.chart_generator:create_summary_report:829 - Failed to create summary report: 'DatasetManager' object has no attribute 'load_all_patterns'
+2025-07-23 10:47:06 | INFO     | __main__:generate_reports:255 - Saving patterns to dataset...
+2025-07-23 10:47:06 | INFO     | src.storage.dataset_manager:batch_save_patterns:268 - Starting batch save of 2 patterns
+2025-07-23 10:47:06 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 0f461a4b-3bff-41ef-bf7b-b8b586572486 saved as RBL8_20230512_1500_上升旗形.json
+2025-07-23 10:47:06 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern b3a60ade-6cb1-40c0-8027-938c853350e4 saved as RBL8_20230120_1445_上升旗形.json
+2025-07-23 10:47:06 | INFO     | src.storage.dataset_manager:batch_save_patterns:282 - Batch save completed: {'total': 2, 'success': 2, 'errors': 0}
+2025-07-23 10:47:06 | INFO     | __main__:generate_reports:257 - Saved 2/2 patterns to dataset
+2025-07-23 10:47:06 | INFO     | __main__:generate_reports:260 - Report generation completed. Generated 2 charts
+2025-07-23 10:47:06 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-23 10:47:06 | INFO     | __main__:run:323 - PatternScout execution completed successfully
+2025-07-23 10:54:31 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-23 10:54:31 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 10:54:31 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 10:54:31 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 10:54:31 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 10:54:31 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 10:54:31 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 10:54:31 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 10:54:31 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 10:54:31 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 10:54:31 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:54:31 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5923 records for RBL8 from 2023-01-01 00:00:00 to 2023-12-31 00:00:00
+2025-07-23 10:55:23 | INFO     | src.patterns.detectors.flag_detector:detect_flags:88 - Detected 16 potential flagpoles with improved algorithm
+2025-07-23 10:55:25 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: 664f8693-acb1-4a8a-8972-81930555c71c with confidence 0.706
+2025-07-23 10:55:25 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: 99dbfcb6-2d03-4733-9a8b-2e099871a66c with confidence 0.773
+2025-07-23 10:55:25 | INFO     | src.patterns.detectors.flag_detector:detect_flags:109 - Total improved flag patterns detected: 2
+2025-07-23 10:55:25 | INFO     | __main__:scan_patterns:187 - Found 2 flag patterns for RBL8
+2025-07-23 10:55:25 | ERROR    | __main__:scan_patterns:196 - Error scanning RBL8: 'min_duration_days'
+2025-07-23 10:55:25 | ERROR    | __main__:scan_patterns:198 - Full traceback: Traceback (most recent call last):
+  File "C:\quant\strategy\PatternScout\pattern-scout\main.py", line 191, in scan_patterns
+    triangle_patterns = self.triangle_detector.detect_triangle_flags(df)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\triangle_flag_detector.py", line 68, in detect_triangle_flags
+    flagpoles = self._detect_flagpoles(df)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\triangle_flag_detector.py", line 103, in _detect_flagpoles
+    min_duration = self.config['flagpole']['min_duration_days']
+                   ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'min_duration_days'
+
+2025-07-23 10:55:25 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 2
+2025-07-23 10:55:25 | INFO     | __main__:generate_reports:218 - Generating reports...
+2025-07-23 10:55:25 | INFO     | __main__:generate_reports:233 - Generating TradingView style classified charts...
+2025-07-23 10:55:25 | INFO     | src.visualization.chart_generator:generate_classified_charts:717 - Generating 2 flag charts...
+2025-07-23 10:55:25 | INFO     | src.visualization.chart_generator:generate_classified_charts:730 - Generating 1/2 flag chart: RBL8_20230120_1445_上升旗形
+2025-07-23 10:55:25 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:55:25 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 216 records for RBL8 from 2023-01-17 14:45:00 to 2023-02-04 09:15:00
+2025-07-23 10:55:27 | INFO     | src.visualization.chart_generator:generate_pattern_chart_from_data:679 - TradingView style chart saved: output\charts\flag\RBL8_20230120_1445_上升旗形.png
+2025-07-23 10:55:27 | INFO     | src.visualization.chart_generator:generate_classified_charts:736 - TradingView style chart saved: output\charts\flag\RBL8_20230120_1445_上升旗形.png
+2025-07-23 10:55:27 | INFO     | src.visualization.chart_generator:generate_classified_charts:730 - Generating 2/2 flag chart: RBL8_20230512_1500_上升旗形
+2025-07-23 10:55:27 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:55:27 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 144 records for RBL8 from 2023-05-09 15:00:00 to 2023-05-17 22:15:00
+2025-07-23 10:55:28 | INFO     | src.visualization.chart_generator:generate_pattern_chart_from_data:679 - TradingView style chart saved: output\charts\flag\RBL8_20230512_1500_上升旗形.png
+2025-07-23 10:55:28 | INFO     | src.visualization.chart_generator:generate_classified_charts:736 - TradingView style chart saved: output\charts\flag\RBL8_20230512_1500_上升旗形.png
+2025-07-23 10:55:28 | INFO     | src.visualization.chart_generator:generate_classified_charts:745 - Classification chart generation completed. Generated 2 charts
+2025-07-23 10:55:28 | INFO     | __main__:generate_reports:242 - Generated 2 TradingView style charts
+2025-07-23 10:55:28 | INFO     | __main__:generate_reports:246 - Generating pattern classification summary...
+2025-07-23 10:55:28 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 10:55:28 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 10:55:28 | ERROR    | src.visualization.chart_generator:create_summary_report:829 - Failed to create summary report: 'DatasetManager' object has no attribute 'load_all_patterns'
+2025-07-23 10:55:28 | INFO     | __main__:generate_reports:255 - Saving patterns to dataset...
+2025-07-23 10:55:28 | INFO     | src.storage.dataset_manager:batch_save_patterns:268 - Starting batch save of 2 patterns
+2025-07-23 10:55:28 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 664f8693-acb1-4a8a-8972-81930555c71c saved as RBL8_20230512_1500_上升旗形.json
+2025-07-23 10:55:28 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 99dbfcb6-2d03-4733-9a8b-2e099871a66c saved as RBL8_20230120_1445_上升旗形.json
+2025-07-23 10:55:28 | INFO     | src.storage.dataset_manager:batch_save_patterns:282 - Batch save completed: {'total': 2, 'success': 2, 'errors': 0}
+2025-07-23 10:55:28 | INFO     | __main__:generate_reports:257 - Saved 2/2 patterns to dataset
+2025-07-23 10:55:28 | INFO     | __main__:generate_reports:260 - Report generation completed. Generated 2 charts
+2025-07-23 10:55:28 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-23 10:55:28 | INFO     | __main__:run:323 - PatternScout execution completed successfully
+2025-07-23 10:55:50 | INFO     | src.utils.config_manager:validate_config:201 - Configuration validation passed
+2025-07-23 10:55:50 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 10:55:50 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 10:55:50 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 10:55:50 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 10:55:50 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 10:55:50 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 10:55:50 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 10:55:50 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 10:55:50 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 10:55:50 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:55:50 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5923 records for RBL8 from 2023-01-01 00:00:00 to 2023-12-31 00:00:00
+2025-07-23 10:56:41 | INFO     | src.patterns.detectors.flag_detector:detect_flags:88 - Detected 16 potential flagpoles with improved algorithm
+2025-07-23 10:56:43 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: d8276f67-42cf-490b-84fe-da6eda6c0d33 with confidence 0.706
+2025-07-23 10:56:44 | INFO     | src.patterns.detectors.flag_detector:detect_flags:107 - Detected improved flag pattern: ec318847-cea9-479f-bf3e-ee81be2d0245 with confidence 0.773
+2025-07-23 10:56:44 | INFO     | src.patterns.detectors.flag_detector:detect_flags:109 - Total improved flag patterns detected: 2
+2025-07-23 10:56:44 | INFO     | __main__:scan_patterns:187 - Found 2 flag patterns for RBL8
+2025-07-23 10:56:44 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 2
+2025-07-23 10:56:44 | INFO     | __main__:generate_reports:218 - Generating reports...
+2025-07-23 10:56:44 | INFO     | __main__:generate_reports:233 - Generating TradingView style classified charts...
+2025-07-23 10:56:44 | INFO     | src.visualization.chart_generator:generate_classified_charts:717 - Generating 2 flag charts...
+2025-07-23 10:56:44 | INFO     | src.visualization.chart_generator:generate_classified_charts:730 - Generating 1/2 flag chart: RBL8_20230120_1445_上升旗形
+2025-07-23 10:56:44 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:56:44 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 216 records for RBL8 from 2023-01-17 14:45:00 to 2023-02-04 09:15:00
+2025-07-23 10:56:45 | INFO     | src.visualization.chart_generator:generate_pattern_chart_from_data:679 - TradingView style chart saved: output\charts\flag\RBL8_20230120_1445_上升旗形.png
+2025-07-23 10:56:45 | INFO     | src.visualization.chart_generator:generate_classified_charts:736 - TradingView style chart saved: output\charts\flag\RBL8_20230120_1445_上升旗形.png
+2025-07-23 10:56:45 | INFO     | src.visualization.chart_generator:generate_classified_charts:730 - Generating 2/2 flag chart: RBL8_20230512_1500_上升旗形
+2025-07-23 10:56:45 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 10:56:45 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 144 records for RBL8 from 2023-05-09 15:00:00 to 2023-05-17 22:15:00
+2025-07-23 10:56:46 | INFO     | src.visualization.chart_generator:generate_pattern_chart_from_data:679 - TradingView style chart saved: output\charts\flag\RBL8_20230512_1500_上升旗形.png
+2025-07-23 10:56:46 | INFO     | src.visualization.chart_generator:generate_classified_charts:736 - TradingView style chart saved: output\charts\flag\RBL8_20230512_1500_上升旗形.png
+2025-07-23 10:56:46 | INFO     | src.visualization.chart_generator:generate_classified_charts:745 - Classification chart generation completed. Generated 2 charts
+2025-07-23 10:56:46 | INFO     | __main__:generate_reports:242 - Generated 2 TradingView style charts
+2025-07-23 10:56:46 | INFO     | __main__:generate_reports:246 - Generating pattern classification summary...
+2025-07-23 10:56:46 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 10:56:46 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 10:56:46 | ERROR    | src.visualization.chart_generator:create_summary_report:829 - Failed to create summary report: 'DatasetManager' object has no attribute 'load_all_patterns'
+2025-07-23 10:56:46 | INFO     | __main__:generate_reports:255 - Saving patterns to dataset...
+2025-07-23 10:56:46 | INFO     | src.storage.dataset_manager:batch_save_patterns:268 - Starting batch save of 2 patterns
+2025-07-23 10:56:46 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern d8276f67-42cf-490b-84fe-da6eda6c0d33 saved as RBL8_20230512_1500_上升旗形.json
+2025-07-23 10:56:46 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern ec318847-cea9-479f-bf3e-ee81be2d0245 saved as RBL8_20230120_1445_上升旗形.json
+2025-07-23 10:56:46 | INFO     | src.storage.dataset_manager:batch_save_patterns:282 - Batch save completed: {'total': 2, 'success': 2, 'errors': 0}
+2025-07-23 10:56:46 | INFO     | __main__:generate_reports:257 - Saved 2/2 patterns to dataset
+2025-07-23 10:56:46 | INFO     | __main__:generate_reports:260 - Report generation completed. Generated 2 charts
+2025-07-23 10:56:46 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-23 10:56:46 | INFO     | __main__:run:323 - PatternScout execution completed successfully
+2025-07-23 15:18:22 | INFO     | src.utils.config_manager:validate_config:368 - Configuration validation passed
+2025-07-23 15:18:22 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:18:22 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 15:18:22 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 15:18:22 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 15:18:22 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 15:18:22 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:18:22 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 15:18:22 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 15:18:22 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 15:18:22 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 15:18:22 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5387 records for RBL8 from 2024-07-23 15:18:22.126138 to 2025-07-23 15:18:22.126142
+2025-07-23 15:18:22 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:18:22 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting flag patterns - Timeframe: 15m, Category: short
+2025-07-23 15:18:44 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 11 potential flagpoles
+2025-07-23 15:18:44 | ERROR    | __main__:scan_patterns:196 - Error scanning RBL8: 'flag'
+2025-07-23 15:18:44 | ERROR    | __main__:scan_patterns:198 - Full traceback: Traceback (most recent call last):
+  File "C:\quant\strategy\PatternScout\pattern-scout\main.py", line 185, in scan_patterns
+    flag_patterns = self.flag_detector.detect(df)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\base\base_detector.py", line 80, in detect
+    patterns = self._detect_pattern_formation(
+        df_processed, flagpoles, params, strategy
+    )
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\flag_detector.py", line 122, in _detect_pattern_formation
+    flag_result = self._detect_flag_after_pole(df, flagpole, params, strategy)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\flag_detector.py", line 156, in _detect_flag_after_pole
+    if flagpole_end_idx >= len(df) - params['flag']['min_bars']:
+                                     ~~~~~~^^^^^^^^
+KeyError: 'flag'
+
+2025-07-23 15:18:44 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 0
+2025-07-23 15:18:44 | WARNING  | __main__:run:301 - No patterns detected
+2025-07-23 15:19:11 | INFO     | src.utils.config_manager:validate_config:368 - Configuration validation passed
+2025-07-23 15:19:11 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:19:11 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 15:19:11 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 15:19:11 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 15:19:11 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 15:19:11 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:19:11 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 15:19:11 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 15:19:11 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 15:19:11 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 15:19:11 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5387 records for RBL8 from 2024-07-23 15:19:11.864687 to 2025-07-23 15:19:11.864691
+2025-07-23 15:19:11 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:19:11 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting flag patterns - Timeframe: 15m, Category: short
+2025-07-23 15:19:34 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 11 potential flagpoles
+2025-07-23 15:19:34 | ERROR    | __main__:scan_patterns:196 - Error scanning RBL8: 'flag'
+2025-07-23 15:19:34 | ERROR    | __main__:scan_patterns:198 - Full traceback: Traceback (most recent call last):
+  File "C:\quant\strategy\PatternScout\pattern-scout\main.py", line 185, in scan_patterns
+    flag_patterns = self.flag_detector.detect(df)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\base\base_detector.py", line 80, in detect
+    patterns = self._detect_pattern_formation(
+        df_processed, flagpoles, params, strategy
+    )
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\flag_detector.py", line 122, in _detect_pattern_formation
+    flag_result = self._detect_flag_after_pole(df, flagpole, params, strategy)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\flag_detector.py", line 156, in _detect_flag_after_pole
+    if flagpole_end_idx >= len(df) - params['flag']['min_bars']:
+                                     ~~~~~~^^^^^^^^
+KeyError: 'flag'
+
+2025-07-23 15:19:34 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 0
+2025-07-23 15:19:34 | WARNING  | __main__:run:301 - No patterns detected
+2025-07-23 15:21:36 | INFO     | src.utils.config_manager:validate_config:368 - Configuration validation passed
+2025-07-23 15:21:36 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:21:36 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 15:21:36 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 15:21:36 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 15:21:36 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 15:21:36 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:21:36 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 15:21:36 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 15:21:36 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 15:21:36 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 15:21:37 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5387 records for RBL8 from 2024-07-23 15:21:36.949155 to 2025-07-23 15:21:36.949159
+2025-07-23 15:21:37 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:21:37 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting flag patterns - Timeframe: 15m, Category: short
+2025-07-23 15:21:58 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 11 potential flagpoles
+2025-07-23 15:21:58 | ERROR    | __main__:scan_patterns:196 - Error scanning RBL8: 'min_bars'
+2025-07-23 15:21:58 | ERROR    | __main__:scan_patterns:198 - Full traceback: Traceback (most recent call last):
+  File "C:\quant\strategy\PatternScout\pattern-scout\main.py", line 185, in scan_patterns
+    flag_patterns = self.flag_detector.detect(df)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\base\base_detector.py", line 80, in detect
+    patterns = self._detect_pattern_formation(
+        df_processed, flagpoles, params, strategy
+    )
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\flag_detector.py", line 122, in _detect_pattern_formation
+    flag_result = self._detect_flag_after_pole(df, flagpole, params, strategy)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\flag_detector.py", line 156, in _detect_flag_after_pole
+    if flagpole_end_idx >= len(df) - params['pattern']['min_bars']:
+                                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'min_bars'
+
+2025-07-23 15:21:58 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 0
+2025-07-23 15:21:58 | WARNING  | __main__:run:301 - No patterns detected
+2025-07-23 15:23:12 | INFO     | src.utils.config_manager:validate_config:368 - Configuration validation passed
+2025-07-23 15:23:12 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:23:12 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 15:23:12 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 15:23:12 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 15:23:12 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 15:23:12 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:23:12 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 15:23:12 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 15:23:12 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 15:23:12 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 15:23:12 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5387 records for RBL8 from 2024-07-23 15:23:12.085466 to 2025-07-23 15:23:12.085470
+2025-07-23 15:23:12 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:23:12 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting flag patterns - Timeframe: 15m, Category: short
+2025-07-23 15:23:33 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 11 potential flagpoles
+2025-07-23 15:23:34 | INFO     | src.patterns.base.base_detector:detect:84 - Total flag patterns detected: 0
+2025-07-23 15:23:34 | INFO     | __main__:scan_patterns:187 - Found 0 flag patterns for RBL8
+2025-07-23 15:23:34 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 0
+2025-07-23 15:23:34 | WARNING  | __main__:run:301 - No patterns detected
+2025-07-23 15:23:55 | INFO     | src.utils.config_manager:validate_config:368 - Configuration validation passed
+2025-07-23 15:23:55 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:23:55 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 15:23:55 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 15:23:55 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 15:23:55 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 15:23:55 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:23:55 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 15:23:55 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 15:23:55 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 15:23:55 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 15:23:55 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5387 records for RBL8 from 2024-07-23 15:23:55.580101 to 2025-07-23 15:23:55.580105
+2025-07-23 15:23:55 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:23:55 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting flag patterns - Timeframe: 15m, Category: short
+2025-07-23 15:24:17 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 11 potential flagpoles
+2025-07-23 15:24:18 | INFO     | src.patterns.base.base_detector:detect:84 - Total flag patterns detected: 0
+2025-07-23 15:24:18 | INFO     | __main__:scan_patterns:187 - Found 0 flag patterns for RBL8
+2025-07-23 15:24:18 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:24:18 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting pennant patterns - Timeframe: 15m, Category: short
+2025-07-23 15:24:41 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 11 potential flagpoles
+2025-07-23 15:24:41 | ERROR    | __main__:scan_patterns:196 - Error scanning RBL8: 'pennant'
+2025-07-23 15:24:41 | ERROR    | __main__:scan_patterns:198 - Full traceback: Traceback (most recent call last):
+  File "C:\quant\strategy\PatternScout\pattern-scout\main.py", line 191, in scan_patterns
+    pennant_patterns = self.pennant_detector.detect(df)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\base\base_detector.py", line 80, in detect
+    patterns = self._detect_pattern_formation(
+        df_processed, flagpoles, params, strategy
+    )
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\pennant_detector.py", line 120, in _detect_pattern_formation
+    pennant_result = self._detect_pennant_after_pole(
+        df, flagpole, params, strategy
+    )
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\pennant_detector.py", line 157, in _detect_pennant_after_pole
+    if flagpole_end_idx >= len(df) - params['pennant']['min_bars']:
+                                     ~~~~~~^^^^^^^^^^^
+KeyError: 'pennant'
+
+2025-07-23 15:24:41 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 0
+2025-07-23 15:24:41 | WARNING  | __main__:run:301 - No patterns detected
+2025-07-23 15:26:07 | INFO     | src.utils.config_manager:validate_config:368 - Configuration validation passed
+2025-07-23 15:26:07 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:26:07 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 15:26:07 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 15:26:07 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 15:26:07 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 15:26:07 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:26:07 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 15:26:07 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 15:26:07 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 15:26:07 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 15:26:07 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5387 records for RBL8 from 2024-07-23 15:26:07.393154 to 2025-07-23 15:26:07.393158
+2025-07-23 15:26:07 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:26:07 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting flag patterns - Timeframe: 15m, Category: short
+2025-07-23 15:26:30 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 11 potential flagpoles
+2025-07-23 15:26:31 | INFO     | src.patterns.base.base_detector:detect:84 - Total flag patterns detected: 0
+2025-07-23 15:26:31 | INFO     | __main__:scan_patterns:187 - Found 0 flag patterns for RBL8
+2025-07-23 15:26:31 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:26:31 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting pennant patterns - Timeframe: 15m, Category: short
+2025-07-23 15:26:54 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 11 potential flagpoles
+2025-07-23 15:26:54 | ERROR    | __main__:scan_patterns:196 - Error scanning RBL8: 'numpy.timedelta64' object has no attribute 'total_seconds'
+2025-07-23 15:26:54 | ERROR    | __main__:scan_patterns:198 - Full traceback: Traceback (most recent call last):
+  File "C:\quant\strategy\PatternScout\pattern-scout\main.py", line 191, in scan_patterns
+    pennant_patterns = self.pennant_detector.detect(df)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\base\base_detector.py", line 80, in detect
+    patterns = self._detect_pattern_formation(
+        df_processed, flagpoles, params, strategy
+    )
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\pennant_detector.py", line 120, in _detect_pattern_formation
+    pennant_result = self._detect_pennant_after_pole(
+        df, flagpole, params, strategy
+    )
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\pennant_detector.py", line 180, in _detect_pennant_after_pole
+    pennant_result = self._analyze_pennant_pattern(
+        pennant_data, flagpole, params, strategy, df
+    )
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\pennant_detector.py", line 220, in _analyze_pennant_pattern
+    apex = self.pattern_components.calculate_convergence_point(upper_line, lower_line)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\base\pattern_components.py", line 343, in calculate_convergence_point
+    time_diff = (upper_line.end_time - upper_line.start_time).total_seconds()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'numpy.timedelta64' object has no attribute 'total_seconds'
+
+2025-07-23 15:26:54 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 0
+2025-07-23 15:26:54 | WARNING  | __main__:run:301 - No patterns detected
+2025-07-23 15:27:43 | INFO     | src.utils.config_manager:validate_config:368 - Configuration validation passed
+2025-07-23 15:27:43 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:27:43 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 15:27:43 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 15:27:43 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 15:27:43 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 15:27:43 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:27:43 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 15:27:43 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 15:27:43 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 15:27:43 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 15:27:43 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5387 records for RBL8 from 2024-07-23 15:27:43.591124 to 2025-07-23 15:27:43.591128
+2025-07-23 15:27:43 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:27:43 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting pennant patterns - Timeframe: 15m, Category: short
+2025-07-23 15:28:06 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 11 potential flagpoles
+2025-07-23 15:28:06 | INFO     | src.patterns.base.base_detector:detect:84 - Total pennant patterns detected: 0
+2025-07-23 15:28:06 | INFO     | __main__:scan_patterns:193 - Found 0 pennant patterns for RBL8
+2025-07-23 15:28:06 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 0
+2025-07-23 15:28:06 | WARNING  | __main__:run:301 - No patterns detected
+2025-07-23 15:38:45 | INFO     | src.utils.config_manager:validate_config:368 - Configuration validation passed
+2025-07-23 15:38:45 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:38:45 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 15:38:45 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 15:38:45 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 15:38:45 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 15:38:45 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:38:45 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 15:38:45 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 15:38:45 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 15:38:45 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 15:38:45 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5387 records for RBL8 from 2024-07-23 15:38:45.818615 to 2025-07-23 15:38:45.818619
+2025-07-23 15:38:45 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:38:45 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting flag patterns - Timeframe: 15m, Category: short
+2025-07-23 15:39:08 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 11 potential flagpoles
+2025-07-23 15:39:09 | INFO     | src.patterns.base.base_detector:detect:84 - Total flag patterns detected: 0
+2025-07-23 15:39:09 | INFO     | __main__:scan_patterns:187 - Found 0 flag patterns for RBL8
+2025-07-23 15:39:09 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 0
+2025-07-23 15:39:09 | WARNING  | __main__:run:301 - No patterns detected
+2025-07-23 15:41:04 | INFO     | src.utils.config_manager:validate_config:368 - Configuration validation passed
+2025-07-23 15:41:04 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:41:04 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 15:41:04 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 15:41:04 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 15:41:04 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 15:41:04 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:41:04 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 15:41:04 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 15:41:04 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 15:41:04 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 15:41:04 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5387 records for RBL8 from 2024-07-23 15:41:04.916302 to 2025-07-23 15:41:04.916306
+2025-07-23 15:41:05 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:41:05 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting flag patterns - Timeframe: 15m, Category: short
+2025-07-23 15:41:39 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 72 potential flagpoles
+2025-07-23 15:41:39 | ERROR    | __main__:scan_patterns:196 - Error scanning RBL8: name 'stats' is not defined
+2025-07-23 15:41:39 | ERROR    | __main__:scan_patterns:198 - Full traceback: Traceback (most recent call last):
+  File "C:\quant\strategy\PatternScout\pattern-scout\main.py", line 185, in scan_patterns
+    flag_patterns = self.flag_detector.detect(df)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\base\base_detector.py", line 80, in detect
+    patterns = self._detect_pattern_formation(
+        df_processed, flagpoles, params, strategy
+    )
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\flag_detector.py", line 122, in _detect_pattern_formation
+    flag_result = self._detect_flag_after_pole(df, flagpole, params, strategy)
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\flag_detector.py", line 179, in _detect_flag_after_pole
+    flag_result = self._analyze_flag_pattern(
+        flag_data, flagpole, params, strategy, df
+    )
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\detectors\flag_detector.py", line 235, in _analyze_flag_pattern
+    confidence_score = strategy.score_flag_quality(
+        flag_data, flagpole, boundaries
+    )
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\strategies\short_strategy.py", line 136, in score_flag_quality
+    base_score = self.quality_scorer.score_flag_pattern(
+        df, flagpole, boundaries, 'short'
+    )
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\base\quality_scorer.py", line 108, in score_flag_pattern
+    scores['volume_pattern'] = self._score_volume_pattern(
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        flag_data, flagpole, 'flag', category
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\quant\strategy\PatternScout\pattern-scout\src\patterns\base\quality_scorer.py", line 453, in _score_volume_pattern
+    slope, _, r_value, _, _ = stats.linregress(x, pattern_volumes)
+                              ^^^^^
+NameError: name 'stats' is not defined
+
+2025-07-23 15:41:39 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 0
+2025-07-23 15:41:39 | WARNING  | __main__:run:301 - No patterns detected
+2025-07-23 15:42:06 | INFO     | src.utils.config_manager:validate_config:368 - Configuration validation passed
+2025-07-23 15:42:06 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:42:06 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 15:42:06 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 15:42:06 | INFO     | __main__:__init__:50 - PatternScout initialized successfully
+2025-07-23 15:42:06 | INFO     | __main__:run:290 - Starting PatternScout execution...
+2025-07-23 15:42:06 | INFO     | src.data.connectors.csv_connector:connect:32 - Connected to CSV data source: data\csv
+2025-07-23 15:42:06 | INFO     | __main__:_setup_data_connector:123 - Connected to csv data source
+2025-07-23 15:42:06 | INFO     | __main__:scan_patterns:150 - Starting pattern scanning...
+2025-07-23 15:42:06 | INFO     | __main__:scan_patterns:174 - Scanning patterns for RBL8...
+2025-07-23 15:42:06 | INFO     | src.data.connectors.csv_connector:get_data:65 - Loading data from: data\csv\RBL8-15min.csv
+2025-07-23 15:42:06 | INFO     | src.data.connectors.csv_connector:get_data:107 - Loaded 5387 records for RBL8 from 2024-07-23 15:42:06.135212 to 2025-07-23 15:42:06.135217
+2025-07-23 15:42:06 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:42:06 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting flag patterns - Timeframe: 15m, Category: short
+2025-07-23 15:42:40 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 72 potential flagpoles
+2025-07-23 15:42:40 | INFO     | src.patterns.detectors.flag_detector:_detect_pattern_formation:143 - Detected flag pattern: 90fac963-0083-4fde-a124-f12b8398cb25 with confidence 0.815
+2025-07-23 15:42:40 | INFO     | src.patterns.detectors.flag_detector:_detect_pattern_formation:143 - Detected flag pattern: a6568822-40b8-4014-b9f4-999d1e293e64 with confidence 0.818
+2025-07-23 15:42:42 | INFO     | src.patterns.detectors.flag_detector:_detect_pattern_formation:143 - Detected flag pattern: 28518ba1-d51d-4600-a643-b550f839f36b with confidence 0.790
+2025-07-23 15:42:43 | INFO     | src.patterns.detectors.flag_detector:_detect_pattern_formation:143 - Detected flag pattern: e1a2e40f-e66b-4c79-b879-0d10d2d07507 with confidence 0.810
+2025-07-23 15:42:46 | INFO     | src.patterns.base.base_detector:detect:84 - Total flag patterns detected: 4
+2025-07-23 15:42:46 | INFO     | __main__:scan_patterns:187 - Found 4 flag patterns for RBL8
+2025-07-23 15:42:46 | INFO     | src.patterns.base.base_detector:_resolve_timeframe:141 - Auto-detected timeframe: 15m
+2025-07-23 15:42:46 | INFO     | src.patterns.base.base_detector:detect:62 - Detecting pennant patterns - Timeframe: 15m, Category: short
+2025-07-23 15:43:20 | INFO     | src.patterns.base.base_detector:detect:77 - Detected 72 potential flagpoles
+2025-07-23 15:43:20 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: a17650c7-1793-4157-ba80-9d69c1358d78 with confidence 0.657
+2025-07-23 15:43:20 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 3e7a60de-4de1-43de-a461-849d2f4b931b with confidence 0.796
+2025-07-23 15:43:21 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 9d7e624f-d7d6-4d8e-84d4-44e41ef32692 with confidence 0.820
+2025-07-23 15:43:21 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 4957c7e8-b62d-4b7a-8c79-5ee7b2df7bf7 with confidence 0.731
+2025-07-23 15:43:21 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 85be47ca-de48-4e0b-a16e-175812770764 with confidence 0.702
+2025-07-23 15:43:22 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: f2b1066b-26e6-44df-8b3d-074fa6afdb2a with confidence 0.858
+2025-07-23 15:43:22 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 67f2ff16-d401-4449-ab45-97f078ef6aff with confidence 0.689
+2025-07-23 15:43:22 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 4f1b5db4-becc-4c04-80d2-41ebc3967268 with confidence 0.681
+2025-07-23 15:43:23 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 3cd44b94-e8a6-41e2-8e07-54c8dbf0db1d with confidence 0.822
+2025-07-23 15:43:23 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 06a54a01-fbde-495b-bc83-27db65c9ba79 with confidence 0.637
+2025-07-23 15:43:23 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 1fe9759a-1070-4761-87a8-0de25dc12c9f with confidence 0.797
+2025-07-23 15:43:23 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 0270c73b-af15-4f53-8098-c861b9be93c3 with confidence 0.631
+2025-07-23 15:43:24 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: ab299cd2-7a66-4c93-b9bc-0fa54e942039 with confidence 0.650
+2025-07-23 15:43:24 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 0e2967c8-7988-48ff-81b7-826da95f9ecb with confidence 0.886
+2025-07-23 15:43:24 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: cdeb90ec-d419-4780-a646-ae3994c14390 with confidence 0.796
+2025-07-23 15:43:24 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: e4d6867c-eb39-4c38-9799-5a04e8d8659f with confidence 0.743
+2025-07-23 15:43:25 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: f86ae3d3-da60-42cd-838e-26550ccc91f8 with confidence 0.686
+2025-07-23 15:43:25 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 17dc84c5-b1fd-4991-ae9d-37a78cd8a931 with confidence 0.871
+2025-07-23 15:43:25 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 88e2a3df-3206-4e90-b7f1-5bbe6081a16f with confidence 0.670
+2025-07-23 15:43:26 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: bcd4a8a6-6349-430b-b7c8-f2f58e3e1e63 with confidence 0.621
+2025-07-23 15:43:26 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: b5b35b29-daa1-49d4-92db-e94793076126 with confidence 0.772
+2025-07-23 15:43:26 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: e2c8ef4b-8be1-44f0-aa29-a14d5ba91c9f with confidence 0.844
+2025-07-23 15:43:26 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: c34a5df9-dce0-42cb-b25c-637952a94a83 with confidence 0.629
+2025-07-23 15:43:27 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: b515a0b0-7e51-47e5-8ce3-a9c3b99a530d with confidence 0.899
+2025-07-23 15:43:27 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 97d75a8c-0f6c-467a-9b2c-b68d32f4336f with confidence 0.845
+2025-07-23 15:43:27 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 94785236-6324-4dfe-b86d-5ad4bc1b5d4f with confidence 0.678
+2025-07-23 15:43:28 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 48f69ad6-16cf-4589-be5d-af42b698693e with confidence 0.797
+2025-07-23 15:43:28 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 50d12ce6-9f88-4206-99f8-a30feb4b9f03 with confidence 0.868
+2025-07-23 15:43:28 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: c40c6aec-193c-415d-9d26-2c44a9e911e9 with confidence 0.677
+2025-07-23 15:43:29 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 09625e65-54a5-4eae-b6ee-e6ddfab680d4 with confidence 0.692
+2025-07-23 15:43:29 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 2d926ef5-c5c5-4cb9-aa62-80468f902502 with confidence 0.631
+2025-07-23 15:43:29 | INFO     | src.patterns.detectors.pennant_detector:_detect_pattern_formation:144 - Detected pennant pattern: 56a76b65-033b-42bc-b079-b25d3b0dfa07 with confidence 0.704
+2025-07-23 15:43:29 | INFO     | src.patterns.base.base_detector:detect:84 - Total pennant patterns detected: 32
+2025-07-23 15:43:29 | INFO     | __main__:scan_patterns:193 - Found 32 pennant patterns for RBL8
+2025-07-23 15:43:29 | INFO     | __main__:scan_patterns:201 - Pattern scanning completed. Total patterns found: 36
+2025-07-23 15:43:29 | INFO     | __main__:generate_reports:218 - Generating reports...
+2025-07-23 15:43:29 | INFO     | __main__:generate_reports:233 - Generating TradingView style classified charts...
+2025-07-23 15:43:29 | WARNING  | src.visualization.chart_generator:generate_classified_charts:697 - No pattern files found!
+2025-07-23 15:43:29 | INFO     | __main__:generate_reports:242 - Generated 0 TradingView style charts
+2025-07-23 15:43:29 | INFO     | __main__:generate_reports:246 - Generating pattern classification summary...
+2025-07-23 15:43:29 | INFO     | src.storage.dataset_manager:_ensure_directories:56 - Dataset directories initialized at output\data
+2025-07-23 15:43:29 | INFO     | src.storage.dataset_manager:_init_database:119 - Database initialized successfully
+2025-07-23 15:43:29 | INFO     | src.visualization.chart_generator:create_summary_report:832 - Summary report generated successfully
+2025-07-23 15:43:29 | INFO     | __main__:generate_reports:255 - Saving patterns to dataset...
+2025-07-23 15:43:29 | INFO     | src.storage.dataset_manager:batch_save_patterns:268 - Starting batch save of 36 patterns
+2025-07-23 15:43:29 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 90fac963-0083-4fde-a124-f12b8398cb25 saved as RBL8_20250403_1500_下降旗形.json
+2025-07-23 15:43:29 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern a6568822-40b8-4014-b9f4-999d1e293e64 saved as RBL8_20241009_1345_下降旗形.json
+2025-07-23 15:43:29 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 28518ba1-d51d-4600-a643-b550f839f36b saved as RBL8_20240910_1415_下降旗形.json
+2025-07-23 15:43:29 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern e1a2e40f-e66b-4c79-b879-0d10d2d07507 saved as RBL8_20240809_1015_上升旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern a17650c7-1793-4157-ba80-9d69c1358d78 saved as RBL8_20241008_0915_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 3e7a60de-4de1-43de-a461-849d2f4b931b saved as RBL8_20241017_1000_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 9d7e624f-d7d6-4d8e-84d4-44e41ef32692 saved as RBL8_20250403_1500_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 4957c7e8-b62d-4b7a-8c79-5ee7b2df7bf7 saved as RBL8_20241209_1430_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 85be47ca-de48-4e0b-a16e-175812770764 saved as RBL8_20250226_1015_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern f2b1066b-26e6-44df-8b3d-074fa6afdb2a saved as RBL8_20240823_1500_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 67f2ff16-d401-4449-ab45-97f078ef6aff saved as RBL8_20250506_0915_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 4f1b5db4-becc-4c04-80d2-41ebc3967268 saved as RBL8_20241101_2115_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 3cd44b94-e8a6-41e2-8e07-54c8dbf0db1d saved as RBL8_20240814_1115_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 06a54a01-fbde-495b-bc83-27db65c9ba79 saved as RBL8_20250408_2300_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 1fe9759a-1070-4761-87a8-0de25dc12c9f saved as RBL8_20241018_1130_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 0270c73b-af15-4f53-8098-c861b9be93c3 saved as RBL8_20250124_1130_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern ab299cd2-7a66-4c93-b9bc-0fa54e942039 saved as RBL8_20240830_1345_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 0e2967c8-7988-48ff-81b7-826da95f9ecb saved as RBL8_20240919_0945_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern cdeb90ec-d419-4780-a646-ae3994c14390 saved as RBL8_20241212_1130_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern e4d6867c-eb39-4c38-9799-5a04e8d8659f saved as RBL8_20250207_2300_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern f86ae3d3-da60-42cd-838e-26550ccc91f8 saved as RBL8_20250604_1345_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 17dc84c5-b1fd-4991-ae9d-37a78cd8a931 saved as RBL8_20250110_1500_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 88e2a3df-3206-4e90-b7f1-5bbe6081a16f saved as RBL8_20241029_1415_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern bcd4a8a6-6349-430b-b7c8-f2f58e3e1e63 saved as RBL8_20241122_1000_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern b5b35b29-daa1-49d4-92db-e94793076126 saved as RBL8_20250513_2200_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern e2c8ef4b-8be1-44f0-aa29-a14d5ba91c9f saved as RBL8_20240920_2215_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern c34a5df9-dce0-42cb-b25c-637952a94a83 saved as RBL8_20250303_2300_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern b515a0b0-7e51-47e5-8ce3-a9c3b99a530d saved as RBL8_20250523_2245_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 97d75a8c-0f6c-467a-9b2c-b68d32f4336f saved as RBL8_20240724_2215_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 94785236-6324-4dfe-b86d-5ad4bc1b5d4f saved as RBL8_20240730_1430_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 48f69ad6-16cf-4589-be5d-af42b698693e saved as RBL8_20241122_2115_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 50d12ce6-9f88-4206-99f8-a30feb4b9f03 saved as RBL8_20250423_1115_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern c40c6aec-193c-415d-9d26-2c44a9e911e9 saved as RBL8_20240806_1100_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 09625e65-54a5-4eae-b6ee-e6ddfab680d4 saved as RBL8_20250224_2245_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 2d926ef5-c5c5-4cb9-aa62-80468f902502 saved as RBL8_20250526_2300_下降三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:save_pattern:200 - Pattern 56a76b65-033b-42bc-b079-b25d3b0dfa07 saved as RBL8_20250218_1015_上升三角旗形.json
+2025-07-23 15:43:30 | INFO     | src.storage.dataset_manager:batch_save_patterns:282 - Batch save completed: {'total': 36, 'success': 36, 'errors': 0}
+2025-07-23 15:43:30 | INFO     | __main__:generate_reports:257 - Saved 36/36 patterns to dataset
+2025-07-23 15:43:30 | INFO     | __main__:generate_reports:260 - Report generation completed. Generated 0 charts
+2025-07-23 15:43:30 | INFO     | src.data.connectors.csv_connector:close:177 - Disconnected from CSV data source
+2025-07-23 15:43:30 | INFO     | __main__:run:323 - PatternScout execution completed successfully
