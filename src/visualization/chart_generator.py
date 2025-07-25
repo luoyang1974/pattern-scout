@@ -138,6 +138,14 @@ class ChartGenerator:
         # 创建附加图线
         apds = self._create_additional_plots(chart_df, pattern)
         
+        # 确保输出路径正确
+        if not output_path:
+            Path(self.charts_base_path).mkdir(parents=True, exist_ok=True)
+            output_path = f"{self.charts_base_path}/{pattern.id}.{self.config['output']['format']}"
+        else:
+            # 确保输出目录存在
+            Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+        
         # 生成图表
         fig, axes = mpf.plot(
             chart_df,
@@ -147,22 +155,13 @@ class ChartGenerator:
             volume=True,
             figsize=(16, 10),
             addplot=apds,
-            returnfig=True,
-            savefig=dict(
-                fname=output_path if output_path else f"charts/{pattern.id}.{self.config['output']['format']}",
-                dpi=self.config['output']['dpi'],
-                bbox_inches='tight'
-            )
+            returnfig=True
         )
         
         # 添加自定义标注
         self._add_pattern_annotations(axes, chart_df, pattern)
         
         # 保存图表
-        if not output_path:
-            Path(self.charts_base_path).mkdir(parents=True, exist_ok=True)
-            output_path = f"{self.charts_base_path}/{pattern.id}.{self.config['output']['format']}"
-        
         fig.savefig(output_path, dpi=self.config['output']['dpi'], bbox_inches='tight')
         plt.close(fig)
         
@@ -541,33 +540,66 @@ class ChartGenerator:
         """创建有意义的文件名：资产名称_起始时间_形态名称"""
         try:
             # 提取资产名称（去掉-15min后缀）
-            symbol = pattern_data['symbol'].replace('-15min', '')
+            symbol = pattern_data.get('symbol', '').replace('-15min', '').strip()
+            if not symbol:
+                symbol = 'unknown_symbol'
             
             # 提取旗杆起始时间并格式化
-            start_time = datetime.fromisoformat(pattern_data['flagpole']['start_time'])
-            time_str = start_time.strftime('%Y%m%d_%H%M')
+            start_time_str = pattern_data.get('flagpole', {}).get('start_time', '')
+            if start_time_str:
+                start_time = datetime.fromisoformat(start_time_str)
+                time_str = start_time.strftime('%Y%m%d_%H%M')
+            else:
+                time_str = datetime.now().strftime('%Y%m%d_%H%M')
             
             # 形态名称映射
-            pattern_type = pattern_data['pattern_type']
+            pattern_type = pattern_data.get('pattern_type', 'flag')
             pattern_config = self.config['pattern_types'].get(pattern_type, {})
             pattern_name = pattern_config.get('name_cn', pattern_type)
+            if not pattern_name or not pattern_name.strip():
+                pattern_name = 'unknown_pattern'
             
             # 方向信息
-            direction = pattern_data['flagpole']['direction']
+            direction = pattern_data.get('flagpole', {}).get('direction', 'up')
             direction_name = '上升' if direction == 'up' else '下降'
             
-            # 组合文件名
+            # 组合文件名并验证
             filename = f"{symbol}_{time_str}_{direction_name}{pattern_name}"
-            return filename
+            
+            # 最终验证：确保文件名不为空且不包含非法字符
+            if filename and filename.strip():
+                # 清理文件名中的非法字符
+                filename = filename.strip()
+                illegal_chars = '<>:"/\\|?*'
+                for char in illegal_chars:
+                    filename = filename.replace(char, '_')
+                return filename
+            else:
+                raise ValueError("Generated filename is empty")
             
         except Exception as e:
             logger.warning(f"Failed to create meaningful filename: {e}")
-            # 回退到使用ID
-            return pattern_data.get('id', 'unknown')
+            # 回退到使用ID，并确保不返回空字符串
+            fallback_id = pattern_data.get('id', 'unknown_pattern')
+            if fallback_id and fallback_id.strip():  # 确保非空且非纯空白
+                return fallback_id.strip()
+            else:
+                return 'unknown_pattern'
     
     def generate_pattern_chart_from_data(self, pattern_data: dict, save_path: str = None) -> str:
         """从形态数据生成TradingView风格图表"""
         try:
+            # 确保保存路径正确
+            if not save_path:
+                # 如果没有指定保存路径，使用默认路径
+                filename = self.create_meaningful_filename(pattern_data)
+                pattern_type = pattern_data.get('pattern_type', 'flag')
+                type_dir = Path(f"{self.charts_base_path}/{pattern_type}")
+                type_dir.mkdir(parents=True, exist_ok=True)
+                save_path = str(type_dir / f"{filename}.png")
+            else:
+                # 确保保存目录存在
+                Path(save_path).parent.mkdir(parents=True, exist_ok=True)
             pattern_type = pattern_data.get('pattern_type', 'flag')
             pattern_config = self.config['pattern_types'].get(pattern_type, self.config['pattern_types']['flag'])
             
@@ -671,11 +703,12 @@ class ChartGenerator:
                 figsize=(16, 10),
                 tight_layout=True,
                 returnfig=True,
-                warn_too_much_data=1000,
-                savefig=dict(fname=save_path, dpi=300, bbox_inches='tight') if save_path else None
+                warn_too_much_data=1000
             )
             
+            # 手动保存图表
             if save_path:
+                fig.savefig(save_path, dpi=300, bbox_inches='tight')
                 logger.info(f"TradingView style chart saved: {save_path}")
                 plt.close(fig)
             else:

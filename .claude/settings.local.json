@@ -39,7 +39,10 @@
       "Bash(uv run python main.py --symbols RBL8-15min --start-date 2024-01-01 --end-date 2024-12-31 --pattern-types flag --no-summary)",
       "Bash(sqlite3 dataset/patterns.db \".schema\")",
       "Bash(mkdir -p src/patterns/base src/patterns/strategies src/patterns/config)",
-      "Bash(cp src/patterns/detectors/flag_detector.py src/patterns/detectors/flag_detector_backup.py)"
+      "Bash(cp src/patterns/detectors/flag_detector.py src/patterns/detectors/flag_detector_backup.py)",
+      "Bash(ls -la \"C:\\quant\\strategy\\PatternScout\\pattern-scout\\nul\")",
+      "Bash(echo $env:OS)",
+      "Bash(ver)"
     ],
     "deny": []
   }

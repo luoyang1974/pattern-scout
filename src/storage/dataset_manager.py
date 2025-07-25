@@ -126,30 +126,54 @@ class DatasetManager:
         """创建有意义的文件名：资产名称_起始时间_形态名称"""
         try:
             # 提取资产名称（去掉-15min后缀）
-            symbol = pattern.symbol.replace('-15min', '')
+            symbol = getattr(pattern, 'symbol', '').replace('-15min', '').strip()
+            if not symbol:
+                symbol = 'unknown_symbol'
             
             # 提取旗杆起始时间并格式化
-            start_time = pattern.flagpole.start_time
-            time_str = start_time.strftime('%Y%m%d_%H%M')
+            start_time = getattr(pattern.flagpole, 'start_time', None) if hasattr(pattern, 'flagpole') else None
+            if start_time:
+                time_str = start_time.strftime('%Y%m%d_%H%M')
+            else:
+                from datetime import datetime
+                time_str = datetime.now().strftime('%Y%m%d_%H%M')
             
             # 形态名称映射
             pattern_names = {
                 'flag': '旗形',
                 'pennant': '三角旗形'
             }
-            pattern_name = pattern_names.get(pattern.pattern_type, pattern.pattern_type)
+            pattern_type = getattr(pattern, 'pattern_type', 'flag')
+            pattern_name = pattern_names.get(pattern_type, pattern_type)
+            if not pattern_name or not pattern_name.strip():
+                pattern_name = 'unknown_pattern'
             
             # 方向信息
-            direction_name = '上升' if pattern.flagpole.direction == 'up' else '下降'
+            direction = getattr(pattern.flagpole, 'direction', 'up') if hasattr(pattern, 'flagpole') else 'up'
+            direction_name = '上升' if direction == 'up' else '下降'
             
-            # 组合文件名
+            # 组合文件名并验证
             filename = f"{symbol}_{time_str}_{direction_name}{pattern_name}"
-            return filename
+            
+            # 最终验证：确保文件名不为空且不包含非法字符
+            if filename and filename.strip():
+                filename = filename.strip()
+                # 清理文件名中的非法字符
+                illegal_chars = '<>:"/\\|?*'
+                for char in illegal_chars:
+                    filename = filename.replace(char, '_')
+                return filename
+            else:
+                raise ValueError("Generated filename is empty")
             
         except Exception as e:
             logger.error(f"创建文件名失败: {e}")
-            # 回退到使用ID
-            return pattern.id
+            # 回退到使用ID，并确保不返回空字符串
+            pattern_id = getattr(pattern, 'id', 'unknown_pattern')
+            if pattern_id and str(pattern_id).strip():
+                return str(pattern_id).strip()
+            else:
+                return 'unknown_pattern'
     
     def save_pattern(self, pattern: PatternRecord) -> bool:
         """
@@ -241,7 +265,18 @@ class DatasetManager:
                     conn.commit()
             
             # 保存完整的分析结果JSON
-            analysis_file = self.dataset_root / "analysis" / f"{analysis.pattern.id}_analysis.json"
+            # 确保使用安全的文件名
+            pattern_id = getattr(analysis.pattern, 'id', 'unknown_pattern')
+            if not pattern_id or not str(pattern_id).strip():
+                pattern_id = 'unknown_pattern'
+            else:
+                pattern_id = str(pattern_id).strip()
+                # 清理非法字符
+                illegal_chars = '<>:"/\\|?*'
+                for char in illegal_chars:
+                    pattern_id = pattern_id.replace(char, '_')
+            
+            analysis_file = self.dataset_root / "analysis" / f"{pattern_id}_analysis.json"
             with open(analysis_file, 'w', encoding='utf-8') as f:
                 json.dump(self._analysis_to_dict(analysis), f, ensure_ascii=False, indent=2, default=str)
             
