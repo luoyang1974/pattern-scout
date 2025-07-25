@@ -39,6 +39,16 @@ class DatasetManager:
         self.db_path = self.dataset_root / "patterns.db"
         self._ensure_directories()
         self._init_database()
+    
+    def _get_db_connection(self):
+        """获取数据库连接，确保正确配置"""
+        conn = sqlite3.connect(self.db_path, timeout=30.0)
+        # 启用WAL模式以减少锁定问题
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA synchronous=NORMAL") 
+        conn.execute("PRAGMA cache_size=10000")
+        conn.execute("PRAGMA temp_store=memory")
+        return conn
         
     def _ensure_directories(self):
         """确保必要的目录存在"""
@@ -58,7 +68,7 @@ class DatasetManager:
     def _init_database(self):
         """初始化SQLite数据库"""
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with self._get_db_connection() as conn:
                 cursor = conn.cursor()
                 
                 # 创建形态记录表
@@ -186,7 +196,7 @@ class DatasetManager:
             保存是否成功
         """
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with self._get_db_connection() as conn:
                 cursor = conn.cursor()
                 
                 cursor.execute("""
@@ -244,7 +254,7 @@ class DatasetManager:
             
             # 保存突破分析
             if analysis.breakthrough:
-                with sqlite3.connect(self.db_path) as conn:
+                with self._get_db_connection() as conn:
                     cursor = conn.cursor()
                     
                     cursor.execute("""
@@ -371,7 +381,7 @@ class DatasetManager:
             查询结果列表
         """
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with self._get_db_connection() as conn:
                 conn.row_factory = sqlite3.Row  # 使结果可以按列名访问
                 cursor = conn.cursor()
                 
@@ -434,7 +444,7 @@ class DatasetManager:
     def get_dataset_statistics(self) -> Dict[str, Any]:
         """获取数据集统计信息"""
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with self._get_db_connection() as conn:
                 cursor = conn.cursor()
                 
                 # 基本统计
@@ -601,7 +611,7 @@ class DatasetManager:
                 'backup_path': str(backup_dir)
             }
             
-            with sqlite3.connect(self.db_path) as conn:
+            with self._get_db_connection() as conn:
                 cursor = conn.cursor()
                 cursor.execute("""
                     INSERT INTO dataset_versions 

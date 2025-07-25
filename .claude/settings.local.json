@@ -42,7 +42,21 @@
       "Bash(cp src/patterns/detectors/flag_detector.py src/patterns/detectors/flag_detector_backup.py)",
       "Bash(ls -la \"C:\\quant\\strategy\\PatternScout\\pattern-scout\\nul\")",
       "Bash(echo $env:OS)",
-      "Bash(ver)"
+      "Bash(ver)",
+      "Bash(uv run python -m py_compile src/patterns/base/pattern_components.py src/patterns/detectors/flag_detector.py src/patterns/detectors/pennant_detector.py)",
+      "Bash(uv run ruff check src/patterns/base/pattern_components.py src/patterns/detectors/flag_detector.py src/patterns/detectors/pennant_detector.py)",
+      "Bash(uv run python -m pytest tests/test_algorithm_improvements.py -v)",
+      "Bash(uv run python -m pytest tests/test_algorithm_improvements.py::TestImprovedFlagValidation -v)",
+      "Bash(uv run python tests/run_tests.py)",
+      "Bash(uv run python -c \"\nimport unittest\nimport sys\nsys.path.insert(0, ''.'')\n\n# 只运行核心算法相关的测试\nfrom tests.test_technical_indicators import *\nfrom tests.test_data_connectors import *\nfrom tests.test_pattern_detectors import *\n\nif __name__ == ''__main__'':\n    unittest.main(verbosity=2)\n\")",
+      "Bash(grep -n \"sqlite3.connect(self.db_path)\" src/storage/dataset_manager.py)",
+      "Bash(uv run python -m pytest tests/test_dataset_manager.py::TestDatasetManager::test_save_pattern -v)",
+      "Bash(uv run python -m pytest tests/test_dataset_manager.py::TestDatasetManager::test_batch_save_patterns -v)",
+      "Bash(uv run python -m pytest tests/test_dataset_manager.py -v)",
+      "Bash(uv run python -m pytest tests/test_atr_adaptive.py::TestATRAdaptiveManager::test_volatility_analysis_low -v)",
+      "Bash(uv run python -m pytest tests/test_atr_adaptive.py::TestATRAdaptiveManager::test_parameter_adaptation -v)",
+      "Bash(uv run python -m pytest tests/test_atr_adaptive.py::TestATRAdaptiveIntegration::test_atr_adaptation_enabled_vs_disabled -v)",
+      "Bash(uv run python -m pytest tests/test_atr_adaptive.py -v)"
     ],
     "deny": []
   }

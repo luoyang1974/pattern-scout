@@ -1,0 +1,14 @@
+{
+  "test_time": "2025-07-25T17:55:18.187432",
+  "data_points": 1000,
+  "algorithm_comparison": {
+    "new_patterns": 0,
+    "legacy_patterns": 0,
+    "improvement": 0,
+    "speed_ratio": 0.9464100962818712
+  },
+  "confidence_analysis": {
+    "new_avg": 0,
+    "legacy_avg": 0
+  }
+}

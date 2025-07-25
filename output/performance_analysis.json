@@ -1,0 +1,51 @@
+{
+  "test_time": "2025-07-25T18:00:29.573244",
+  "performance_benchmarks": {
+    "500": {
+      "avg_time": 1.9785254796346028,
+      "std_time": 0.054410792478226444,
+      "avg_patterns": 0.0,
+      "records_per_second": 252.71345006501548,
+      "ms_per_record": 3.957050959269206
+    },
+    "1000": {
+      "avg_time": 4.007927974065145,
+      "std_time": 0.09244687312401162,
+      "avg_patterns": 0.0,
+      "records_per_second": 249.50548175288793,
+      "ms_per_record": 4.007927974065145
+    },
+    "2000": {
+      "avg_time": 8.263338883717855,
+      "std_time": 0.18731780172325527,
+      "avg_patterns": 0.0,
+      "records_per_second": 242.03291528329,
+      "ms_per_record": 4.131669441858928
+    }
+  },
+  "scaling_analysis": {
+    "scaling_factor": 1.0441284391803665,
+    "linear_scaling_expected": 1.0,
+    "performance_degradation": "4.4%"
+  },
+  "optimization_suggestions": [
+    {
+      "priority": "MEDIUM",
+      "issue": "RANSAC算法计算开销",
+      "suggestion": "在数据质量较好时可选择性关闭RANSAC",
+      "impact": "预计节省15-25%计算时间"
+    },
+    {
+      "priority": "LOW",
+      "issue": "技术指标重复计算",
+      "suggestion": "实现指标缓存机制",
+      "impact": "预计节省10-20%计算时间"
+    },
+    {
+      "priority": "LOW",
+      "issue": "内存使用优化",
+      "suggestion": "优化数据结构，及时释放临时变量",
+      "impact": "减少30%内存占用"
+    }
+  ]
+}

@@ -9,10 +9,158 @@ from scipy import stats
 from scipy.signal import find_peaks
 
 from src.data.models.base_models import Flagpole, TrendLine
+from src.patterns.indicators.technical_indicators import TechnicalIndicators
+from src.patterns.base.ransac_trend_fitter import RANSACTrendLineFitter
 
 
 class PatternComponents:
     """共享的形态组件"""
+    
+    def __init__(self):
+        """初始化组件"""
+        # 初始化RANSAC拟合器（使用更宽松的参数）
+        self.ransac_fitter = RANSACTrendLineFitter(
+            max_iterations=1000,
+            min_inliers_ratio=0.4,  # 降低最小内点比例以适应小数据集
+            confidence=0.99
+        )
+    
+    @staticmethod
+    def find_swing_points(df: pd.DataFrame, window: int, 
+                         min_prominence_atr_multiple: float = None,
+                         atr_period: int = 14) -> Tuple[List[int], List[int]]:
+        """
+        智能摆动点检测算法
+        
+        Args:
+            df: OHLCV数据
+            window: 回看窗口大小
+            min_prominence_atr_multiple: 最小突出度（ATR的倍数），None则不过滤
+            atr_period: ATR计算周期
+            
+        Returns:
+            (swing_highs, swing_lows): 摆动高点和低点的索引列表
+        """
+        swing_highs = []
+        swing_lows = []
+        
+        # 确保窗口大小合理
+        window = max(1, min(window, len(df) // 4))
+        
+        # 步骤1: 基础摆动点识别
+        for i in range(window, len(df) - window):
+            # 获取窗口数据
+            window_high = df['high'].iloc[i-window:i+window+1]
+            window_low = df['low'].iloc[i-window:i+window+1]
+            
+            # 摆动高点：当前高点是窗口内最高点
+            if df['high'].iloc[i] == window_high.max():
+                # 确保是唯一最高点
+                if list(window_high).count(df['high'].iloc[i]) == 1:
+                    swing_highs.append(i)
+            
+            # 摆动低点：当前低点是窗口内最低点
+            if df['low'].iloc[i] == window_low.min():
+                # 确保是唯一最低点
+                if list(window_low).count(df['low'].iloc[i]) == 1:
+                    swing_lows.append(i)
+        
+        # 步骤2: 基于ATR的突出度过滤
+        if min_prominence_atr_multiple is not None and min_prominence_atr_multiple > 0:
+            # 计算ATR
+            atr = TechnicalIndicators.calculate_atr(df, period=atr_period)
+            if atr is not None and len(atr) > 0:
+                # 过滤高点
+                filtered_highs = []
+                for idx in swing_highs:
+                    if idx < len(atr) and not pd.isna(atr.iloc[idx]):
+                        # 计算与邻近点的价格差异
+                        prominence = PatternComponents._calculate_point_prominence(
+                            df, idx, 'high', window
+                        )
+                        if prominence >= min_prominence_atr_multiple * atr.iloc[idx]:
+                            filtered_highs.append(idx)
+                swing_highs = filtered_highs
+                
+                # 过滤低点
+                filtered_lows = []
+                for idx in swing_lows:
+                    if idx < len(atr) and not pd.isna(atr.iloc[idx]):
+                        prominence = PatternComponents._calculate_point_prominence(
+                            df, idx, 'low', window
+                        )
+                        if prominence >= min_prominence_atr_multiple * atr.iloc[idx]:
+                            filtered_lows.append(idx)
+                swing_lows = filtered_lows
+        
+        # 步骤3: 时间间隔过滤（避免过于密集的摆动点）
+        min_distance = max(1, window // 2)
+        swing_highs = PatternComponents._filter_by_time_distance(
+            swing_highs, min_distance, df, 'high'
+        )
+        swing_lows = PatternComponents._filter_by_time_distance(
+            swing_lows, min_distance, df, 'low'
+        )
+        
+        return swing_highs, swing_lows
+    
+    @staticmethod
+    def _calculate_point_prominence(df: pd.DataFrame, idx: int, 
+                                  price_type: str, window: int) -> float:
+        """计算点的突出度"""
+        if price_type == 'high':
+            # 对于高点，计算与左右低点的差异
+            left_low = df['low'].iloc[max(0, idx-window):idx].min() if idx > 0 else df['low'].iloc[idx]
+            right_low = df['low'].iloc[idx+1:min(len(df), idx+window+1)].min() if idx < len(df)-1 else df['low'].iloc[idx]
+            prominence = df['high'].iloc[idx] - max(left_low, right_low)
+        else:
+            # 对于低点，计算与左右高点的差异
+            left_high = df['high'].iloc[max(0, idx-window):idx].max() if idx > 0 else df['high'].iloc[idx]
+            right_high = df['high'].iloc[idx+1:min(len(df), idx+window+1)].max() if idx < len(df)-1 else df['high'].iloc[idx]
+            prominence = min(left_high, right_high) - df['low'].iloc[idx]
+        
+        return prominence
+    
+    @staticmethod
+    def _filter_by_time_distance(indices: List[int], min_distance: int,
+                               df: pd.DataFrame = None, price_type: str = None) -> List[int]:
+        """按时间间隔过滤，保留最显著的点"""
+        if not indices or min_distance <= 0:
+            return indices
+        
+        if df is None or price_type is None:
+            # 简单过滤
+            filtered = [indices[0]]
+            for idx in indices[1:]:
+                if idx - filtered[-1] >= min_distance:
+                    filtered.append(idx)
+            return filtered
+        
+        # 基于价格显著性的过滤
+        filtered = []
+        i = 0
+        while i < len(indices):
+            # 查找当前点附近的所有点
+            group = [indices[i]]
+            j = i + 1
+            while j < len(indices) and indices[j] - indices[i] < min_distance:
+                group.append(indices[j])
+                j += 1
+            
+            # 从组中选择最显著的点
+            if len(group) == 1:
+                filtered.append(group[0])
+            else:
+                # 选择价格最极端的点
+                if price_type == 'high':
+                    best_idx = max(group, key=lambda x: df['high'].iloc[x])
+                else:
+                    best_idx = min(group, key=lambda x: df['low'].iloc[x])
+                filtered.append(best_idx)
+            
+            i = j
+        
+        return filtered
     
     @staticmethod
     def detect_flagpoles_adaptive(df: pd.DataFrame, params: dict, 
@@ -316,6 +464,51 @@ class PatternComponents:
             r_squared=r_value ** 2
         )
     
+    def fit_trend_line_ransac(self, df: pd.DataFrame, point_indices: List[int], 
+                             price_type: str = 'close',
+                             use_ransac: bool = True) -> Optional[TrendLine]:
+        """
+        使用RANSAC算法拟合鲁棒趋势线
+        
+        Args:
+            df: OHLCV数据
+            point_indices: 要拟合的点的索引
+            price_type: 价格类型（'high', 'low', 'close'）
+            use_ransac: 是否使用RANSAC，False时使用传统OLS
+            
+        Returns:
+            趋势线对象，如果拟合失败返回None
+        """
+        if not use_ransac:
+            # 回退到传统方法
+            return self.fit_trend_line(df, point_indices, price_type)
+        
+        return self.ransac_fitter.fit_trend_line(df, point_indices, price_type)
+    
+    def get_ransac_statistics(self) -> dict:
+        """
+        获取最后一次RANSAC拟合的统计信息
+        
+        Returns:
+            统计信息字典
+        """
+        return self.ransac_fitter.get_fit_statistics()
+    
+    def compare_fitting_methods(self, df: pd.DataFrame, point_indices: List[int], 
+                               price_type: str = 'close') -> dict:
+        """
+        比较传统OLS与RANSAC拟合方法的效果
+        
+        Args:
+            df: OHLCV数据
+            point_indices: 点索引
+            price_type: 价格类型
+            
+        Returns:
+            比较结果字典
+        """
+        return self.ransac_fitter.compare_with_ols(df, point_indices, price_type)
+    
     @staticmethod
     def calculate_convergence_point(upper_line: TrendLine, 
                                   lower_line: TrendLine) -> Optional[Tuple[float, float]]:
@@ -445,3 +638,155 @@ class PatternComponents:
             'slope': slope,
             'score': score
         }
+    
+    @staticmethod
+    def analyze_volume_pattern_enhanced(df: pd.DataFrame, 
+                                      pattern_start: int, 
+                                      pattern_end: int,
+                                      flagpole_start: int = None,
+                                      flagpole_end: int = None) -> dict:
+        """
+        增强的成交量模式分析
+        
+        Args:
+            df: OHLCV数据
+            pattern_start: 形态开始索引
+            pattern_end: 形态结束索引
+            flagpole_start: 旗杆开始索引（可选）
+            flagpole_end: 旗杆结束索引（可选）
+            
+        Returns:
+            详细的成交量分析结果
+        """
+        pattern_df = df.iloc[pattern_start:pattern_end + 1]
+        pattern_volumes = pattern_df['volume']
+        
+        # 1. 基础趋势分析
+        basic_analysis = PatternComponents.analyze_volume_pattern(pattern_volumes, 'decreasing')
+        
+        # 2. 相对强度分析
+        if flagpole_start is not None and flagpole_end is not None:
+            flagpole_avg_volume = df.iloc[flagpole_start:flagpole_end + 1]['volume'].mean()
+            pattern_avg_volume = pattern_volumes.mean()
+            volume_contraction_ratio = pattern_avg_volume / flagpole_avg_volume if flagpole_avg_volume > 0 else 1
+        else:
+            # 使用形态前的历史数据
+            lookback = min(20, pattern_start)
+            if lookback > 0:
+                pre_pattern_avg = df.iloc[max(0, pattern_start - lookback):pattern_start]['volume'].mean()
+                pattern_avg_volume = pattern_volumes.mean()
+                volume_contraction_ratio = pattern_avg_volume / pre_pattern_avg if pre_pattern_avg > 0 else 1
+            else:
+                volume_contraction_ratio = 1.0
+        
+        # 3. 波动性分析
+        volume_volatility = pattern_volumes.std() / pattern_volumes.mean() if pattern_volumes.mean() > 0 else 0
+        
+        # 4. 极值分析（检测异常成交量）
+        volume_spikes = PatternComponents._detect_volume_spikes(pattern_df)
+        
+        # 5. 流动性检查
+        min_liquidity_threshold = 0.3  # 最低成交量不应低于平均值的30%
+        liquidity_healthy = pattern_volumes.min() >= pattern_volumes.mean() * min_liquidity_threshold
+        
+        # 6. 综合健康度评分
+        health_score = PatternComponents._calculate_volume_health_score(
+            basic_analysis['slope'],
+            basic_analysis['consistency'],
+            volume_contraction_ratio,
+            volume_volatility,
+            len(volume_spikes),
+            liquidity_healthy
+        )
+        
+        return {
+            'trend': basic_analysis['trend'],
+            'trend_slope': basic_analysis['slope'],
+            'trend_r2': basic_analysis['consistency'] ** 2,
+            'contraction_ratio': volume_contraction_ratio,
+            'volatility': volume_volatility,
+            'spike_count': len(volume_spikes),
+            'spike_indices': volume_spikes,
+            'liquidity_healthy': liquidity_healthy,
+            'health_score': health_score,
+            'basic_score': basic_analysis['score']
+        }
+    
+    @staticmethod
+    def _detect_volume_spikes(df: pd.DataFrame, threshold: float = 2.0) -> List[int]:
+        """
+        检测成交量异常峰值
+        
+        Args:
+            df: 包含volume的DataFrame
+            threshold: 异常阈值（标准差的倍数）
+            
+        Returns:
+            异常索引列表
+        """
+        volumes = df['volume']
+        mean_volume = volumes.mean()
+        std_volume = volumes.std()
+        
+        spike_indices = []
+        for i in range(len(volumes)):
+            if volumes.iloc[i] > mean_volume + threshold * std_volume:
+                spike_indices.append(i)
+        
+        return spike_indices
+    
+    @staticmethod
+    def _calculate_volume_health_score(slope: float, consistency: float,
+                                     contraction_ratio: float, volatility: float,
+                                     spike_count: int, liquidity_healthy: bool) -> float:
+        """
+        计算成交量健康度综合评分
+        
+        Returns:
+            0-1之间的健康度评分
+        """
+        scores = []
+        weights = []
+        
+        # 1. 趋势得分（期望递减）
+        if slope < 0:
+            trend_score = min(1.0, abs(slope) * 100)  # 斜率越负越好
+        else:
+            trend_score = 0.3
+        scores.append(trend_score)
+        weights.append(0.3)
+        
+        # 2. 一致性得分
+        scores.append(consistency)
+        weights.append(0.2)
+        
+        # 3. 收缩比例得分（期望 0.3-0.7）
+        if 0.3 <= contraction_ratio <= 0.7:
+            contraction_score = 1.0
+        elif contraction_ratio < 0.3:
+            contraction_score = contraction_ratio / 0.3
+        else:
+            contraction_score = max(0, 1 - (contraction_ratio - 0.7) / 0.3)
+        scores.append(contraction_score)
+        weights.append(0.25)
+        
+        # 4. 波动性得分（越低越好）
+        volatility_score = max(0, 1 - volatility)
+        scores.append(volatility_score)
+        weights.append(0.15)
+        
+        # 5. 流动性得分
+        liquidity_score = 1.0 if liquidity_healthy else 0.5
+        scores.append(liquidity_score)
+        weights.append(0.1)
+        
+        # 计算加权平均
+        total_score = sum(s * w for s, w in zip(scores, weights))
+        
+        # 根据异常峰值数量进行惩罚
+        if spike_count > 2:
+            total_score *= 0.8
+        elif spike_count > 0:
+            total_score *= 0.9
+        
+        return max(0, min(1, total_score))

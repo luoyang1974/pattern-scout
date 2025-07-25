@@ -109,6 +109,20 @@ class TechnicalIndicators:
             return true_range.rolling(window=window).mean()
     
     @staticmethod
+    def calculate_atr(df: pd.DataFrame, period: int = 14) -> pd.Series:
+        """
+        从DataFrame计算ATR
+        
+        Args:
+            df: 包含high, low, close列的DataFrame
+            period: ATR周期
+            
+        Returns:
+            ATR序列
+        """
+        return TechnicalIndicators.atr(df['high'], df['low'], df['close'], period)
+    
+    @staticmethod
     def volume_sma(volume: pd.Series, window: int = 20) -> pd.Series:
         """计算成交量移动平均"""
         return volume.rolling(window=window).mean()

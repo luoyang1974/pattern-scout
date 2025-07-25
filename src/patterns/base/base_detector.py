@@ -12,6 +12,7 @@ from loguru import logger
 from src.data.models.base_models import PatternRecord, Flagpole, TrendLine, PatternType
 from src.patterns.base.timeframe_manager import TimeframeManager
 from src.patterns.base.pattern_components import PatternComponents
+from src.patterns.base.atr_adaptive_manager import ATRAdaptiveManager
 
 
 class BasePatternDetector(ABC):
@@ -27,7 +28,11 @@ class BasePatternDetector(ABC):
         self.config = config or self.get_default_config()
         self.timeframe_manager = TimeframeManager()
         self.pattern_components = PatternComponents()
+        self.atr_adaptive_manager = ATRAdaptiveManager()
         self._strategy_cache = {}
+        
+        # ATR自适应开关（可以在配置中控制）
+        self.enable_atr_adaptation = self.config.get('global', {}).get('enable_atr_adaptation', True)
         
     @abstractmethod
     def get_default_config(self) -> dict:
@@ -65,6 +70,10 @@ class BasePatternDetector(ABC):
         # 2. 获取策略和参数
         strategy = self._get_strategy(category)
         params = self._get_params(category, timeframe)
+        
+        # 2.5 ATR自适应参数调整
+        if self.enable_atr_adaptation:
+            params = self._apply_atr_adaptation(df, params, category)
         
         # 3. 数据预处理
         df_processed = strategy.preprocess(df, params)
@@ -158,20 +167,74 @@ class BasePatternDetector(ABC):
     
     def _get_params(self, category: str, timeframe: str) -> dict:
         """获取周期相关参数"""
-        # 从配置中获取该类别的参数
-        category_config = self.config.get('pattern_detection', {}).get(category, {})
+        # 从配置中获取该类别的参数，支持两种配置结构
+        if 'timeframe_configs' in self.config:
+            # 新的多时间周期配置结构
+            category_config = self.config.get('timeframe_configs', {}).get(category, {})
+        else:
+            # 旧的单一配置结构
+            category_config = self.config.get('pattern_detection', {}).get(category, {})
+        
+        # 确保pattern配置存在
+        pattern_type_name = self.get_pattern_type().lower()
+        pattern_config = category_config.get(pattern_type_name, {})
         
         # 合并默认参数
         params = {
             'timeframe': timeframe,
             'category': category,
             'flagpole': category_config.get('flagpole', {}),
-            'pattern': category_config.get(self.get_pattern_type().lower(), {}),
+            'pattern': pattern_config,
             'scoring': category_config.get('scoring', {}),
             'min_confidence': self.config.get('scoring', {}).get('min_confidence_score', 0.6)
         }
         
         return params
+    
+    def _apply_atr_adaptation(self, df: pd.DataFrame, params: dict, category: str) -> dict:
+        """
+        应用ATR自适应参数调整
+        
+        Args:
+            df: OHLCV数据
+            params: 原始参数
+            category: 时间周期类别
+            
+        Returns:
+            调整后的参数
+        """
+        try:
+            # 分析市场波动率
+            volatility_analysis = self.atr_adaptive_manager.analyze_market_volatility(df)
+            
+            # 应用自适应调整
+            adapted_params = self.atr_adaptive_manager.adapt_parameters(
+                params, volatility_analysis, category
+            )
+            
+            # 记录调整信息
+            if volatility_analysis.get('volatility_level'):
+                logger.info(f"ATR adaptation applied - Volatility: {volatility_analysis['volatility_level']}, "
+                          f"Normalized ATR: {volatility_analysis['atr_normalized']:.3%}")
+            
+            return adapted_params
+            
+        except Exception as e:
+            logger.error(f"ATR adaptation failed: {e}")
+            # 返回原始参数
+            return params
+    
+    def get_volatility_report(self, df: pd.DataFrame) -> str:
+        """
+        获取波动率分析报告
+        
+        Args:
+            df: OHLCV数据
+            
+        Returns:
+            波动率报告字符串
+        """
+        return self.atr_adaptive_manager.get_volatility_report(df)
     
     def _get_min_data_points(self) -> int:
         """获取最小数据点数量"""

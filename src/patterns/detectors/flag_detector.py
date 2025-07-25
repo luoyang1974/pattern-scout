@@ -26,7 +26,9 @@ class FlagDetector(BasePatternDetector):
         return {
             'global': {
                 'min_data_points': 60,
-                'enable_multi_timeframe': False
+                'enable_multi_timeframe': False,
+                'enable_atr_adaptation': True,  # 启用ATR自适应
+                'enable_ransac_fitting': True   # 启用RANSAC拟合
             },
             'timeframe_configs': {
                 'ultra_short': {
@@ -199,8 +201,29 @@ class FlagDetector(BasePatternDetector):
         if len(flag_data) < params['pattern']['min_bars']:
             return None
         
-        # 1. 使用策略寻找平行边界
-        boundaries = strategy.find_parallel_boundaries(flag_data, flagpole, params)
+        # 1. 使用智能摆动点检测代替简单的边界寻找
+        window_size = max(2, len(flag_data) // 5)
+        swing_highs, swing_lows = self.pattern_components.find_swing_points(
+            flag_data, 
+            window=window_size,
+            min_prominence_atr_multiple=params['pattern'].get('min_prominence_atr', 0.1)
+        )
+        
+        # 如果摆动点太少，使用原始策略
+        if len(swing_highs) < 2 or len(swing_lows) < 2:
+            boundaries = strategy.find_parallel_boundaries(flag_data, flagpole, params)
+        else:
+            # 检查是否启用RANSAC拟合
+            use_ransac = params.get('use_ransac_fitting', True)
+            
+            # 使用摆动点拟合边界（支持RANSAC）
+            upper_line = self.pattern_components.fit_trend_line_ransac(
+                flag_data, swing_highs, 'high', use_ransac=use_ransac
+            )
+            lower_line = self.pattern_components.fit_trend_line_ransac(
+                flag_data, swing_lows, 'low', use_ransac=use_ransac
+            )
+            boundaries = [upper_line, lower_line] if upper_line and lower_line else None
         
         if not boundaries or len(boundaries) < 2:
             return None
@@ -222,31 +245,55 @@ class FlagDetector(BasePatternDetector):
             logger.debug(f"Poor parallel quality: {parallel_quality:.3f}")
             return None
         
-        # 2.3 验证成交量模式
-        volume_valid = self._verify_volume_pattern(
-            flag_data, flagpole, full_df, params
-        )
-        
-        if not volume_valid:
-            logger.debug("Invalid volume pattern")
+        # 2.3 新增：验证通道不发散
+        if not self._verify_no_divergence(upper_line, lower_line, flag_data):
+            logger.debug("Channel is diverging")
             return None
         
-        # 3. 计算置信度
-        confidence_score = strategy.score_flag_quality(
+        # 2.4 使用增强的成交量分析
+        flag_start_idx = full_df[full_df['timestamp'] >= flag_data.iloc[0]['timestamp']].index[0]
+        flag_end_idx = full_df[full_df['timestamp'] <= flag_data.iloc[-1]['timestamp']].index[-1]
+        flagpole_start_idx = full_df[full_df['timestamp'] >= flagpole.start_time].index[0]
+        flagpole_end_idx = full_df[full_df['timestamp'] <= flagpole.end_time].index[-1]
+        
+        volume_analysis = self.pattern_components.analyze_volume_pattern_enhanced(
+            full_df,
+            flag_start_idx,
+            flag_end_idx,
+            flagpole_start_idx,
+            flagpole_end_idx
+        )
+        
+        if volume_analysis['health_score'] < 0.5:
+            logger.debug(f"Poor volume health score: {volume_analysis['health_score']:.3f}")
+            return None
+        
+        # 2.5 新增：验证突破准备度
+        breakout_readiness = self._verify_breakout_preparation(
+            flag_data, upper_line, lower_line, params
+        )
+        
+        # 3. 计算综合置信度
+        base_confidence = strategy.score_flag_quality(
             flag_data, flagpole, boundaries
         )
         
-        # 4. 分析成交量详情
-        volume_pattern = self.pattern_components.analyze_volume_pattern(
-            flag_data['volume'], 'decreasing'
-        )
+        # 根据新增验证调整置信度
+        adjusted_confidence = base_confidence * 0.7 + \
+                            volume_analysis['health_score'] * 0.2 + \
+                            breakout_readiness * 0.1
         
         return {
             'boundaries': boundaries,
-            'confidence_score': confidence_score,
-            'volume_pattern': volume_pattern,
+            'confidence_score': adjusted_confidence,
+            'volume_pattern': volume_analysis,
             'slope_direction_valid': True,
-            'parallel_quality': parallel_quality
+            'parallel_quality': parallel_quality,
+            'breakout_readiness': breakout_readiness,
+            'swing_points': {
+                'highs': swing_highs,
+                'lows': swing_lows
+            }
         }
     
     def _verify_opposite_slope(self, flagpole: Flagpole,
@@ -344,3 +391,80 @@ class FlagDetector(BasePatternDetector):
             return is_valid
         
         return True  # 如果无法计算，默认通过
+    
+    def _verify_no_divergence(self, upper_line: TrendLine,
+                             lower_line: TrendLine,
+                             flag_data: pd.DataFrame) -> bool:
+        """验证通道不发散"""
+        # 计算通道开始和结束的宽度
+        start_width = abs(upper_line.start_price - lower_line.start_price)
+        end_width = abs(upper_line.end_price - lower_line.end_price)
+        
+        # 允许轻微的宽度增加（最多20%）
+        max_expansion_ratio = 1.2
+        
+        if start_width > 0:
+            expansion_ratio = end_width / start_width
+            is_valid = expansion_ratio <= max_expansion_ratio
+            
+            logger.debug(f"Channel expansion ratio: {expansion_ratio:.2f} "
+                        f"(max allowed: {max_expansion_ratio})")
+            
+            return is_valid
+        
+        return True
+    
+    def _verify_breakout_preparation(self, flag_data: pd.DataFrame,
+                                   upper_line: TrendLine,
+                                   lower_line: TrendLine,
+                                   params: dict) -> float:
+        """
+        验证是否有突破准备迹象
+        
+        Returns:
+            突破准备度评分（0-1）
+        """
+        # 1. 价格接近边界的程度
+        last_prices = flag_data['close'].iloc[-5:]  # 最后5根K线
+        channel_width = abs(upper_line.end_price - lower_line.end_price)
+        
+        # 计算价格到上下边界的距离
+        avg_price = last_prices.mean()
+        distance_to_upper = abs(avg_price - upper_line.end_price)
+        distance_to_lower = abs(avg_price - lower_line.end_price)
+        min_distance = min(distance_to_upper, distance_to_lower)
+        
+        # 距离越近得分越高
+        proximity_score = 1.0 - (min_distance / channel_width) if channel_width > 0 else 0.5
+        
+        # 2. 成交量是否开始放大
+        if len(flag_data) >= 8:
+            recent_volume = flag_data['volume'].iloc[-3:].mean()
+            earlier_volume = flag_data['volume'].iloc[:-3].mean()
+            volume_expansion_ratio = recent_volume / earlier_volume if earlier_volume > 0 else 1.0
+            
+            # 成交量放大是积极信号
+            volume_score = min(1.0, (volume_expansion_ratio - 0.8) / 0.4)  # 0.8-1.2映射到0-1
+        else:
+            volume_score = 0.5
+        
+        # 3. 价格波动收窄（即将选择方向）
+        recent_volatility = flag_data['close'].iloc[-5:].std()
+        overall_volatility = flag_data['close'].std()
+        
+        if overall_volatility > 0:
+            volatility_contraction = 1.0 - (recent_volatility / overall_volatility)
+            volatility_score = max(0, min(1, volatility_contraction * 2))  # 放大效果
+        else:
+            volatility_score = 0.5
+        
+        # 综合评分
+        breakout_readiness = (proximity_score * 0.5 + 
+                            volume_score * 0.3 + 
+                            volatility_score * 0.2)
+        
+        logger.debug(f"Breakout readiness - proximity: {proximity_score:.2f}, "
+                    f"volume: {volume_score:.2f}, volatility: {volatility_score:.2f}, "
+                    f"total: {breakout_readiness:.2f}")
+        
+        return breakout_readiness

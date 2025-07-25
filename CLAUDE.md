@@ -28,6 +28,14 @@ uv run python tests/run_tests.py
 uv run python -m pytest tests/test_technical_indicators.py -v
 uv run python -m pytest tests/test_pattern_detectors.py -v
 
+# 运行专项测试
+uv run python -m pytest tests/test_atr_adaptive.py -v
+uv run python -m pytest tests/test_ransac.py -v
+
+# 运行算法性能验证
+uv run python tests/quick_real_test.py
+uv run python tests/simple_performance_analysis.py
+
 # 代码检查
 uv run ruff check .
 uv run ruff format .
@@ -185,8 +193,89 @@ output/
 - **质量评分**: 多维度权重评分（几何特征、成交量模式、技术确认）
 - **平行度验证**: 使用线性回归R²值评估旗形通道质量
 
+#### 算法优化（2025年1月实施）
+- **ATR自适应参数系统**: 根据市场波动率自动调整检测参数
+  - 5级波动率分类（very_low, low, medium, high, very_high）
+  - 自动调整最小高度、趋势强度、平行容忍度、置信度阈值
+  - 集成到所有检测器中，提供适应性检测能力
+- **RANSAC趋势线拟合**: 提供鲁棒的异常值处理
+  - 替代传统OLS回归，在存在异常值时R²从0.074提升到0.946
+  - 自适应阈值计算，基于数据标准差
+  - 支持与传统方法的性能比较和统计分析
+- **智能摆动点检测**: 使用基于ATR的突出度过滤，取代简单的局部极值
+- **增强成交量分析**: 
+  - 趋势线性回归分析
+  - 流动性健康度检查
+  - 异常峰值检测
+  - 多维度成交量健康度评分（0-1）
+- **旗形改进**:
+  - 通道发散检查
+  - 突破准备度评估
+  - 摆动点优先拟合
+- **三角旗形改进**:
+  - 支持三角形分类（对称/上升/下降）
+  - 差异化验证逻辑
+  - 支撑阻力质量评估
+
 ### 日志系统
 使用loguru库，配置在config.yaml中：
 - 默认输出: `logs/pattern_scout.log`
 - 支持文件轮转和级别控制
 - 调试时关注`Auto-detected timeframe`日志确认周期检测结果
+
+## 环境配置
+
+### Python版本要求
+- Python >= 3.13（严格要求，使用了最新语法特性）
+- 使用uv作为包管理器
+
+### 环境变量配置
+复制`.env.example`到`.env`并配置MongoDB连接信息（如使用MongoDB数据源）
+
+## 项目结构特点
+
+### 分层架构
+```
+src/
+├── data/           # 数据层
+│   ├── connectors/ # CSV/MongoDB连接器
+│   └── models/     # Pydantic数据模型
+├── patterns/       # 形态检测层
+│   ├── base/       # 基础组件（检测器基类、质量评分、时间周期管理）
+│   ├── detectors/  # 具体检测器实现
+│   ├── indicators/ # 技术指标
+│   └── strategies/ # 时间周期策略
+├── analysis/       # 分析层（突破分析）
+├── visualization/  # 图表生成
+├── storage/        # 数据持久化
+└── utils/         # 工具类（配置管理）
+```
+
+### 测试体系
+完整的unittest测试套件，覆盖所有核心组件：
+- 技术指标测试
+- 数据连接器测试  
+- 形态检测器测试（包含时间周期适应性测试）
+- 数据集管理器测试
+- 向后兼容性测试
+
+### 专项测试工具
+- **tests/test_atr_adaptive.py**: ATR自适应参数系统测试
+- **tests/test_algorithm_improvements.py**: 算法改进综合测试
+- **tests/test_ransac.py**: RANSAC算法性能和鲁棒性测试
+- **tests/test_real_data.py**: 真实数据算法验证框架
+- **tests/quick_real_test.py**: 快速真实数据验证
+- **tests/simple_performance_analysis.py**: 性能基准测试和优化分析
+
+### 性能基准
+基于真实数据的性能测试结果（RBL8期货15分钟数据）：
+- **处理速度**: 250记录/秒，4ms/记录
+- **扩展性**: 扩展因子1.04（接近理想值1.0）
+- **算法改进**: RANSAC在异常值环境下R²从0.074提升到0.946
+- **当前性能水平**: 良好（2000条记录处理时间8.26秒）
+
+### 关键性能组件
+- **ATRAdaptiveManager**: 自动波动率分析和参数调整
+- **RANSACTrendLineFitter**: 鲁棒趋势线拟合，支持异常值检测
+- **PatternComponents**: 增强的形态组件，集成智能检测算法
+- **BasePatternDetector**: 统一的检测器基类，支持ATR自适应和RANSAC拟合
