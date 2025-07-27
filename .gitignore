@@ -9,5 +9,7 @@ wheels/
 # Virtual environments
 .venv
 
-# 错误生成的文件
-nul
+#输出文件
+output/
+logs/
+

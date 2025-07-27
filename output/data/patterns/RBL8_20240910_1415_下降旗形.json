@@ -1,8 +1,8 @@
 {
-  "id": "28518ba1-d51d-4600-a643-b550f839f36b",
+  "id": "9637e763-a818-4306-aa76-ba0c81e3f844",
   "symbol": "RBL8",
   "pattern_type": "flag",
-  "detection_date": "2025-07-23T15:42:42.058793",
+  "detection_date": "2025-07-27T15:16:49.744002",
   "flagpole": {
     "start_time": "2024-09-10T14:15:00",
     "end_time": "2024-09-10T22:00:00",
@@ -15,26 +15,26 @@
   "pattern_boundaries": [
     {
       "start_time": "2024-09-10T22:15:00",
-      "end_time": "2024-09-12T09:45:00",
-      "start_price": 3063.6190476190477,
-      "end_price": 3174.0476190476193,
-      "slope": 22.085714285714282,
-      "r_squared": 0.9659714344989989
+      "end_time": "2024-09-11T11:30:00",
+      "start_price": 3062.8,
+      "end_price": 3123.7000000000003,
+      "slope": 20.3,
+      "r_squared": 0.8167475968684965
     },
     {
       "start_time": "2024-09-10T22:15:00",
-      "end_time": "2024-09-12T09:45:00",
-      "start_price": 3038.9166666666665,
-      "end_price": 3151.583333333333,
-      "slope": 16.095238095238095,
-      "r_squared": 0.9504591353903431
+      "end_time": "2024-09-11T11:30:00",
+      "start_price": 3036.0,
+      "end_price": 3103.6,
+      "slope": 16.900000000000002,
+      "r_squared": 0.9145958754963498
     }
   ],
-  "pattern_duration": 29,
+  "pattern_duration": 12,
   "breakthrough_date": null,
   "breakthrough_price": null,
   "result_type": null,
-  "confidence_score": 0.7897991886432771,
+  "confidence_score": 0.7556935239034646,
   "pattern_quality": "medium",
   "chart_path": null,
   "data_path": null

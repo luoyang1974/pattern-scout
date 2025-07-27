@@ -17,17 +17,20 @@ PatternScout is a tool for automatically detecting "flag" and "pennant" technica
 
 The project uses `uv` for environment and package management.
 
-### Setup
+### Setup & Basic Commands
 ```bash
 # Install dependencies from uv.lock
 uv sync
-```
 
-### Running the Application
-```bash
 # Run the main application
 uv run python main.py
 
+# Run the full test suite
+uv run python tests/run_tests.py
+```
+
+### Running Specific Scans & Analyses
+```bash
 # Run a basic scan for a specific symbol
 uv run python main.py --symbols RBL8
 
@@ -39,15 +42,27 @@ uv run python main.py --pattern-types flag pennant --min-confidence 0.4
 
 # Export the dataset and run breakthrough analysis
 uv run python main.py --export-dataset json --analyze-breakthrough
+
+# Limit the scan to a specific date range
+uv run python main.py --start-date 2023-01-01 --end-date 2023-12-31
+
+# Use MongoDB as the data source
+uv run python main.py --data-source mongodb
 ```
 
 ### Testing
 ```bash
-# Run the full test suite
-uv run python tests/run_tests.py
-
 # Run a specific test module with pytest
 uv run python -m pytest tests/test_pattern_detectors.py -v
+uv run python -m pytest tests/test_technical_indicators.py -v
+
+# Run specialized algorithm tests
+uv run python -m pytest tests/test_atr_adaptive.py -v
+uv run python -m pytest tests/test_ransac.py -v
+
+# Run performance and validation tests
+uv run python tests/quick_real_test.py
+uv run python tests/simple_performance_analysis.py
 ```
 
 ### Code Quality & Linting
@@ -83,10 +98,21 @@ The system uses a multi-timeframe adaptive architecture to apply the optimal det
 6.  **ChartGenerator**: Creates TradingView-style charts for visualization.
 7.  **DatasetManager**: Manages pattern data persistence using SQLite and JSON.
 
-### Key Components
-- **Detectors**: `BasePatternDetector` provides a common interface for `FlagDetector` and `PennantDetector`.
+### Key Components & Design Patterns
+- **Detectors**: `BasePatternDetector` provides a common interface for `FlagDetector` and `PennantDetector`. `PatternScanner` coordinates the execution of multiple detectors.
 - **Data Models**: Pydantic and dataclasses define strict types for `PatternRecord`, `Flagpole`, `TrendLine`, etc.
 - **Configuration**: Managed via `config.yaml` (standard) and `config_multi_timeframe.yaml`. Parameters are structured by timeframe category.
+- **Factory Pattern**: `DataConnectorFactory` creates the appropriate data connector (CSV/MongoDB) based on configuration.
+- **Strategy Pattern**: `TimeframeStrategy` implementations (`UltraShortStrategy`, etc.) encapsulate the detection logic optimized for each timeframe.
+
+## Algorithm Details & Optimizations
+
+- **RANSAC Trend Line Fitting**: Employs RANSAC for robust trend line detection, significantly improving accuracy in the presence of price outliers compared to standard OLS regression.
+- **ATR-Adaptive Parameters**: The system dynamically adjusts key detection parameters (e.g., minimum pattern height, trend strength) based on the market's Average True Range (ATR), making detection more adaptive to changing volatility.
+- **Intelligent Swing Point Detection**: Uses an ATR-based prominence filter to identify significant swing highs and lows, moving beyond simple local extrema.
+- **Enhanced Volume Analysis**: Incorporates multi-dimensional volume analysis, including trend regression, liquidity checks, and anomaly detection, to score the health of volume patterns.
+- **Pennant Convergence**: Calculates the apex and convergence ratio of trend lines to validate the pennant shape.
+- **Flag Parallelism**: Uses the R² value from linear regression to verify the parallel quality of the flag's channel.
 
 ## Important Notes
 
@@ -109,7 +135,8 @@ All output is saved to the `output/` directory, which is organized as follows:
 output/
 ├── charts/
 │   ├── flag/
-│   └── pennant/
+│   ├── pennant/
+│   └── summary/
 ├── data/
 │   ├── patterns/      # Individual pattern data (JSON)
 │   ├── patterns.db    # SQLite database

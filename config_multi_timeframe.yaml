@@ -66,32 +66,32 @@ pattern_detection:
   # 短周期参数（标准）
   short:
     flagpole:
-      min_bars: 3
-      max_bars: 12
-      min_height_percent: 1.0
-      max_height_percent: 12.0
-      volume_surge_ratio: 1.5
-      max_retracement: 0.4
-      min_trend_strength: 0.5
+      min_bars: 2
+      max_bars: 15
+      min_height_percent: 0.5
+      max_height_percent: 15.0
+      volume_surge_ratio: 1.2
+      max_retracement: 0.5
+      min_trend_strength: 0.3
     flag:
-      min_bars: 6
-      max_bars: 35
-      min_slope_angle: 0.3
-      max_slope_angle: 12
-      retracement_range: [0.15, 0.7]
-      volume_decay_threshold: 0.8
-      parallel_tolerance: 0.25
-      min_touches: 2
+      min_bars: 4
+      max_bars: 50
+      min_slope_angle: 0.1
+      max_slope_angle: 15
+      retracement_range: [0.1, 0.8]
+      volume_decay_threshold: 0.9
+      parallel_tolerance: 0.3
+      min_touches: 1
     pennant:
-      min_bars: 6
-      max_bars: 35
-      min_touches: 2
-      convergence_ratio: 0.4
-      apex_distance_range: [0.3, 3.0]
-      symmetry_tolerance: 0.5
-      volume_decay_threshold: 0.8
+      min_bars: 4
+      max_bars: 50
+      min_touches: 1
+      convergence_ratio: 0.3
+      apex_distance_range: [0.3, 4.0]
+      symmetry_tolerance: 0.6
+      volume_decay_threshold: 0.9
     scoring:
-      min_confidence_score: 0.4
+      min_confidence_score: 0.3
       
   # 中长周期参数
   medium_long:

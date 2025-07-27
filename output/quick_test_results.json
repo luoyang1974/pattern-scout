@@ -1,11 +1,11 @@
 {
-  "test_time": "2025-07-25T17:55:18.187432",
+  "test_time": "2025-07-27T14:59:09.818904",
   "data_points": 1000,
   "algorithm_comparison": {
     "new_patterns": 0,
     "legacy_patterns": 0,
     "improvement": 0,
-    "speed_ratio": 0.9464100962818712
+    "speed_ratio": 0.9852980573708001
   },
   "confidence_analysis": {
     "new_avg": 0,
