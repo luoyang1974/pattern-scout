@@ -5,13 +5,11 @@
 import unittest
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
 
 from src.patterns.base.pattern_components import PatternComponents
-from src.patterns.indicators.technical_indicators import TechnicalIndicators
 from src.patterns.detectors.flag_detector import FlagDetector
 from src.patterns.detectors.pennant_detector import PennantDetector
-from src.data.models.base_models import TrendLine, Flagpole
+from src.data.models.base_models import TrendLine
 
 
 class TestSwingPointDetection(unittest.TestCase):

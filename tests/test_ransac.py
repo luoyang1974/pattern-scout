@@ -4,7 +4,6 @@
 import unittest
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
 
 from src.patterns.base.ransac_trend_fitter import RANSACTrendLineFitter
 from src.patterns.base.pattern_components import PatternComponents

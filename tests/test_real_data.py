@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import pandas as pd
 import numpy as np
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any
 import json
 import time
 from datetime import datetime
@@ -117,7 +117,7 @@ class RealDataAlgorithmTester:
             symbol = file_path.stem.split('-')[0]  # 从文件名提取品种
             
             # 使用默认日期范围获取所有数据
-            from datetime import datetime, timedelta
+            from datetime import datetime
             start_date = datetime(2020, 1, 1)
             end_date = datetime.now()
             df = self.data_connector.get_data(symbol, start_date, end_date)

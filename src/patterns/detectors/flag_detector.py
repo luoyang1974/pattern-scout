@@ -43,7 +43,7 @@ class FlagDetector(BasePatternDetector):
                     },
                     'flag': {
                         'min_bars': 10,
-                        'max_bars': 40,
+                        'max_bars': 30,
                         'min_slope_angle': 0.3,
                         'max_slope_angle': 8,
                         'retracement_range': (0.15, 0.6),
@@ -54,8 +54,8 @@ class FlagDetector(BasePatternDetector):
                 },
                 'short': {
                     'flagpole': {
-                        'min_bars': 4,
-                        'max_bars': 10,
+                        'min_bars': 5,
+                        'max_bars': 12,
                         'min_height_percent': 1.5,
                         'max_height_percent': 10.0,
                         'volume_surge_ratio': 2.0,
@@ -63,8 +63,8 @@ class FlagDetector(BasePatternDetector):
                         'min_trend_strength': 0.7
                     },
                     'flag': {
-                        'min_bars': 8,
-                        'max_bars': 30,
+                        'min_bars': 10,
+                        'max_bars': 25,
                         'min_slope_angle': 0.5,
                         'max_slope_angle': 10,
                         'retracement_range': (0.2, 0.6),
@@ -76,7 +76,7 @@ class FlagDetector(BasePatternDetector):
                 'medium_long': {
                     'flagpole': {
                         'min_bars': 3,
-                        'max_bars': 6,
+                        'max_bars': 8,
                         'min_height_percent': 2.0,
                         'max_height_percent': 15.0,
                         'volume_surge_ratio': 2.5,

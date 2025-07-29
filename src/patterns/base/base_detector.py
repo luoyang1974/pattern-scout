@@ -153,15 +153,12 @@ class BasePatternDetector(ABC):
     def _get_strategy(self, category: str):
         """获取周期策略对象（使用缓存）"""
         if category not in self._strategy_cache:
-            if category == 'ultra_short':
-                from src.patterns.strategies.ultra_short_strategy import UltraShortStrategy
-                self._strategy_cache[category] = UltraShortStrategy()
-            elif category == 'short':
-                from src.patterns.strategies.short_strategy import ShortStrategy
-                self._strategy_cache[category] = ShortStrategy()
-            else:  # medium_long
-                from src.patterns.strategies.medium_long_strategy import MediumLongStrategy
-                self._strategy_cache[category] = MediumLongStrategy()
+            from src.patterns.strategies.strategy_factory import StrategyFactory
+            strategy = StrategyFactory.get_strategy(category)
+            if strategy is None:
+                logger.warning(f"No strategy found for category {category}, using default")
+                strategy = StrategyFactory.get_strategy('15m')
+            self._strategy_cache[category] = strategy
         
         return self._strategy_cache[category]
     

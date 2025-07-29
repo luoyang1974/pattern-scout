@@ -6,15 +6,12 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import pandas as pd
 import numpy as np
 import time
 from datetime import datetime
-from loguru import logger
 import json
 
 from src.patterns.detectors.flag_detector import FlagDetector
-from src.patterns.detectors.pennant_detector import PennantDetector
 from src.data.connectors.csv_connector import CSVDataConnector
 
 
@@ -113,7 +110,7 @@ def quick_test():
     test_indices = list(range(0, len(df_sample), 50))[:10]  # 每50个点选一个
     if len(test_indices) >= 3:
         comparison = components.compare_fitting_methods(df_sample, test_indices, 'close')
-        print(f"RANSAC vs OLS比较:")
+        print("RANSAC vs OLS比较:")
         print(f"- RANSAC R2: {comparison.get('ransac', {}).get('r_squared', 0):.3f}")
         print(f"- OLS R2: {comparison.get('ols', {}).get('r_squared', 0):.3f}")
         print(f"- 异常值检测: {comparison.get('ransac', {}).get('outliers_count', 0)} 个")

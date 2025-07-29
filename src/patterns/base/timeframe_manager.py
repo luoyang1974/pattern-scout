@@ -10,36 +10,60 @@ from loguru import logger
 class TimeframeManager:
     """智能时间周期管理"""
     
-    # 周期分类定义
+    # 8个具体周期分类定义
     CATEGORIES = {
-        'ultra_short': {
-            'timeframes': ['1m', '3m', '5m'],
-            'bars_per_hour': [60, 20, 12],
-            'description': '超短周期（1-5分钟）'
+        '1m': {
+            'bars_per_hour': 60,
+            'seconds': 60,
+            'description': '1分钟周期'
         },
-        'short': {
-            'timeframes': ['15m', '30m', '1h'],
-            'bars_per_hour': [4, 2, 1],
-            'description': '短周期（15分钟-1小时）'
+        '5m': {
+            'bars_per_hour': 12,
+            'seconds': 300,
+            'description': '5分钟周期'
         },
-        'medium_long': {
-            'timeframes': ['4h', '1d', '1w'],
-            'bars_per_hour': [0.25, 0.042, 0.006],
-            'description': '中长周期（4小时-1周）'
+        '15m': {
+            'bars_per_hour': 4,
+            'seconds': 900,
+            'description': '15分钟周期'
+        },
+        '1h': {
+            'bars_per_hour': 1,
+            'seconds': 3600,
+            'description': '1小时周期'
+        },
+        '4h': {
+            'bars_per_hour': 0.25,
+            'seconds': 14400,
+            'description': '4小时周期'
+        },
+        '1d': {
+            'bars_per_hour': 0.042,
+            'seconds': 86400,
+            'description': '日线周期'
+        },
+        '1w': {
+            'bars_per_hour': 0.006,
+            'seconds': 604800,
+            'description': '周线周期'
+        },
+        '1M': {
+            'bars_per_hour': 0.0014,
+            'seconds': 2592000,
+            'description': '月线周期'
         }
     }
     
     # 时间周期映射（秒数）
     TIMEFRAME_SECONDS = {
         '1m': 60,
-        '3m': 180,
         '5m': 300,
         '15m': 900,
-        '30m': 1800,
         '1h': 3600,
         '4h': 14400,
         '1d': 86400,
-        '1w': 604800
+        '1w': 604800,
+        '1M': 2592000
     }
     
     # 重采样规则
@@ -113,21 +137,20 @@ class TimeframeManager:
     
     def get_category(self, timeframe: str) -> str:
         """
-        获取时间周期所属类别
+        获取时间周期分类
         
         Args:
             timeframe: 时间周期字符串
             
         Returns:
-            类别名称（'ultra_short', 'short', 'medium_long'）
+            时间周期分类（直接返回timeframe）
         """
-        for category, info in self.CATEGORIES.items():
-            if timeframe in info['timeframes']:
-                return category
+        if timeframe in self.CATEGORIES:
+            return timeframe
         
-        # 默认返回短周期
-        logger.warning(f"Unknown timeframe {timeframe}, defaulting to 'short' category")
-        return 'short'
+        # 默认返回15分钟周期
+        logger.warning(f"Unknown timeframe {timeframe}, defaulting to '15m' category")
+        return '15m'
     
     def normalize_params(self, params: dict, timeframe: str) -> dict:
         """
@@ -144,16 +167,7 @@ class TimeframeManager:
         
         # 获取每小时的K线数
         category = self.get_category(timeframe)
-        bars_per_hour = None
-        
-        for cat, info in self.CATEGORIES.items():
-            if cat == category:
-                tf_index = info['timeframes'].index(timeframe) if timeframe in info['timeframes'] else 0
-                bars_per_hour = info['bars_per_hour'][tf_index]
-                break
-        
-        if bars_per_hour is None:
-            bars_per_hour = 4  # 默认15分钟
+        bars_per_hour = self.CATEGORIES.get(category, {}).get('bars_per_hour', 4)
         
         # 转换时间参数
         time_params = ['min_duration_hours', 'max_duration_hours', 
@@ -230,14 +244,13 @@ class TimeframeManager:
         """将时间周期转换为pandas频率字符串"""
         freq_map = {
             '1m': '1min',
-            '3m': '3min',
             '5m': '5min',
             '15m': '15min',
-            '30m': '30min',
             '1h': '1h',
             '4h': '4h',
             '1d': '1D',
-            '1w': '1W'
+            '1w': '1W',
+            '1M': '1M'
         }
         return freq_map.get(timeframe, '15min')
     
@@ -252,25 +265,43 @@ class TimeframeManager:
         Returns:
             包含各种回看周期的字典
         """
-        category = self.get_category(timeframe)
-        
-        # 基础回看周期配置
+        # 基础回看周期配置（按具体周期分类）
         lookback_configs = {
-            'ultra_short': {
+            '1m': {
+                'flag': {'min_total_bars': 30, 'max_total_bars': 120, 'pre_pattern_bars': 30},
+                'pennant': {'min_total_bars': 30, 'max_total_bars': 120, 'pre_pattern_bars': 30}
+            },
+            '5m': {
+                'flag': {'min_total_bars': 24, 'max_total_bars': 96, 'pre_pattern_bars': 24},
+                'pennant': {'min_total_bars': 24, 'max_total_bars': 96, 'pre_pattern_bars': 24}
+            },
+            '15m': {
                 'flag': {'min_total_bars': 20, 'max_total_bars': 80, 'pre_pattern_bars': 20},
                 'pennant': {'min_total_bars': 20, 'max_total_bars': 80, 'pre_pattern_bars': 20}
             },
-            'short': {
+            '1h': {
                 'flag': {'min_total_bars': 15, 'max_total_bars': 60, 'pre_pattern_bars': 15},
                 'pennant': {'min_total_bars': 15, 'max_total_bars': 60, 'pre_pattern_bars': 15}
             },
-            'medium_long': {
+            '4h': {
+                'flag': {'min_total_bars': 12, 'max_total_bars': 48, 'pre_pattern_bars': 12},
+                'pennant': {'min_total_bars': 12, 'max_total_bars': 48, 'pre_pattern_bars': 12}
+            },
+            '1d': {
                 'flag': {'min_total_bars': 10, 'max_total_bars': 40, 'pre_pattern_bars': 10},
                 'pennant': {'min_total_bars': 10, 'max_total_bars': 40, 'pre_pattern_bars': 10}
+            },
+            '1w': {
+                'flag': {'min_total_bars': 8, 'max_total_bars': 32, 'pre_pattern_bars': 8},
+                'pennant': {'min_total_bars': 8, 'max_total_bars': 32, 'pre_pattern_bars': 8}
+            },
+            '1M': {
+                'flag': {'min_total_bars': 6, 'max_total_bars': 24, 'pre_pattern_bars': 6},
+                'pennant': {'min_total_bars': 6, 'max_total_bars': 24, 'pre_pattern_bars': 6}
             }
         }
         
-        return lookback_configs.get(category, {}).get(pattern_type, {})
+        return lookback_configs.get(timeframe, lookback_configs['15m']).get(pattern_type, {})
     
     def validate_data_sufficiency(self, df: pd.DataFrame, timeframe: str, 
                                 pattern_type: str) -> Tuple[bool, str]:

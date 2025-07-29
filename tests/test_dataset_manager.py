@@ -81,7 +81,7 @@ class TestDatasetManager(unittest.TestCase):
                     try:
                         shutil.rmtree(self.temp_dir)
                         break
-                    except (PermissionError, OSError) as e:
+                    except (PermissionError, OSError):
                         if attempt < 2:
                             time.sleep(0.2 * (attempt + 1))
                             continue

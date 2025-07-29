@@ -6,7 +6,6 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import pandas as pd
 import numpy as np
 import time
 from datetime import datetime
@@ -152,7 +151,7 @@ def quick_performance_analysis():
     # 6. 生成报告
     generate_performance_report(results, output_dir)
     
-    print(f"\n性能分析完成！结果已保存到 output/performance_analysis.json")
+    print("\n性能分析完成！结果已保存到 output/performance_analysis.json")
     print("详细报告: output/performance_report.md")
     
     return results

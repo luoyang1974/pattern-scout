@@ -4,7 +4,6 @@
 import unittest
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
 
 from src.patterns.base.atr_adaptive_manager import ATRAdaptiveManager
 from src.patterns.detectors.flag_detector import FlagDetector

@@ -6,18 +6,15 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import pandas as pd
 import numpy as np
 import time
 from datetime import datetime
-from loguru import logger
 import json
 import cProfile
 import pstats
 from io import StringIO
 
 from src.patterns.detectors.flag_detector import FlagDetector
-from src.patterns.detectors.pennant_detector import PennantDetector
 from src.data.connectors.csv_connector import CSVDataConnector
 
 

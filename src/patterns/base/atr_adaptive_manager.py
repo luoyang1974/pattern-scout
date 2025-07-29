@@ -4,7 +4,7 @@ ATR自适应参数管理器
 """
 import pandas as pd
 import numpy as np
-from typing import Dict, Any, Optional, Tuple
+from typing import Dict, Any
 from loguru import logger
 
 from src.patterns.indicators.technical_indicators import TechnicalIndicators

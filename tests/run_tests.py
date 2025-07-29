@@ -14,6 +14,7 @@ from tests.test_pattern_detectors import (
     TestTimeframeAdaptation, TestBackwardCompatibility
 )
 from tests.test_dataset_manager import TestDatasetManager, TestDatasetManagerEdgeCases
+from tests.test_multi_timeframe import TestMultiTimeframe, TestTimeframeSpecificBehavior
 
 
 def create_test_suite():
@@ -40,6 +41,10 @@ def create_test_suite():
     # 数据集管理器测试
     suite.addTest(loader.loadTestsFromTestCase(TestDatasetManager))
     suite.addTest(loader.loadTestsFromTestCase(TestDatasetManagerEdgeCases))
+    
+    # 多时间周期系统测试
+    suite.addTest(loader.loadTestsFromTestCase(TestMultiTimeframe))
+    suite.addTest(loader.loadTestsFromTestCase(TestTimeframeSpecificBehavior))
     
     return suite
 
