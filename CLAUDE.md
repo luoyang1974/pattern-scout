@@ -70,9 +70,14 @@ PatternScout 2.0 采用多时间周期自适应架构：
 
 - **TimeframeManager**: 自动检测数据时间周期（分析timestamp间隔，不依赖文件名）
 - **时间周期分类**:
-  - `ultra_short`: 1m, 3m, 5m
-  - `short`: 15m, 30m, 1h  
-  - `medium_long`: 4h, 1d, 1w
+  - `1m`: 1分钟周期（超高频交易）
+  - `5m`: 5分钟周期（高频交易）
+  - `15m`: 15分钟周期（短线交易）
+  - `1h`: 1小时周期（日内交易）
+  - `4h`: 4小时周期（短中线交易）
+  - `1d`: 日线周期（中线交易）
+  - `1w`: 周线周期（中长线交易）
+  - `1M`: 月线周期（长线交易）
 - **策略模式**: 不同周期使用专门优化的检测策略
 - **自适应参数**: 根据检测到的时间周期自动选择对应参数集
 
@@ -119,13 +124,38 @@ class BasePatternDetector(ABC):
 
 配置结构：
 ```yaml
+# 时间周期分类
+timeframe_categories:
+  '1m':
+    description: "1分钟周期（超高频交易）"
+  '5m':
+    description: "5分钟周期（高频交易）"
+  '15m':
+    description: "15分钟周期（短线交易）"
+  '1h':
+    description: "1小时周期（日内交易）"
+  '4h':
+    description: "4小时周期（短中线交易）"
+  '1d':
+    description: "日线周期（中线交易）"
+  '1w':
+    description: "周线周期（中长线交易）"
+  '1M':
+    description: "月线周期（长线交易）"
+
+# 形态检测参数（按具体周期分类）
 pattern_detection:
-  ultra_short:    # 超短周期参数
+  '1m':           # 1分钟周期参数
     flagpole: {...}
     flag: {...}
     pennant: {...}
-  short:          # 短周期参数（15分钟数据默认）
-  medium_long:    # 中长周期参数
+  '5m':           # 5分钟周期参数
+  '15m':          # 15分钟周期参数（默认）
+  '1h':           # 1小时周期参数
+  '4h':           # 4小时周期参数
+  '1d':           # 日线周期参数
+  '1w':           # 周线周期参数
+  '1M':           # 月线周期参数
 ```
 
 ## 关键架构模式
@@ -135,10 +165,15 @@ pattern_detection:
 - 根据配置动态选择数据源类型
 
 ### 策略模式
-- **TimeframeStrategy**: 
-  - UltraShortStrategy: 1-5分钟数据优化
-  - ShortStrategy: 15分钟-1小时数据优化  
-  - MediumLongStrategy: 4小时-周线数据优化
+- **TimeframeStrategy**:
+  - MinuteOneStrategy: 1分钟数据优化
+  - MinuteFiveStrategy: 5分钟数据优化
+  - MinuteFifteenStrategy: 15分钟数据优化
+  - HourOneStrategy: 1小时数据优化
+  - HourFourStrategy: 4小时数据优化
+  - DayOneStrategy: 日线数据优化
+  - WeekOneStrategy: 周线数据优化
+  - MonthOneStrategy: 月线数据优化
 - 每个策略包含专门的预处理、验证和评分逻辑
 
 ### 组件协调
@@ -230,7 +265,15 @@ output/
 - 使用uv作为包管理器
 
 ### 环境变量配置
-复制`.env.example`到`.env`并配置MongoDB连接信息（如使用MongoDB数据源）
+复制`.env.example`到`.env`并配置MongoDB连接信息（如使用MongoDB数据源）：
+```bash
+cp .env.example .env
+```
+
+环境变量包括：
+- `MONGODB_USERNAME`: MongoDB用户名
+- `MONGODB_PASSWORD`: MongoDB密码
+- `API_KEY`: API密钥（如有需要）
 
 ## 项目结构特点
 
