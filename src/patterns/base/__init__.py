@@ -6,10 +6,12 @@ from .base_detector import BasePatternDetector
 from .timeframe_manager import TimeframeManager
 from .pattern_components import PatternComponents
 from .quality_scorer import QualityScorer
+from .parameter_adapter import ParameterAdapter
 
 __all__ = [
     'BasePatternDetector',
     'TimeframeManager',
     'PatternComponents',
-    'QualityScorer'
+    'QualityScorer',
+    'ParameterAdapter'
 ]

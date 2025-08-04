@@ -100,8 +100,7 @@ class PennantDetector(BasePatternDetector):
     
     def _detect_pattern_formation(self, df: pd.DataFrame, 
                                 flagpoles: List[Flagpole],
-                                params: dict,
-                                strategy) -> List[PatternRecord]:
+                                params: dict) -> List[PatternRecord]:
         """
         检测三角旗形（Pennant）形态
         
@@ -109,7 +108,6 @@ class PennantDetector(BasePatternDetector):
             df: 预处理后的数据
             flagpoles: 检测到的旗杆
             params: 周期相关参数
-            strategy: 周期策略对象
             
         Returns:
             检测到的Pennant形态列表
@@ -120,7 +118,7 @@ class PennantDetector(BasePatternDetector):
         for flagpole in flagpoles:
             # 在旗杆后寻找收敛的三角形
             pennant_result = self._detect_pennant_after_pole(
-                df, flagpole, params, strategy
+                df, flagpole, params
             )
             
             if pennant_result:
@@ -136,7 +134,7 @@ class PennantDetector(BasePatternDetector):
                         'convergence_quality': pennant_result.get('convergence_quality', 0),
                         'symmetry_score': pennant_result.get('symmetry_score', 0),
                         'volume_pattern': pennant_result.get('volume_pattern', {}),
-                        'category': params['category'],
+                        'category': params['timeframe'],
                         'timeframe': params['timeframe']
                     }
                 )
@@ -150,8 +148,7 @@ class PennantDetector(BasePatternDetector):
     
     def _detect_pennant_after_pole(self, df: pd.DataFrame,
                                  flagpole: Flagpole,
-                                 params: dict,
-                                 strategy) -> Optional[dict]:
+                                 params: dict) -> Optional[dict]:
         """检测旗杆后的三角旗形"""
         # 找到旗杆结束位置
         flagpole_end_idx = df[df['timestamp'] <= flagpole.end_time].index[-1]
@@ -180,7 +177,7 @@ class PennantDetector(BasePatternDetector):
             
             # 分析三角旗形
             pennant_result = self._analyze_pennant_pattern(
-                pennant_data, flagpole, params, strategy, df
+                pennant_data, flagpole, params, df
             )
             
             if pennant_result and pennant_result['confidence_score'] > best_score:
@@ -196,7 +193,6 @@ class PennantDetector(BasePatternDetector):
     def _analyze_pennant_pattern(self, pennant_data: pd.DataFrame,
                                flagpole: Flagpole,
                                params: dict,
-                               strategy,
                                full_df: pd.DataFrame) -> Optional[dict]:
         """分析三角旗形形态"""
         if len(pennant_data) < params['pattern']['min_bars']:
@@ -213,7 +209,11 @@ class PennantDetector(BasePatternDetector):
         # 如果摆动点太少，使用原始策略
         if len(swing_highs) < params['pattern']['min_touches'] or \
            len(swing_lows) < params['pattern']['min_touches']:
-            support_idx, resistance_idx = strategy.find_key_points(pennant_data, flagpole)
+            support_idx, resistance_idx = self.pattern_components.find_support_resistance_points(
+                pennant_data,
+                window_size=max(2, len(pennant_data) // 12),
+                category=params['timeframe']
+            )
         else:
             support_idx, resistance_idx = swing_lows, swing_highs
         
@@ -288,8 +288,8 @@ class PennantDetector(BasePatternDetector):
         
         # 9. 计算总体置信度（根据形态类型调整权重）
         if triangle_type == 'symmetric':
-            base_confidence = strategy.score_pennant_quality(
-                pennant_data, flagpole, upper_line, lower_line, apex
+            base_confidence = self._calculate_pennant_quality_score(
+                pennant_data, flagpole, upper_line, lower_line, apex, params
             )
             confidence_score = (base_confidence * 0.5 + 
                               convergence_quality * 0.2 + 
@@ -298,8 +298,8 @@ class PennantDetector(BasePatternDetector):
                               sr_quality * 0.05)
         else:
             # 非对称三角形降低对称性权重，增加支撑阻力权重
-            base_confidence = strategy.score_pennant_quality(
-                pennant_data, flagpole, upper_line, lower_line, apex
+            base_confidence = self._calculate_pennant_quality_score(
+                pennant_data, flagpole, upper_line, lower_line, apex, params
             )
             confidence_score = (base_confidence * 0.5 + 
                               convergence_quality * 0.25 + 
@@ -814,3 +814,222 @@ class PennantDetector(BasePatternDetector):
         
         # 综合评分
         return count_score * 0.3 + uniformity_score * 0.3 + clarity_score * 0.4
+    
+    def _calculate_pennant_quality_score(self, pennant_data: pd.DataFrame,
+                                       flagpole: Flagpole,
+                                       upper_line: TrendLine,
+                                       lower_line: TrendLine,
+                                       apex: Tuple[float, float],
+                                       params: dict) -> float:
+        """
+        计算三角旗形质量评分（替代strategy.score_pennant_quality）
+        
+        Args:
+            pennant_data: 三角旗形数据
+            flagpole: 旗杆对象
+            upper_line: 上边界线
+            lower_line: 下边界线
+            apex: 收敛点
+            params: 参数配置
+            
+        Returns:
+            质量评分（0-1）
+        """
+        scores = []
+        
+        # 1. 几何特征评分（45%权重）
+        # 1.1 R²拟合质量
+        r_squared_score = (upper_line.r_squared + lower_line.r_squared) / 2
+        scores.append(('r_squared', r_squared_score, 0.15))
+        
+        # 1.2 收敛质量
+        convergence_score = self._calculate_convergence_score(upper_line, lower_line, apex, pennant_data, params)
+        scores.append(('convergence', convergence_score, 0.20))
+        
+        # 1.3 形态完整性
+        completeness_score = self._calculate_completeness_score(pennant_data, params)
+        scores.append(('completeness', completeness_score, 0.10))
+        
+        # 2. 技术特征评分（35%权重）
+        # 2.1 成交量模式
+        volume_score = self._calculate_pennant_volume_score(pennant_data, params)
+        scores.append(('volume', volume_score, 0.20))
+        
+        # 2.2 价格波动收敛
+        volatility_score = self._calculate_volatility_convergence_score(pennant_data)
+        scores.append(('volatility', volatility_score, 0.15))
+        
+        # 3. 支撑阻力质量评分（20%权重）
+        # 3.1 边界触及次数和质量
+        boundary_score = self._calculate_boundary_quality_score(pennant_data, upper_line, lower_line, params)
+        scores.append(('boundary', boundary_score, 0.20))
+        
+        # 计算加权总分
+        total_score = sum(score * weight for _, score, weight in scores)
+        
+        # 记录详细评分
+        score_details = {name: f"{score:.3f}" for name, score, _ in scores}
+        logger.debug(f"Pennant quality scores: {score_details}, total: {total_score:.3f}")
+        
+        return min(1.0, max(0.0, total_score))
+    
+    def _calculate_convergence_score(self, upper_line: TrendLine, lower_line: TrendLine,
+                                   apex: Tuple[float, float], pennant_data: pd.DataFrame,
+                                   params: dict) -> float:
+        """计算收敛质量评分"""
+        # 1. 收敛比例
+        start_width = abs(upper_line.start_price - lower_line.start_price)
+        end_width = abs(upper_line.end_price - lower_line.end_price)
+        
+        if start_width == 0:
+            return 0.0
+        
+        convergence_ratio = end_width / start_width
+        min_convergence = params['pattern'].get('convergence_ratio', 0.5)
+        
+        # 收敛比例评分
+        if convergence_ratio <= min_convergence:
+            convergence_score = 1.0
+        else:
+            convergence_score = max(0.0, (1.0 - convergence_ratio) / (1.0 - min_convergence))
+        
+        # 2. 顶点距离合理性
+        apex_distance_range = params['pattern'].get('apex_distance_range', [0.5, 3.0])
+        min_distance, max_distance = apex_distance_range
+        
+        pattern_length = len(pennant_data)
+        if pattern_length > 0:
+            apex_distance = apex[0] / pattern_length  # 归一化距离
+            
+            if min_distance <= apex_distance <= max_distance:
+                distance_score = 1.0
+            elif apex_distance < min_distance:
+                distance_score = max(0.0, apex_distance / min_distance)
+            else:
+                distance_score = max(0.0, 1.0 - (apex_distance - max_distance) / max_distance)
+        else:
+            distance_score = 0.5
+        
+        return (convergence_score * 0.7 + distance_score * 0.3)
+    
+    def _calculate_completeness_score(self, pennant_data: pd.DataFrame, params: dict) -> float:
+        """计算形态完整性评分"""
+        actual_duration = len(pennant_data)
+        min_bars = params['pattern']['min_bars']
+        max_bars = params['pattern']['max_bars']
+        
+        if min_bars <= actual_duration <= max_bars:
+            # 在有效范围内，偏向较短的形态（更典型）
+            optimal_ratio = 0.6  # 偏向范围的60%位置
+            optimal_duration = min_bars + (max_bars - min_bars) * optimal_ratio
+            deviation = abs(actual_duration - optimal_duration) / (max_bars - min_bars)
+            return max(0.5, 1.0 - deviation)
+        else:
+            return 0.0
+    
+    def _calculate_pennant_volume_score(self, pennant_data: pd.DataFrame, params: dict) -> float:
+        """计算三角旗形成交量评分"""
+        if 'volume' not in pennant_data.columns:
+            return 0.5
+        
+        # 成交量应该逐渐萎缩
+        volumes = pennant_data['volume'].values
+        
+        # 计算成交量趋势
+        x = np.arange(len(volumes))
+        slope, _, r_value, _, _ = stats.linregress(x, volumes)
+        
+        # 成交量下降是好的信号
+        volume_mean = volumes.mean()
+        if volume_mean > 0:
+            normalized_slope = slope / volume_mean
+            
+            if normalized_slope < -0.05:  # 明显下降
+                trend_score = 1.0
+            elif -0.05 <= normalized_slope <= 0.02:  # 轻微下降或持平
+                trend_score = 0.8
+            else:  # 上升
+                trend_score = max(0.2, 0.8 - normalized_slope * 10)
+            
+            # R²评分：趋势越明显越好
+            r_squared_score = r_value ** 2
+            
+            return trend_score * 0.7 + r_squared_score * 0.3
+        
+        return 0.5
+    
+    def _calculate_volatility_convergence_score(self, pennant_data: pd.DataFrame) -> float:
+        """计算价格波动收敛评分"""
+        if len(pennant_data) < 6:
+            return 0.5
+        
+        # 计算前半部分和后半部分的波动率
+        mid_point = len(pennant_data) // 2
+        early_volatility = pennant_data['close'].iloc[:mid_point].std()
+        late_volatility = pennant_data['close'].iloc[mid_point:].std()
+        
+        if early_volatility == 0:
+            return 0.5
+        
+        # 波动率收敛比例
+        convergence_ratio = late_volatility / early_volatility
+        
+        # 理想情况：后期波动率是前期的30%-70%
+        if 0.3 <= convergence_ratio <= 0.7:
+            return 1.0
+        elif convergence_ratio < 0.3:
+            return max(0.3, convergence_ratio / 0.3)
+        else:
+            return max(0.2, 1.0 - (convergence_ratio - 0.7) / 0.3)
+    
+    def _calculate_boundary_quality_score(self, pennant_data: pd.DataFrame,
+                                        upper_line: TrendLine, lower_line: TrendLine,
+                                        params: dict) -> float:
+        """计算边界质量评分"""
+        min_touches = params['pattern'].get('min_touches', 2)
+        
+        # 计算价格与边界的接触质量
+        tolerance = pennant_data['close'].std() * 0.3
+        
+        upper_touches = 0
+        lower_touches = 0
+        total_deviation = 0
+        
+        for i, row in pennant_data.iterrows():
+            time_ratio = i / (len(pennant_data) - 1) if len(pennant_data) > 1 else 0
+            
+            # 计算理论边界价格
+            upper_price = upper_line.start_price + upper_line.slope * time_ratio
+            lower_price = lower_line.start_price + lower_line.slope * time_ratio
+            
+            # 检查触及情况
+            upper_distance = abs(row['high'] - upper_price)
+            lower_distance = abs(row['low'] - lower_price)
+            
+            if upper_distance <= tolerance:
+                upper_touches += 1
+            if lower_distance <= tolerance:
+                lower_touches += 1
+            
+            # 累计偏离度
+            min_distance = min(
+                abs(row['close'] - upper_price),
+                abs(row['close'] - lower_price)
+            )
+            total_deviation += min_distance
+        
+        # 触及次数评分
+        total_touches = upper_touches + lower_touches
+        touch_score = min(1.0, total_touches / (min_touches * 2))
+        
+        # 偏离度评分（越小越好）
+        avg_deviation = total_deviation / len(pennant_data)
+        channel_width = abs(upper_line.start_price - lower_line.start_price)
+        
+        if channel_width > 0:
+            deviation_ratio = avg_deviation / channel_width
+            deviation_score = max(0.0, 1.0 - deviation_ratio * 2)
+        else:
+            deviation_score = 0.5
+        
+        return touch_score * 0.6 + deviation_score * 0.4

@@ -13,6 +13,7 @@ from src.data.models.base_models import PatternRecord, Flagpole, TrendLine, Patt
 from src.patterns.base.timeframe_manager import TimeframeManager
 from src.patterns.base.pattern_components import PatternComponents
 from src.patterns.base.atr_adaptive_manager import ATRAdaptiveManager
+from src.patterns.base.parameter_adapter import ParameterAdapter
 
 
 class BasePatternDetector(ABC):
@@ -29,7 +30,7 @@ class BasePatternDetector(ABC):
         self.timeframe_manager = TimeframeManager()
         self.pattern_components = PatternComponents()
         self.atr_adaptive_manager = ATRAdaptiveManager()
-        self._strategy_cache = {}
+        self.parameter_adapter = ParameterAdapter(self.config)
         
         # ATR自适应开关（可以在配置中控制）
         self.enable_atr_adaptation = self.config.get('global', {}).get('enable_atr_adaptation', True)
@@ -67,27 +68,27 @@ class BasePatternDetector(ABC):
         logger.info(f"Detecting {self.get_pattern_type()} patterns - "
                    f"Timeframe: {timeframe}, Category: {category}")
         
-        # 2. 获取策略和参数
-        strategy = self._get_strategy(category)
-        params = self._get_params(category, timeframe)
+        # 2. 获取参数
+        pattern_type_name = self.get_pattern_type().lower()
+        params = self.parameter_adapter.get_timeframe_params(timeframe, pattern_type_name)
         
         # 2.5 ATR自适应参数调整
         if self.enable_atr_adaptation:
-            params = self._apply_atr_adaptation(df, params, category)
+            params = self._apply_atr_adaptation(df, params, timeframe)
         
-        # 3. 数据预处理
-        df_processed = strategy.preprocess(df, params)
+        # 3. 数据预处理（简单预处理，移除strategy依赖）
+        df_processed = self._preprocess_data(df, params)
         
         # 4. 检测旗杆（共享逻辑）
         flagpoles = self.pattern_components.detect_flagpoles_adaptive(
-            df_processed, params['flagpole'], category
+            df_processed, params['flagpole'], timeframe
         )
         
         logger.info(f"Detected {len(flagpoles)} potential flagpoles")
         
         # 5. 检测具体形态（子类实现）
         patterns = self._detect_pattern_formation(
-            df_processed, flagpoles, params, strategy
+            df_processed, flagpoles, params
         )
         
         logger.info(f"Total {self.get_pattern_type()} patterns detected: {len(patterns)}")
@@ -127,8 +128,7 @@ class BasePatternDetector(ABC):
     @abstractmethod
     def _detect_pattern_formation(self, df: pd.DataFrame, 
                                 flagpoles: List[Flagpole],
-                                params: dict,
-                                strategy) -> List[PatternRecord]:
+                                params: dict) -> List[PatternRecord]:
         """
         检测具体的形态（子类实现）
         
@@ -136,7 +136,6 @@ class BasePatternDetector(ABC):
             df: 预处理后的数据
             flagpoles: 检测到的旗杆
             params: 周期相关参数
-            strategy: 周期策略对象
             
         Returns:
             检测到的形态列表
@@ -150,52 +149,87 @@ class BasePatternDetector(ABC):
             logger.info(f"Auto-detected timeframe: {timeframe}")
         return timeframe
     
-    def _get_strategy(self, category: str):
-        """获取周期策略对象（使用缓存）"""
-        if category not in self._strategy_cache:
-            from src.patterns.strategies.strategy_factory import StrategyFactory
-            strategy = StrategyFactory.get_strategy(category)
-            if strategy is None:
-                logger.warning(f"No strategy found for category {category}, using default")
-                strategy = StrategyFactory.get_strategy('15m')
-            self._strategy_cache[category] = strategy
+    def _preprocess_data(self, df: pd.DataFrame, params: dict) -> pd.DataFrame:
+        """
+        数据预处理（替代strategy.preprocess）
         
-        return self._strategy_cache[category]
+        Args:
+            df: 原始OHLCV数据
+            params: 参数配置
+            
+        Returns:
+            预处理后的数据
+        """
+        df = df.copy()
+        
+        # 添加技术指标
+        df = self._add_technical_indicators(df)
+        
+        # 根据时间周期进行不同程度的平滑处理
+        timeframe = params.get('timeframe', '15m')
+        if timeframe in ['1m', '5m']:  # 短周期需要更多平滑
+            df = self._smooth_price_data(df, window=5)
+        elif timeframe in ['15m', '1h']:  # 中等周期适度平滑
+            df = self._smooth_price_data(df, window=3)
+        # 长周期数据本身比较平滑，不需要额外处理
+        
+        return df
     
-    def _get_params(self, category: str, timeframe: str) -> dict:
-        """获取周期相关参数"""
-        # 从配置中获取该类别的参数，支持两种配置结构
-        if 'timeframe_configs' in self.config:
-            # 新的多时间周期配置结构
-            category_config = self.config.get('timeframe_configs', {}).get(category, {})
-        else:
-            # 旧的单一配置结构
-            category_config = self.config.get('pattern_detection', {}).get(category, {})
+    def _add_technical_indicators(self, df: pd.DataFrame) -> pd.DataFrame:
+        """添加通用技术指标"""
+        df = df.copy()
         
-        # 确保pattern配置存在
-        pattern_type_name = self.get_pattern_type().lower()
-        pattern_config = category_config.get(pattern_type_name, {})
+        # 成交量指标
+        if 'volume' in df.columns:
+            df['volume_sma20'] = df['volume'].rolling(window=20, min_periods=1).mean()
+            df['volume_ratio'] = df['volume'] / df['volume_sma20'].fillna(1)
         
-        # 合并默认参数
-        params = {
-            'timeframe': timeframe,
-            'category': category,
-            'flagpole': category_config.get('flagpole', {}),
-            'pattern': pattern_config,
-            'scoring': category_config.get('scoring', {}),
-            'min_confidence': self.config.get('scoring', {}).get('min_confidence_score', 0.6)
-        }
+        # 价格变化
+        df['price_change'] = df['close'].pct_change()
         
-        return params
+        # ATR（平均真实范围）
+        df['atr'] = self._calculate_atr(df)
+        
+        # 价格范围
+        df['high_low_range'] = (df['high'] - df['low']) / df['close']
+        
+        return df
     
-    def _apply_atr_adaptation(self, df: pd.DataFrame, params: dict, category: str) -> dict:
+    def _calculate_atr(self, df: pd.DataFrame, period: int = 14) -> pd.Series:
+        """计算ATR"""
+        high = df['high']
+        low = df['low']
+        close = df['close'].shift(1)
+        
+        tr1 = high - low
+        tr2 = abs(high - close)
+        tr3 = abs(low - close)
+        
+        tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+        atr = tr.rolling(window=period, min_periods=1).mean()
+        
+        return atr
+    
+    def _smooth_price_data(self, df: pd.DataFrame, window: int = 3) -> pd.DataFrame:
+        """平滑价格数据（用于降噪）"""
+        df = df.copy()
+        
+        if len(df) > window:
+            # 对关键价格序列进行平滑
+            df['close'] = df['close'].rolling(window=window, center=True).mean().fillna(method='bfill').fillna(method='ffill')
+            df['high'] = df['high'].rolling(window=window, center=True).mean().fillna(method='bfill').fillna(method='ffill')
+            df['low'] = df['low'].rolling(window=window, center=True).mean().fillna(method='bfill').fillna(method='ffill')
+        
+        return df
+    
+    def _apply_atr_adaptation(self, df: pd.DataFrame, params: dict, timeframe: str) -> dict:
         """
         应用ATR自适应参数调整
         
         Args:
             df: OHLCV数据
             params: 原始参数
-            category: 时间周期类别
+            timeframe: 时间周期（如'15m'）
             
         Returns:
             调整后的参数
@@ -206,7 +240,7 @@ class BasePatternDetector(ABC):
             
             # 应用自适应调整
             adapted_params = self.atr_adaptive_manager.adapt_parameters(
-                params, volatility_analysis, category
+                params, volatility_analysis, timeframe
             )
             
             # 记录调整信息

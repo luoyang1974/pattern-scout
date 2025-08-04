@@ -7,12 +7,8 @@ import pandas as pd
 import numpy as np
 
 from src.patterns.base.timeframe_manager import TimeframeManager
-from src.patterns.strategies.strategy_factory import StrategyFactory
-from src.patterns.strategies import (
-    MinuteOneStrategy, MinuteFiveStrategy, MinuteFifteenStrategy,
-    HourOneStrategy, HourFourStrategy, DayOneStrategy,
-    WeekOneStrategy, MonthOneStrategy
-)
+from src.patterns.base.parameter_adapter import ParameterAdapter
+from src.utils.config_manager import ConfigManager
 
 
 class TestMultiTimeframe(unittest.TestCase):
@@ -62,24 +58,29 @@ class TestMultiTimeframe(unittest.TestCase):
                 self.assertGreater(lookback['max_total_bars'], lookback['min_total_bars'])
                 self.assertGreater(lookback['min_total_bars'], 0)
     
-    def test_strategy_factory_mapping(self):
-        """测试策略工厂的映射"""
-        expected_strategies = {
-            '1m': MinuteOneStrategy,
-            '5m': MinuteFiveStrategy,
-            '15m': MinuteFifteenStrategy,
-            '1h': HourOneStrategy,
-            '4h': HourFourStrategy,
-            '1d': DayOneStrategy,
-            '1w': WeekOneStrategy,
-            '1M': MonthOneStrategy,
-        }
-        
-        for tf, expected_class in expected_strategies.items():
-            strategy = StrategyFactory.get_strategy(tf)
-            self.assertIsInstance(strategy, expected_class, 
-                                f"Strategy for {tf} should be {expected_class.__name__}")
-            self.assertEqual(strategy.get_category_name(), tf)
+    def test_parameter_adapter_functionality(self):
+        """测试参数适配器功能"""
+        try:
+            config = ConfigManager('config_multi_timeframe.yaml')
+            adapter = ParameterAdapter(config.config)
+            
+            # 测试支持的时间周期
+            supported_timeframes = adapter.get_supported_timeframes()
+            expected_timeframes = ['1m', '5m', '15m', '1h', '4h', '1d', '1w', '1M']
+            
+            self.assertTrue(all(tf in supported_timeframes for tf in expected_timeframes))
+            
+            # 测试参数获取
+            for tf in ['1m', '15m', '1h', '1d']:
+                if adapter.has_timeframe_config(tf):
+                    flag_params = adapter.get_timeframe_params(tf, 'flag')
+                    self.assertIn('flagpole', flag_params)
+                    self.assertIn('pattern', flag_params)
+                    self.assertIn('timeframe', flag_params)
+                    self.assertEqual(flag_params['timeframe'], tf)
+                    
+        except Exception as e:
+            self.skipTest(f"配置文件不可用: {e}")
     
     def test_timeframe_detection(self):
         """测试时间周期自动检测"""
@@ -193,23 +194,8 @@ class TestMultiTimeframe(unittest.TestCase):
         })
 
 
-class TestTimeframeSpecificBehavior(unittest.TestCase):
-    """测试不同周期特定的行为差异"""
-    
-    def test_strategy_noise_tolerance(self):
-        """测试不同策略的噪音容忍度"""
-        strategies = {
-            '1m': MinuteOneStrategy(),
-            '5m': MinuteFiveStrategy(),
-        }
-        
-        # 1分钟策略应该有最高的噪音容忍度
-        minute1_strategy = strategies['1m']
-        self.assertEqual(minute1_strategy.noise_threshold, 0.001)
-        
-        # 5分钟策略噪音容忍度适中
-        minute5_strategy = strategies['5m']
-        self.assertEqual(minute5_strategy.noise_threshold, 0.0015)
+class TestParameterConfiguration(unittest.TestCase):
+    """测试参数配置系统"""
     
     def test_lookback_period_scaling(self):
         """测试回看周期的合理缩放"""

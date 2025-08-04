@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 
 from src.patterns.base.timeframe_manager import TimeframeManager
-from src.patterns.strategies.strategy_factory import StrategyFactory
+from src.patterns.base.parameter_adapter import ParameterAdapter
 from src.utils.config_manager import ConfigManager
 
 def create_sample_data(timeframe: str, periods: int = 100):
@@ -60,19 +60,24 @@ def demo_timeframe_detection():
     
     print()
 
-def demo_strategy_selection():
-    """演示策略自动选择"""
-    print("=== 策略自动选择演示 ===")
+def demo_parameter_adapter():
+    """演示参数适配器"""
+    print("=== 参数适配器演示 ===")
     
-    supported_timeframes = StrategyFactory.list_supported_timeframes()
-    print(f"支持的时间周期: {supported_timeframes}")
-    
-    for tf in supported_timeframes:
-        strategy = StrategyFactory.get_strategy(tf)
-        category_name = strategy.get_category_name()
-        strategy_name = strategy.__class__.__name__
+    try:
+        config = ConfigManager('config_multi_timeframe.yaml')
+        adapter = ParameterAdapter(config.config)
         
-        print(f"周期: {tf:4s} | 策略: {strategy_name:20s} | 返回分类: {category_name}")
+        supported_timeframes = adapter.get_supported_timeframes()
+        print(f"支持的时间周期: {supported_timeframes}")
+        
+        for tf in ['1m', '15m', '1h', '1d']:
+            if adapter.has_timeframe_config(tf):
+                params = adapter.get_timeframe_params(tf, 'flag')
+                print(f"周期: {tf:4s} | 配置参数数量: {len(params)}")
+        
+    except Exception as e:
+        print(f"演示失败: {e}")
     
     print()
 
@@ -139,7 +144,7 @@ def main():
     
     # 运行各个演示
     demo_timeframe_detection()
-    demo_strategy_selection() 
+    demo_parameter_adapter() 
     demo_config_system()
     demo_lookback_periods()
     
