@@ -10,7 +10,7 @@ sys.path.insert(0, project_root)
 from tests.test_technical_indicators import TestTechnicalIndicators, TestTrendAnalyzer, TestPatternIndicators
 from tests.test_data_connectors import TestCSVDataConnector, TestDataModels
 from tests.test_pattern_detectors import (
-    TestFlagDetector, TestPennantDetector, TestPatternScanner, 
+    TestFlagDetector, TestPatternScanner, 
     TestTimeframeAdaptation, TestBackwardCompatibility
 )
 from tests.test_dataset_manager import TestDatasetManager, TestDatasetManagerEdgeCases
@@ -31,9 +31,8 @@ def create_test_suite():
     suite.addTest(loader.loadTestsFromTestCase(TestCSVDataConnector))
     suite.addTest(loader.loadTestsFromTestCase(TestDataModels))
     
-    # 形态检测器测试
+    # 形态检测器测试（统一架构）
     suite.addTest(loader.loadTestsFromTestCase(TestFlagDetector))
-    suite.addTest(loader.loadTestsFromTestCase(TestPennantDetector))
     suite.addTest(loader.loadTestsFromTestCase(TestPatternScanner))
     suite.addTest(loader.loadTestsFromTestCase(TestTimeframeAdaptation))
     suite.addTest(loader.loadTestsFromTestCase(TestBackwardCompatibility))

@@ -9,12 +9,11 @@ sys.path.append(str(Path(__file__).parent))
 
 from src.utils.config_manager import ConfigManager
 from src.data.connectors.base_connector import DataConnectorFactory
-from src.patterns.detectors.flag_detector import FlagDetector
-from src.patterns.detectors.pennant_detector import PennantDetector
+from src.patterns.detectors.pattern_scanner import PatternScanner
 from src.analysis.breakthrough_analyzer import BreakthroughAnalyzer
 from src.visualization.chart_generator import ChartGenerator
 from src.storage.dataset_manager import DatasetManager
-from src.data.models.base_models import PatternRecord
+from src.data.models.base_models import PatternRecord, PatternType, FlagSubType
 
 from loguru import logger
 
@@ -41,8 +40,7 @@ class PatternScout:
         
         # 初始化组件
         self.data_connector = None
-        self.flag_detector = FlagDetector(self.config_manager.config)
-        self.pennant_detector = PennantDetector(self.config_manager.config)
+        self.pattern_scanner = PatternScanner(self.config_manager.config)
         self.breakthrough_analyzer = BreakthroughAnalyzer(self.config_manager.get('breakthrough', {}))
         self.chart_generator = ChartGenerator(self.config_manager.get('output', {}))
         self.dataset_manager = DatasetManager(self.config_manager.get('output.data_path', 'output/data'))
@@ -165,7 +163,7 @@ class PatternScout:
             end_date = datetime.now()
         
         if not pattern_types:
-            pattern_types = ['flag', 'pennant']  # 默认扫描两种形态
+            pattern_types = [PatternType.FLAG_PATTERN]  # 默认扫描旗形形态（包含矩形旗和三角旗）
         
         all_patterns = []
         
@@ -180,17 +178,19 @@ class PatternScout:
                     logger.warning(f"No data found for {symbol}")
                     continue
                 
-                # 检测旗形
-                if 'flag' in pattern_types:
-                    flag_patterns = self.flag_detector.detect(df)
-                    all_patterns.extend(flag_patterns)
-                    logger.info(f"Found {len(flag_patterns)} flag patterns for {symbol}")
+                # 使用统一的形态扫描器检测形态
+                patterns_result = self.pattern_scanner.scan(df, pattern_types)
                 
-                # 检测三角旗形
-                if 'pennant' in pattern_types:
-                    pennant_patterns = self.pennant_detector.detect(df)
-                    all_patterns.extend(pennant_patterns)
-                    logger.info(f"Found {len(pennant_patterns)} pennant patterns for {symbol}")
+                # 汇总所有检测到的形态
+                for pattern_type, patterns in patterns_result.items():
+                    all_patterns.extend(patterns)
+                    
+                    # 按子类型统计结果
+                    flag_count = sum(1 for p in patterns if p.sub_type == FlagSubType.FLAG)
+                    pennant_count = sum(1 for p in patterns if p.sub_type == FlagSubType.PENNANT)
+                    
+                    logger.info(f"Found {len(patterns)} {pattern_type} patterns for {symbol} "
+                               f"(Flag: {flag_count}, Pennant: {pennant_count})")
                 
             except Exception as e:
                 logger.error(f"Error scanning {symbol}: {e}")
@@ -337,8 +337,8 @@ def main():
     parser.add_argument('--start-date', help='Start date (YYYY-MM-DD)')
     parser.add_argument('--end-date', help='End date (YYYY-MM-DD)')
     parser.add_argument('--data-source', choices=['csv', 'mongodb'], help='Data source type')
-    parser.add_argument('--pattern-types', nargs='+', choices=['flag', 'pennant'], 
-                        help='Pattern types to detect (default: both)', default=None)
+    parser.add_argument('--pattern-types', nargs='+', choices=['flag_pattern', 'flag', 'pennant'], 
+                        help='Pattern types to detect: flag_pattern (unified), flag (rectangles only), pennant (triangles only). Default: flag_pattern', default=None)
     parser.add_argument('--min-confidence', type=float, help='Minimum confidence score')
     parser.add_argument('--export-dataset', choices=['json', 'csv', 'excel'], 
                         help='Export dataset in specified format')
@@ -366,6 +366,18 @@ def main():
         except ValueError:
             print(f"Invalid end date format: {args.end_date}")
             sys.exit(1)
+    
+    # 处理形态类型参数（向后兼容）
+    pattern_types = args.pattern_types
+    if pattern_types:
+        # 转换旧的API到新的统一API
+        if 'flag' in pattern_types or 'pennant' in pattern_types:
+            logger.warning("Using legacy pattern type names. Consider using 'flag_pattern' for unified detection.")
+            # 如果用户指定了flag或pennant，转换为统一的flag_pattern
+            pattern_types = [PatternType.FLAG_PATTERN]
+        elif 'flag_pattern' not in pattern_types:
+            # 如果用户没有指定flag_pattern，添加它
+            pattern_types.append(PatternType.FLAG_PATTERN)
     
     # 创建PatternScout实例
     scout = PatternScout(args.config)

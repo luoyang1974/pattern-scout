@@ -1,5 +1,7 @@
 # PatternScout 8周期配置系统
 # 支持8个具体时间周期的精细化形态检测
+# 重构说明：统一flag和pennant检测为flag_pattern架构
+# flag: 矩形旗（平行通道），pennant: 三角旗（收敛三角形）
 
 # 全局设置
 global:
@@ -39,7 +41,8 @@ timeframe_categories:
   '1M':
     description: "月线周期（长线交易）"
 
-# 形态检测参数（按具体周期分类）
+# 统一的旗形形态检测参数（按具体周期分类）
+# 每个周期包含统一的flag_pattern配置，内含flag和pennant子配置
 pattern_detection:
   # 1分钟周期参数（超高频交易，适应最高噪音）
   '1m':
@@ -103,33 +106,34 @@ pattern_detection:
       
   # 15分钟周期参数（短线交易，标准配置）
   '15m':
-    flagpole:
-      min_bars: 5                       # 旗杆最少K线数量
-      max_bars: 12                      # 旗杆最多K线数量
-      min_height_percent: 0.5           # 旗杆最小涨跌幅（%）
-      max_height_percent: 15.0          # 旗杆最大涨跌幅（%）
-      volume_surge_ratio: 1.2           # 成交量激增倍数
-      max_retracement: 0.5              # 最大回撤比例
-      min_trend_strength: 0.3           # 最小趋势强度（R²值）
-    flag:
-      min_bars: 10                      # 旗形最少K线数量
-      max_bars: 25                      # 旗形最多K线数量
-      min_slope_angle: 0.1              # 最小倾斜角度（度）
-      max_slope_angle: 15               # 最大倾斜角度（度）
-      retracement_range: [0.1, 0.8]     # 回撤范围
-      volume_decay_threshold: 0.9       # 成交量衰减阈值
-      parallel_tolerance: 0.3           # 平行度容忍度
-      min_touches: 1                    # 最少触及次数
-    pennant:
-      min_bars: 4                       # 三角旗形最少K线数量
-      max_bars: 50                      # 三角旗形最多K线数量
-      min_touches: 1                    # 最少触及次数
-      convergence_ratio: 0.3            # 收敛比例
-      apex_distance_range: [0.3, 4.0]   # 顶点距离范围
-      symmetry_tolerance: 0.6           # 对称性容忍度
-      volume_decay_threshold: 0.9       # 成交量衰减阈值
-    scoring:
-      min_confidence_score: 0.3         # 最低置信度分数阈值
+    flag_pattern:
+      flagpole:
+        min_bars: 5                       # 旗杆最少K线数量
+        max_bars: 12                      # 旗杆最多K线数量
+        min_height_percent: 0.5           # 旗杆最小涨跌幅（%）
+        max_height_percent: 15.0          # 旗杆最大涨跌幅（%）
+        volume_surge_ratio: 1.2           # 成交量激增倍数
+        max_retracement: 0.5              # 最大回撤比例
+        min_trend_strength: 0.3           # 最小趋势强度（R²值）
+      flag:  # 矩形旗检测参数
+        min_bars: 10                      # 旗形最少K线数量
+        max_bars: 25                      # 旗形最多K线数量
+        min_slope_angle: 0.1              # 最小倾斜角度（度）
+        max_slope_angle: 15               # 最大倾斜角度（度）
+        retracement_range: [0.1, 0.8]     # 回撤范围
+        volume_decay_threshold: 0.9       # 成交量衰减阈值
+        parallel_tolerance: 0.3           # 平行度容忍度
+        min_touches: 1                    # 最少触及次数
+      pennant:  # 三角旗检测参数
+        min_bars: 4                       # 三角旗形最少K线数量
+        max_bars: 50                      # 三角旗形最多K线数量
+        min_touches: 1                    # 最少触及次数
+        convergence_ratio: 0.3            # 收敛比例
+        apex_distance_range: [0.3, 4.0]   # 顶点距离范围
+        symmetry_tolerance: 0.6           # 对称性容忍度
+        volume_decay_threshold: 0.9       # 成交量衰减阈值
+      scoring:
+        min_confidence_score: 0.3         # 最低置信度分数阈值
       
   # 1小时周期参数（日内交易）
   '1h':
@@ -281,15 +285,16 @@ pattern_detection:
     scoring:
       min_confidence_score: 0.85        # 最低置信度分数阈值（最高要求）
 
-# 质量评分权重（按具体周期调整）
+# 统一形态质量评分权重（按具体周期调整）
 scoring_weights:
-  flag:
-    '1m':
-      slope_direction: 0.18             # 斜率方向权重（旗形应与旗杆方向相反）
-      parallel_quality: 0.18            # 平行度质量权重（上下边界线平行程度）
-      volume_pattern: 0.35              # 成交量模式权重（成交量应逐渐衰减）
-      channel_containment: 0.19         # 通道包含性权重（价格在通道内的程度）
-      time_proportion: 0.10             # 时间比例权重（形态持续时间合理性）
+  flag_pattern:
+    flag:  # 矩形旗评分权重
+      '1m':
+        slope_direction: 0.18             # 斜率方向权重（旗形应与旗杆方向相反）
+        parallel_quality: 0.18            # 平行度质量权重（上下边界线平行程度）
+        volume_pattern: 0.35              # 成交量模式权重（成交量应逐渐衰减）
+        channel_containment: 0.19         # 通道包含性权重（价格在通道内的程度）
+        time_proportion: 0.10             # 时间比例权重（形态持续时间合理性）
     '5m':
       slope_direction: 0.20             # 斜率方向权重
       parallel_quality: 0.20            # 平行度质量权重

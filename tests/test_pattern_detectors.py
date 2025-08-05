@@ -6,8 +6,8 @@ import unittest
 import pandas as pd
 import numpy as np
 
-from src.patterns.detectors import FlagDetector, PennantDetector, PatternScanner
-from src.data.models.base_models import PatternType
+from src.patterns.detectors import FlagDetector, PatternScanner
+from src.data.models.base_models import PatternType, FlagSubType
 
 
 class TestFlagDetector(unittest.TestCase):

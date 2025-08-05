@@ -6,7 +6,7 @@ from pathlib import Path
 from datetime import datetime
 
 from src.storage.dataset_manager import DatasetManager
-from src.data.models.base_models import PatternRecord, Flagpole, PatternType, AnalysisResult, BreakthroughResult
+from src.data.models.base_models import PatternRecord, Flagpole, PatternType, FlagSubType, AnalysisResult, BreakthroughResult
 
 
 class TestDatasetManager(unittest.TestCase):
@@ -32,7 +32,8 @@ class TestDatasetManager(unittest.TestCase):
         self.test_pattern = PatternRecord(
             id='test-pattern-001',
             symbol='TEST',
-            pattern_type=PatternType.FLAG,
+            pattern_type=PatternType.FLAG_PATTERN,
+            sub_type=FlagSubType.FLAG,
             detection_date=datetime(2024, 1, 10),
             flagpole=self.test_flagpole,
             pattern_boundaries=[],
@@ -165,7 +166,8 @@ class TestDatasetManager(unittest.TestCase):
             pattern = PatternRecord(
                 id=f'test-pattern-{i:03d}',
                 symbol=f'TEST{i}',
-                pattern_type=PatternType.FLAG,
+                pattern_type=PatternType.FLAG_PATTERN,
+                sub_type=FlagSubType.PENNANT,
                 detection_date=datetime(2024, 1, 10+i),
                 flagpole=flagpole,
                 pattern_boundaries=[],

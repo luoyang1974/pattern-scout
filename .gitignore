@@ -13,3 +13,5 @@ wheels/
 output/
 logs/
 
+#错误输出的nul文件
+nul

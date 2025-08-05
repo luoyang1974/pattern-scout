@@ -44,9 +44,17 @@ class Flagpole:
 
 
 class PatternType:
-    """形态类型枚举"""
-    FLAG = "flag"
-    PENNANT = "pennant"
+    """主要形态类型枚举"""
+    FLAG_PATTERN = "flag_pattern"
+    # 未来扩展的形态类型
+    # HEAD_SHOULDERS = "head_shoulders"
+    # DOUBLE_TOP = "double_top"
+
+
+class FlagSubType:
+    """旗形子类型枚举"""
+    FLAG = "flag"           # 矩形旗（平行通道）
+    PENNANT = "pennant"     # 三角旗（收敛三角形）
 
 
 @dataclass
@@ -55,6 +63,7 @@ class PatternRecord:
     id: str
     symbol: str
     pattern_type: str
+    sub_type: str           # 形态子类型（如flag、pennant）
     detection_date: datetime
     
     # 形态特征

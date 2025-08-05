@@ -6,8 +6,8 @@ import pandas as pd
 from typing import List, Dict, Optional
 from loguru import logger
 
-from src.data.models.base_models import PatternRecord, PatternType
-from src.patterns.detectors import FlagDetector, PennantDetector
+from src.data.models.base_models import PatternRecord, PatternType, FlagSubType
+from src.patterns.detectors import FlagDetector
 
 
 class PatternScanner:
@@ -25,10 +25,12 @@ class PatternScanner:
         """
         self.config = config or {}
         
-        # 初始化检测器
+        # 初始化统一的旗形检测器
+        self.flag_detector = FlagDetector(config)
+        
+        # 保持向后兼容的检测器映射
         self.detectors = {
-            PatternType.FLAG: FlagDetector(config),
-            PatternType.PENNANT: PennantDetector(config)
+            PatternType.FLAG_PATTERN: self.flag_detector
         }
     
     def scan(self, 
@@ -47,8 +49,8 @@ class PatternScanner:
             按形态类型分组的检测结果
         """
         if pattern_types is None:
-            # 检测所有支持的形态（不包括兼容性别名）
-            pattern_types = [PatternType.FLAG, PatternType.PENNANT]
+            # 默认检测旗形形态（包含矩形旗和三角旗）
+            pattern_types = [PatternType.FLAG_PATTERN]
         
         results = {}
         
@@ -83,7 +85,7 @@ class PatternScanner:
             嵌套字典：{pattern_type: {timeframe: patterns}}
         """
         if pattern_types is None:
-            pattern_types = [PatternType.FLAG, PatternType.PENNANT]
+            pattern_types = [PatternType.FLAG_PATTERN]
         
         results = {}
         
@@ -152,5 +154,35 @@ class PatternScanner:
         else:
             # 更新所有检测器的配置
             self.config.update(config)
-            for detector in self.detectors.values():
-                detector.config.update(config)
+            self.flag_detector.config.update(config)
+    
+    # 向后兼容性方法 - 支持旧的分离式API
+    def scan_flags(self, df: pd.DataFrame, timeframe: Optional[str] = None) -> List[PatternRecord]:
+        """
+        扫描矩形旗形态（向后兼容）
+        
+        Args:
+            df: OHLCV数据
+            timeframe: 时间周期
+            
+        Returns:
+            检测到的矩形旗形态列表
+        """
+        logger.info("Using legacy flag detection API - consider using scan() with pattern_types=[PatternType.FLAG_PATTERN]")
+        all_patterns = self.flag_detector.detect(df, timeframe)
+        return [p for p in all_patterns if p.sub_type == FlagSubType.FLAG]
+    
+    def scan_pennants(self, df: pd.DataFrame, timeframe: Optional[str] = None) -> List[PatternRecord]:
+        """
+        扫描三角旗形态（向后兼容）
+        
+        Args:
+            df: OHLCV数据
+            timeframe: 时间周期
+            
+        Returns:
+            检测到的三角旗形态列表
+        """
+        logger.info("Using legacy pennant detection API - consider using scan() with pattern_types=[PatternType.FLAG_PATTERN]")
+        all_patterns = self.flag_detector.detect(df, timeframe)
+        return [p for p in all_patterns if p.sub_type == FlagSubType.PENNANT]

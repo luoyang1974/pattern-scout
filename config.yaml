@@ -1,4 +1,6 @@
 # Configuration settings for PatternScout
+# 重构说明：统一flag和pennant检测为flag_pattern架构
+# flag: 矩形旗（平行通道），pennant: 三角旗（收敛三角形）
 
 # Data Sources
 data_sources:
@@ -12,41 +14,40 @@ data_sources:
     database: "market_data"
     collection: "ohlcv"
 
-# Pattern Recognition Parameters
+# 统一的旗形形态检测参数（包含矩形旗和三角旗）
 pattern_detection:
-  flagpole:
-    min_bars: 4                # 最少4个15分钟K线（1小时）
-    max_bars: 20               # 最多20个15分钟K线（5小时）
-    min_height_percent: 1.5    # 最小涨跌幅1.5%
-    max_height_percent: 10.0   # 最大涨跌幅10%
-    volume_surge_ratio: 2.0    # 成交量激增倍数
-    max_retracement: 0.3       # 最大回撤30%
-    min_trend_strength: 0.7    # 最小趋势强度（R²）
-    
-  flag:
-    min_bars: 8                # 最少8个15分钟K线（2小时）
-    max_bars: 48               # 最多48个15分钟K线（12小时）
-    min_slope_angle: 0.5       # 最小倾斜角度0.5度（适应15分钟数据）
-    max_slope_angle: 10        # 最大倾斜角度10度（适应15分钟数据）
-    retracement_range: [0.2, 0.6]  # 回撤范围20%-60%
-    volume_decay_threshold: 0.7     # 成交量衰减阈值
-    parallel_tolerance: 0.15        # 平行度容忍度
-    min_touches: 2                  # 最少触及边界次数
-    
-  pennant:
-    min_duration_days: 2       # Minimum pennant formation duration
-    max_duration_days: 15      # Maximum pennant formation duration (增加从10)
-    convergence_ratio: 0.6     # Required convergence ratio (降低从0.7)
-    min_convergence_angle: 5   # Minimum convergence angle in degrees
-    max_convergence_angle: 45  # Maximum convergence angle in degrees
-    
-  volume:
-    flagpole_volume_threshold: 1.0    # Flagpole volume threshold (降低从1.2)
-    flag_volume_decrease: 0.9         # Flag volume decrease ratio (增加从0.8)
-    pennant_volume_decrease: 0.8      # Pennant volume decrease ratio
-    
-  scoring:
-    min_confidence_score: 0.5         # Minimum confidence score for pattern acceptance
+  # 统一的旗形检测配置
+  flag_pattern:
+    flagpole:
+      min_bars: 4                # 最少4个15分钟K线（1小时）
+      max_bars: 20               # 最多20个15分钟K线（5小时）
+      min_height_percent: 1.5    # 最小涨跌幅1.5%
+      max_height_percent: 10.0   # 最大涨跌幅10%
+      volume_surge_ratio: 2.0    # 成交量激增倍数
+      max_retracement: 0.3       # 最大回撤30%
+      min_trend_strength: 0.7    # 最小趋势强度（R²）
+      
+    flag:  # 矩形旗检测参数
+      min_bars: 8                # 最少8个15分钟K线（2小时）
+      max_bars: 48               # 最多48个15分钟K线（12小时）
+      min_slope_angle: 0.5       # 最小倾斜角度0.5度（适应15分钟数据）
+      max_slope_angle: 10        # 最大倾斜角度10度（适应15分钟数据）
+      retracement_range: [0.2, 0.6]  # 回撤范围20%-60%
+      volume_decay_threshold: 0.7     # 成交量衰减阈值
+      parallel_tolerance: 0.15        # 平行度容忍度
+      min_touches: 2                  # 最少触及边界次数
+      
+    pennant:  # 三角旗检测参数
+      min_bars: 8                # 最少8个15分钟K线（2小时）
+      max_bars: 48               # 最多48个15分钟K线（12小时）
+      min_touches: 2             # 最少触及边界次数
+      convergence_ratio: 0.6     # 要求的收敛比例
+      apex_distance_range: [0.3, 4.0]  # 顶点距离范围（相对形态长度的倍数）
+      symmetry_tolerance: 0.6    # 对称性容忍度（0-1，越小越对称）
+      volume_decay_threshold: 0.8     # 成交量衰减阈值
+      
+    scoring:
+      min_confidence_score: 0.5         # 最小置信度分数阈值
 
 # Technical Indicators
 indicators:
@@ -58,12 +59,21 @@ indicators:
   bollinger_period: 20
   bollinger_std: 2
 
-# Scoring System
-scoring:
-  pattern_completeness: 0.30
-  technical_confirmation: 0.25
-  volume_confirmation: 0.25
-  historical_success_rate: 0.20
+# 统一的评分系统权重配置
+scoring_weights:
+  flag_pattern:
+    flag:  # 矩形旗评分权重
+      slope_direction: 0.25             # 斜率方向权重（旗形应与旗杆方向相反）
+      parallel_quality: 0.25            # 平行度质量权重（上下边界线平行程度）
+      volume_pattern: 0.25              # 成交量模式权重（成交量应逐渐衰减）
+      channel_containment: 0.15         # 通道包含性权重（价格在通道内的程度）
+      time_proportion: 0.10             # 时间比例权重（形态持续时间合理性）
+    pennant:  # 三角旗评分权重
+      convergence_quality: 0.30         # 收敛质量权重（三角形收敛程度）
+      symmetry: 0.25                    # 对称性权重（上下边界对称程度）
+      volume_pattern: 0.25              # 成交量模式权重
+      size_proportion: 0.10             # 尺寸比例权重（相对旗杆的大小）
+      apex_validity: 0.10               # 顶点有效性权重（交点位置合理性）
 
 # Output Settings
 output:
