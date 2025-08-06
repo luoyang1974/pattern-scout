@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+from matplotlib import font_manager
 import mplfinance as mpf
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -8,17 +10,23 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime
 from pathlib import Path
 
-from src.data.models.base_models import PatternRecord, TrendLine
+from src.data.models.base_models import (
+    PatternRecord, TrendLine, PatternOutcomeAnalysis, 
+    MarketSnapshot, InvalidationSignal, FlagSubType
+)
 from src.data.connectors.csv_connector import CSVDataConnector
 from src.storage.dataset_manager import DatasetManager
+from src.visualization.dynamic_chart_methods import DynamicChartMethods
 from loguru import logger
 import json
 
 
-class ChartGenerator:
-    """图表生成器"""
+class DynamicChartGenerator(DynamicChartMethods):
+    """动态基线系统图表生成器"""
 
     def __init__(self, config: Dict[str, Any] = None):
+        # 配置中文字体支持
+        self._setup_chinese_fonts()
         """
         初始化图表生成器
 
@@ -42,9 +50,21 @@ class ChartGenerator:
                 for sub_key, sub_value in value.items():
                     if sub_key not in self.config[key]:
                         self.config[key][sub_key] = sub_value
+        
+        # 初始化可视化层级
+        self.visualization_layers = {
+            'baseline_indicators': True,
+            'market_regime': True,
+            'invalidation_signals': True,
+            'outcome_tracking': True,
+            'dynamic_thresholds': True
+        }
 
         # 初始化数据连接器
         self.data_connector = CSVDataConnector("data/csv/")
+        
+        # 初始化中文字体属性
+        self.chinese_font_prop = getattr(self, 'chinese_font_prop', None)
         try:
             self.data_connector.connect()
         except Exception as e:
@@ -52,6 +72,109 @@ class ChartGenerator:
 
         # 设置图表输出路径
         self.charts_base_path = self.config.get("charts_path", "output/charts")
+    
+    def _setup_chinese_fonts(self):
+        """配置中文字体支持"""
+        try:
+            # Windows系统的字体路径
+            import platform
+            import os
+            
+            if platform.system() == 'Windows':
+                # Windows系统字体目录
+                font_dirs = [
+                    r'C:\Windows\Fonts',
+                    r'C:\Windows\System32\Fonts'
+                ]
+                
+                # 尝试直接加载中文字体文件
+                chinese_font_files = [
+                    'msyh.ttc',      # 微软雅黑
+                    'simhei.ttf',    # 黑体
+                    'simsun.ttc',    # 宋体
+                    'kaiti.ttf',     # 楷体
+                ]
+                
+                font_found = False
+                for font_dir in font_dirs:
+                    if not os.path.exists(font_dir):
+                        continue
+                    for font_file in chinese_font_files:
+                        font_path = os.path.join(font_dir, font_file)
+                        if os.path.exists(font_path):
+                            # 直接使用字体文件路径
+                            from matplotlib.font_manager import FontProperties
+                            self.chinese_font_prop = FontProperties(fname=font_path)
+                            
+                            # 设置全局字体
+                            plt.rcParams['font.family'] = ['sans-serif']
+                            plt.rcParams['font.sans-serif'] = [self.chinese_font_prop.get_name(), 'SimHei', 'Microsoft YaHei']
+                            plt.rcParams['axes.unicode_minus'] = False
+                            mpl.rcParams['font.family'] = ['sans-serif']
+                            mpl.rcParams['font.sans-serif'] = [self.chinese_font_prop.get_name(), 'SimHei', 'Microsoft YaHei']
+                            mpl.rcParams['axes.unicode_minus'] = False
+                            
+                            logger.info(f"Chinese font configured with file: {font_path}")
+                            font_found = True
+                            break
+                    if font_found:
+                        break
+                
+                if not font_found:
+                    # 如果没有找到字体文件，尝试使用系统字体名
+                    self._setup_system_fonts()
+            else:
+                # 非Windows系统
+                self._setup_system_fonts()
+                
+        except Exception as e:
+            logger.error(f"Failed to setup Chinese fonts: {e}")
+            # 使用默认字体
+            plt.rcParams['font.sans-serif'] = ['DejaVu Sans']
+            mpl.rcParams['font.sans-serif'] = ['DejaVu Sans']
+            self.chinese_font_prop = None
+    
+    def _setup_system_fonts(self):
+        """设置系统字体"""
+        # 设置matplotlib全局中文字体
+        # 尝试常见的中文字体
+        chinese_fonts = [
+            'SimHei',  # 黑体
+            'Microsoft YaHei',  # 微软雅黑
+            'KaiTi',  # 楷体
+            'FangSong',  # 仿宋
+            'SimSun',  # 宋体
+            'Arial Unicode MS',  # macOS
+            'PingFang SC',  # macOS
+            'Noto Sans CJK SC',  # Linux
+            'Source Han Sans SC'  # Linux
+        ]
+        
+        # 查找可用的中文字体
+        available_fonts = [f.name for f in font_manager.fontManager.ttflist]
+        chinese_font = None
+        
+        for font in chinese_fonts:
+            if font in available_fonts:
+                chinese_font = font
+                break
+        
+        if chinese_font:
+            # 设置全局中文字体
+            plt.rcParams['font.sans-serif'] = [chinese_font]
+            plt.rcParams['axes.unicode_minus'] = False
+            mpl.rcParams['font.sans-serif'] = [chinese_font]
+            mpl.rcParams['axes.unicode_minus'] = False
+            
+            from matplotlib.font_manager import FontProperties
+            self.chinese_font_prop = FontProperties(family=chinese_font)
+            logger.info(f"Chinese font configured: {chinese_font}")
+        else:
+            # 如果没有找到中文字体，使用DejaVu Sans作为备选
+            logger.warning("No Chinese font found, using DejaVu Sans")
+            plt.rcParams['font.sans-serif'] = ['DejaVu Sans']
+            mpl.rcParams['font.sans-serif'] = ['DejaVu Sans']
+            self.chinese_font_prop = None
 
     def _get_default_config(self) -> Dict[str, Any]:
         """获取默认配置"""
@@ -70,18 +193,50 @@ class ChartGenerator:
                 "breakthrough_color": "#F39C12",
             },
             "pattern_types": {
-                "flag": {
-                    "name_cn": "旗形",
+                "flag_pattern": {
+                    "name_cn": "旗形形态",
                     "color_flagpole": "#ff6b35",
                     "color_upper": "#2196f3",
                     "color_lower": "#ff9800",
+                    "subtypes": {
+                        "flag": {
+                            "name_cn": "矩形旗",
+                            "color_boundary": "#2196f3"
+                        },
+                        "pennant": {
+                            "name_cn": "三角旗", 
+                            "color_boundary": "#4caf50"
+                        }
+                    }
+                }
+            },
+            "dynamic_baseline": {
+                "regime_colors": {
+                    "high_volatility": "#ff5722",
+                    "low_volatility": "#4caf50",
+                    "unknown": "#9e9e9e"
                 },
-                "pennant": {
-                    "name_cn": "三角旗形",
-                    "color_flagpole": "#9c27b0",
-                    "color_upper": "#4caf50",
-                    "color_lower": "#f44336",
+                "threshold_colors": {
+                    "slope_score": "#ff9800",
+                    "volume_burst": "#e91e63",
+                    "retrace_depth": "#9c27b0"
                 },
+                "invalidation_colors": {
+                    "fake_breakout": "#f44336",
+                    "volatility_decay": "#ff5722",
+                    "volume_divergence": "#795548"
+                }
+            },
+            "outcome_tracking": {
+                "outcome_colors": {
+                    "strong_continuation": "#4caf50",
+                    "standard_continuation": "#8bc34a",
+                    "breakout_stagnation": "#ff9800",
+                    "failed_breakout": "#f44336",
+                    "internal_collapse": "#9c27b0",
+                    "opposite_run": "#e91e63",
+                    "monitoring": "#607d8b"
+                }
             },
         }
 
@@ -176,6 +331,252 @@ class ChartGenerator:
 
         logger.info(f"Static chart saved: {output_path}")
         return output_path
+    
+    def _generate_dynamic_static_chart(
+        self,
+        df: pd.DataFrame,
+        pattern: PatternRecord,
+        market_snapshot: Optional[MarketSnapshot] = None,
+        outcome_analysis: Optional[PatternOutcomeAnalysis] = None,
+        baseline_data: Optional[Dict[str, Any]] = None,
+        output_path: Optional[str] = None,
+    ) -> str:
+        """生成动态基线系统静态图表"""
+        
+        # 准备数据
+        chart_df = self._prepare_chart_data(df, pattern)
+        
+        # 设置动态基线风格
+        style = self._create_dynamic_baseline_style()
+        
+        # 创建附加图线
+        apds = self._create_dynamic_additional_plots(
+            chart_df, pattern, market_snapshot, baseline_data
+        )
+        
+        # 确保输出路径正确
+        if not output_path:
+            Path(self.charts_base_path).mkdir(parents=True, exist_ok=True)
+            sub_type_name = pattern.sub_type if hasattr(pattern, 'sub_type') else 'flag'
+            output_path = f"{self.charts_base_path}/{sub_type_name}/{pattern.id}.{self.config['output']['format']}"
+        else:
+            Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+        
+        # 创建标题
+        title = self._create_dynamic_chart_title(pattern, market_snapshot)
+        
+        # 生成图表
+        fig, axes = mpf.plot(
+            chart_df,
+            type="candle",
+            style=style,
+            title=title,
+            volume=True,
+            figsize=(18, 12),
+            addplot=apds,
+            returnfig=True,
+        )
+        
+        # 添加动态基线标注
+        self._add_dynamic_pattern_annotations(
+            axes, chart_df, pattern, market_snapshot, outcome_analysis, baseline_data
+        )
+        
+        # 保存图表
+        fig.savefig(output_path, dpi=self.config["output"]["dpi"], bbox_inches="tight")
+        plt.close(fig)
+        
+        logger.info(f"Dynamic static chart saved: {output_path}")
+        return output_path
+    
+    def _generate_dynamic_interactive_chart(
+        self,
+        df: pd.DataFrame,
+        pattern: PatternRecord,
+        market_snapshot: Optional[MarketSnapshot] = None,
+        outcome_analysis: Optional[PatternOutcomeAnalysis] = None,
+        baseline_data: Optional[Dict[str, Any]] = None,
+        output_path: Optional[str] = None,
+    ) -> str:
+        """生成动态基线系统交互式图表"""
+        
+        # 准备数据
+        chart_df = self._prepare_chart_data(df, pattern)
+        
+        # 创建子图
+        fig = make_subplots(
+            rows=3,
+            cols=1,
+            shared_xaxes=True,
+            vertical_spacing=0.02,
+            subplot_titles=["Price & Pattern", "Volume", "Market Regime"],
+            row_heights=[0.6, 0.2, 0.2],
+        )
+        
+        # 添加K线图
+        fig.add_trace(
+            go.Candlestick(
+                x=chart_df.index,
+                open=chart_df["Open"],
+                high=chart_df["High"],
+                low=chart_df["Low"],
+                close=chart_df["Close"],
+                name="Price",
+                increasing_line_color="green",
+                decreasing_line_color="red",
+            ),
+            row=1, col=1,
+        )
+        
+        # 添加成交量
+        colors = [
+            "green" if c >= o else "red"
+            for c, o in zip(chart_df["Close"], chart_df["Open"])
+        ]
+        fig.add_trace(
+            go.Bar(
+                x=chart_df.index,
+                y=chart_df["Volume"],
+                name="Volume",
+                marker_color=colors,
+                opacity=0.7,
+            ),
+            row=2, col=1,
+        )
+        
+        # 添加形态标注
+        self._add_dynamic_plotly_annotations(
+            fig, chart_df, pattern, market_snapshot, outcome_analysis, baseline_data
+        )
+        
+        # 设置布局
+        title = self._create_dynamic_chart_title(pattern, market_snapshot)
+        fig.update_layout(
+            title=title,
+            xaxis_rangeslider_visible=False,
+            width=self.config["output"]["width"],
+            height=self.config["output"]["height"] + 200,  # 增加高度以适应第三个子图
+            template="plotly_white",
+        )
+        
+        # 保存图表
+        if not output_path:
+            Path(self.charts_base_path).mkdir(parents=True, exist_ok=True)
+            sub_type_name = getattr(pattern, 'sub_type', 'flag')
+            output_path = f"{self.charts_base_path}/{sub_type_name}/{pattern.id}.html"
+        
+        fig.write_html(output_path)
+        logger.info(f"Dynamic interactive chart saved: {output_path}")
+        return output_path
+    
+    def _add_dynamic_plotly_annotations(
+        self, 
+        fig, 
+        chart_df: pd.DataFrame, 
+        pattern: PatternRecord,
+        market_snapshot: Optional[MarketSnapshot] = None,
+        outcome_analysis: Optional[PatternOutcomeAnalysis] = None,
+        baseline_data: Optional[Dict[str, Any]] = None
+    ):
+        """添加动态Plotly标注"""
+        try:
+            # 1. 旗杆区域高亮
+            fig.add_vrect(
+                x0=pattern.flagpole.start_time,
+                x1=pattern.flagpole.end_time,
+                fillcolor=self.config["style"]["flagpole_color"],
+                opacity=0.2,
+                layer="below",
+                line_width=0,
+                row=1, col=1,
+            )
+            
+            # 2. 添加边界线
+            if pattern.pattern_boundaries:
+                boundary_colors = self._get_boundary_colors(pattern)
+                for i, boundary in enumerate(pattern.pattern_boundaries):
+                    color = boundary_colors[i] if i < len(boundary_colors) else "#ff9800"
+                    fig.add_trace(
+                        go.Scatter(
+                            x=[boundary.start_time, boundary.end_time],
+                            y=[boundary.start_price, boundary.end_price],
+                            mode="lines",
+                            line=dict(color=color, width=2, dash="dash"),
+                            name=f"Boundary {i + 1}",
+                            showlegend=i == 0,
+                        ),
+                        row=1, col=1,
+                    )
+            
+            # 3. 添加旗杆标注
+            fig.add_annotation(
+                x=pattern.flagpole.start_time,
+                y=pattern.flagpole.start_price,
+                text=f"旗杆<br>{pattern.flagpole.height_percent:.1f}%",
+                showarrow=True,
+                arrowhead=2,
+                arrowcolor=self.config["style"]["flagpole_color"],
+                bgcolor="white",
+                bordercolor=self.config["style"]["flagpole_color"],
+                row=1, col=1,
+            )
+            
+            # 4. 添加失效信号标记
+            if hasattr(pattern, 'invalidation_signals') and self.visualization_layers['invalidation_signals']:
+                for signal in pattern.invalidation_signals:
+                    if signal.trigger_time in chart_df.index:
+                        color = self.config["dynamic_baseline"]["invalidation_colors"].get(
+                            signal.signal_type, "#f44336"
+                        )
+                        size = 15 if signal.is_critical else 10
+                        
+                        fig.add_trace(
+                            go.Scatter(
+                                x=[signal.trigger_time],
+                                y=[signal.trigger_price],
+                                mode="markers",
+                                marker=dict(
+                                    size=size,
+                                    color=color,
+                                    symbol="x" if signal.is_critical else "circle"
+                                ),
+                                name=f"{signal.signal_type}",
+                                showlegend=True,
+                            ),
+                            row=1, col=1,
+                        )
+            
+            # 5. 市场状态显示（第三个子图）
+            if market_snapshot and self.visualization_layers['market_regime']:
+                self._add_market_regime_subplot(fig, chart_df, market_snapshot)
+            
+        except Exception as e:
+            logger.warning(f"Failed to add dynamic Plotly annotations: {e}")
+    
+    def _add_market_regime_subplot(self, fig, chart_df: pd.DataFrame, 
+                                  market_snapshot: MarketSnapshot):
+        """添加市场状态子图"""
+        try:
+            # 创建虚拟的状态时间序列（简化实现）
+            regime_values = [1 if market_snapshot.current_regime == "high_volatility" else 0] * len(chart_df)
+            regime_color = self.config["dynamic_baseline"]["regime_colors"].get(
+                market_snapshot.current_regime, "#9e9e9e"
+            )
+            
+            fig.add_trace(
+                go.Scatter(
+                    x=chart_df.index,
+                    y=regime_values,
+                    mode="lines",
+                    fill="tozeroy",
+                    line=dict(color=regime_color),
+                    name="Market Regime",
+                ),
+                row=3, col=1,
+            )
+            
+        except Exception as e:
+            logger.warning(f"Failed to add market regime subplot: {e}")
 
     def _generate_interactive_chart(
         self,
@@ -1102,3 +1503,323 @@ class ChartGenerator:
 
         except Exception as e:
             logger.error(f"Failed to create summary report: {e}")
+    
+    def generate_outcome_analysis_chart(
+        self,
+        df: pd.DataFrame,
+        pattern: PatternRecord,
+        outcome_analysis: PatternOutcomeAnalysis,
+        monitoring_data: pd.DataFrame,
+        output_path: Optional[str] = None,
+    ) -> str:
+        """
+        生成结局分析图表
+        
+        Args:
+            df: 原始价格数据
+            pattern: 形态记录
+            outcome_analysis: 结局分析
+            monitoring_data: 监控期间数据
+            output_path: 输出路径
+            
+        Returns:
+            生成的图表文件路径
+        """
+        try:
+            # 合并数据：形态期 + 监控期
+            extended_df = pd.concat([df, monitoring_data]).drop_duplicates('timestamp').sort_values('timestamp')
+            
+            # 生成动态图表
+            return self.generate_dynamic_pattern_chart(
+                extended_df, pattern, None, outcome_analysis, None, output_path
+            )
+            
+        except Exception as e:
+            logger.error(f"Failed to generate outcome analysis chart: {e}")
+            raise
+    
+    def generate_baseline_summary_chart(
+        self,
+        baseline_data: Dict[str, Any],
+        regime_history: List[Dict[str, Any]],
+        output_path: Optional[str] = None,
+    ) -> str:
+        """
+        生成基线数据汇总图表
+        
+        Args:
+            baseline_data: 基线数据
+            regime_history: 市场状态历史
+            output_path: 输出路径
+            
+        Returns:
+            生成的图表文件路径
+        """
+        try:
+            # 创建子图
+            fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+            fig.suptitle(
+                "Dynamic Baseline System - Summary Report", fontsize=16, fontweight="bold"
+            )
+            
+            # 1. 市场状态分布
+            if regime_history:
+                regime_counts = {}
+                for regime_record in regime_history:
+                    regime = regime_record.get('regime', 'unknown')
+                    regime_counts[regime] = regime_counts.get(regime, 0) + 1
+                
+                if regime_counts:
+                    axes[0, 0].pie(
+                        regime_counts.values(), 
+                        labels=[
+                            {
+                                'high_volatility': '高波动',
+                                'low_volatility': '低波动', 
+                                'unknown': '未知'
+                            }.get(k, k) for k in regime_counts.keys()
+                        ],
+                        autopct='%1.1f%%',
+                        colors=[
+                            self.config['dynamic_baseline']['regime_colors'].get(k, '#9e9e9e')
+                            for k in regime_counts.keys()
+                        ]
+                    )
+                # 设置中文标题
+                title_text = '市场状态分布'
+                if self.chinese_font_prop:
+                    axes[0, 0].set_title(title_text, fontproperties=self.chinese_font_prop)
+                else:
+                    axes[0, 0].set_title(title_text)
+            
+            # 2. 动态阈值趋势（简化实现）
+            trend_text = '动态阈值趋势\n（需要实际数据支持）'
+            title2_text = '动态阈值趋势'
+            if self.chinese_font_prop:
+                axes[0, 1].text(
+                    0.5, 0.5, 
+                    trend_text,
+                    transform=axes[0, 1].transAxes,
+                    ha='center', va='center',
+                    fontsize=12,
+                    fontproperties=self.chinese_font_prop
+                )
+                axes[0, 1].set_title(title2_text, fontproperties=self.chinese_font_prop)
+            else:
+                axes[0, 1].text(
+                    0.5, 0.5, 
+                    trend_text,
+                    transform=axes[0, 1].transAxes,
+                    ha='center', va='center',
+                    fontsize=12
+                )
+                axes[0, 1].set_title(title2_text)
+            
+            # 3. 基线覆盖统计
+            if baseline_data:
+                coverage_stats = baseline_data.get('coverage_stats', {})
+                if coverage_stats:
+                    metrics = list(coverage_stats.keys())
+                    values = list(coverage_stats.values())
+                    axes[1, 0].bar(metrics, values, alpha=0.7)
+                    title3_text = '基线覆盖统计'
+                    if self.chinese_font_prop:
+                        axes[1, 0].set_title(title3_text, fontproperties=self.chinese_font_prop)
+                    else:
+                        axes[1, 0].set_title(title3_text)
+                    axes[1, 0].tick_params(axis='x', rotation=45)
+            
+            # 4. 系统状态信息
+            status_text = f"""
+            系统状态报告:
+            
+            基线数据点数: {baseline_data.get('total_data_points', 'N/A')}
+            有效状态记录: {len(regime_history)}
+            生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+            
+            状态转换次数: {baseline_data.get('regime_transitions', 'N/A')}
+            当前活跃状态: {baseline_data.get('current_regime', 'unknown')}
+            """
+            
+            if self.chinese_font_prop:
+                axes[1, 1].text(
+                    0.1, 0.9,
+                    status_text,
+                    transform=axes[1, 1].transAxes,
+                    fontsize=10,
+                    verticalalignment="top",
+                    bbox=dict(boxstyle="round", facecolor="lightgray", alpha=0.8),
+                    fontproperties=self.chinese_font_prop
+                )
+            else:
+                axes[1, 1].text(
+                    0.1, 0.9,
+                    status_text,
+                    transform=axes[1, 1].transAxes,
+                    fontsize=10,
+                    verticalalignment="top",
+                    bbox=dict(boxstyle="round", facecolor="lightgray", alpha=0.8),
+                )
+            axes[1, 1].axis('off')
+            
+            plt.tight_layout()
+            
+            # 保存图表
+            if not output_path:
+                Path(self.charts_base_path).mkdir(parents=True, exist_ok=True)
+                output_path = f"{self.charts_base_path}/baseline_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+            
+            plt.savefig(
+                output_path, dpi=self.config["output"]["dpi"], bbox_inches="tight"
+            )
+            plt.close()
+            
+            logger.info(f"Baseline summary chart saved: {output_path}")
+            return output_path
+            
+        except Exception as e:
+            logger.error(f"Failed to generate baseline summary chart: {e}")
+            raise
+    
+    def generate_dynamic_chart_from_scan_result(
+        self,
+        scan_result: Dict[str, Any],
+        df: pd.DataFrame,
+        output_dir: Optional[str] = None
+    ) -> List[str]:
+        """
+        从扫描结果生成动态图表
+        
+        Args:
+            scan_result: 动态扫描结果
+            df: 价格数据
+            output_dir: 输出目录
+            
+        Returns:
+            生成的图表文件路径列表
+        """
+        try:
+            if not scan_result.get('success', False):
+                logger.warning("Scan result indicates failure, skipping chart generation")
+                return []
+            
+            patterns = scan_result.get('patterns', [])
+            if not patterns:
+                logger.info("No patterns found in scan result")
+                return []
+            
+            chart_paths = []
+            market_snapshot_dict = scan_result.get('market_snapshot', {})
+            
+            for pattern_dict in patterns:
+                try:
+                    # 转换为 PatternRecord 对象（简化实现）
+                    # 在实际实现中需要更完整的转换逻辑
+                    pattern = self._dict_to_pattern_record(pattern_dict)
+                    
+                    # 创建输出路径
+                    if output_dir:
+                        Path(output_dir).mkdir(parents=True, exist_ok=True)
+                        sub_type_dir = Path(output_dir) / getattr(pattern, 'sub_type', 'flag')
+                        sub_type_dir.mkdir(parents=True, exist_ok=True)
+                        
+                        filename = self.create_dynamic_meaningful_filename(pattern)
+                        chart_path = str(sub_type_dir / f"{filename}.{self.config['output']['format']}")
+                    else:
+                        chart_path = None
+                    
+                    # 生成图表
+                    result_path = self.generate_dynamic_pattern_chart(
+                        df, pattern, 
+                        market_snapshot=self._dict_to_market_snapshot(market_snapshot_dict),
+                        output_path=chart_path
+                    )
+                    
+                    if result_path:
+                        chart_paths.append(result_path)
+                        logger.info(f"Generated dynamic chart: {result_path}")
+                    
+                except Exception as pattern_error:
+                    logger.error(f"Failed to generate chart for pattern {pattern_dict.get('id', 'unknown')}: {pattern_error}")
+                    continue
+            
+            logger.info(f"Generated {len(chart_paths)} dynamic charts from scan result")
+            return chart_paths
+            
+        except Exception as e:
+            logger.error(f"Failed to generate charts from scan result: {e}")
+            return []
+    
+    def _dict_to_pattern_record(self, pattern_dict: Dict[str, Any]):
+        """将字典转换为 PatternRecord 对象（简化实现）"""
+        # 这里需要根据实际的 PatternRecord 类结构进行实现
+        # 简化示例：
+        return pattern_dict  # 这里需要实际的转换逻辑
+    
+    def _dict_to_market_snapshot(self, snapshot_dict: Dict[str, Any]) -> Optional[MarketSnapshot]:
+        """将字典转换为 MarketSnapshot 对象（简化实现）"""
+        if not snapshot_dict:
+            return None
+        # 这里需要根据实际的 MarketSnapshot 类结构进行实现
+        return None  # 简化实现
+    
+    def create_dynamic_meaningful_filename(self, pattern) -> str:
+        """为动态基线系统创建有意义的文件名"""
+        try:
+            # 获取基本信息
+            symbol = pattern.symbol.replace("-15min", "").strip()
+            if not symbol:
+                symbol = "unknown_symbol"
+            
+            # 格式化时间
+            time_str = pattern.flagpole.start_time.strftime("%Y%m%d_%H%M")
+            
+            # 获取形态类型名称
+            sub_type = getattr(pattern, 'sub_type', 'flag')
+            sub_type_config = self.config["pattern_types"]["flag_pattern"]["subtypes"].get(sub_type, {})
+            pattern_name = sub_type_config.get("name_cn", sub_type)
+            
+            # 方向信息
+            direction_name = "上升" if pattern.flagpole.direction == "up" else "下降"
+            
+            # 组合文件名
+            filename = f"{symbol}_{time_str}_{direction_name}{pattern_name}"
+            
+            # 清理非法字符
+            illegal_chars = '<>:"/\\|?*'
+            for char in illegal_chars:
+                filename = filename.replace(char, "_")
+            
+            return filename.strip() or pattern.id[:8]
+            
+        except Exception as e:
+            logger.warning(f"Failed to create dynamic meaningful filename: {e}")
+            return getattr(pattern, 'id', 'unknown_pattern')[:8]
+    
+    # 保留原有的方法以保持向后兼容
+    def generate_pattern_chart(self, df: pd.DataFrame, pattern: PatternRecord, output_path: Optional[str] = None) -> str:
+        """向后兼容的方法"""
+        return self.generate_legacy_pattern_chart(df, pattern, output_path)
+    
+    def generate_legacy_pattern_chart(
+        self,
+        df: pd.DataFrame,
+        pattern: PatternRecord,
+        output_path: Optional[str] = None,
+    ) -> str:
+        """
+        生成传统形态图表（向后兼容）
+        """
+        try:
+            if self.config["output"]["format"].lower() == "html":
+                return self._generate_interactive_chart(df, pattern, output_path)
+            else:
+                return self._generate_static_chart(df, pattern, output_path)
+        except Exception as e:
+            logger.error(f"Failed to generate legacy chart: {e}")
+            raise
+
+
+class ChartGenerator(DynamicChartGenerator):
+    """向后兼容的图表生成器别名"""
+    pass

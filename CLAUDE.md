@@ -4,12 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-PatternScout 是一个用于技术分析的自动化旗形和三角旗形形态识别工具。主要功能包括：
-- 从 CSV 或 MongoDB 数据源读取 OHLCV 数据
-- 自动检测旗形 (flag) 和三角旗形 (pennant) 形态
-- 生成可视化图表和形态分析报告
-- 支持多时间周期的自适应检测
-- 批量数据集管理和突破分析
+PatternScout 是一个采用动态基线系统的高精度旗形形态识别工具。主要功能包括：
+- **动态基线系统**: 500K线滚动统计，三层鲁棒统计保护，智能市场状态检测
+- **失效信号过滤**: 假突破检测、成交量背离分析、形态变形监控
+- **六分类结局追踪**: 强势延续、标准延续、突破停滞、假突破反转、内部瘫解、反向运行
+- **多数据源支持**: CSV 或 MongoDB 数据源读取 OHLCV 数据
+- **智能形态识别**: 动态阈值调整的旗形 (flag) 和三角旗形 (pennant) 检测
+- **增强可视化**: 动态基线图表、失效信号标记、结局分析图表
+- **多时间周期**: 自适应检测参数，支持分钟到月线的全周期分析
+- **数据归档系统**: 形态数据集管理和统计分析
 
 ## 开发环境
 
@@ -24,11 +27,18 @@ uv run python main.py
 # 运行测试（完整测试套件）
 uv run python tests/run_tests.py
 
-# 运行单个测试模块
+# 运行核心测试模块
 uv run python -m pytest tests/test_technical_indicators.py -v
 uv run python -m pytest tests/test_pattern_detectors.py -v
 
-# 运行专项测试
+# 运行动态基线系统测试
+uv run python -m pytest tests/test_dynamic_baseline_system.py -v
+uv run python -m pytest tests/test_dynamic_flagpole_detector.py -v
+uv run python -m pytest tests/test_dynamic_flag_detector.py -v
+uv run python -m pytest tests/test_pattern_outcome_tracker.py -v
+uv run python -m pytest tests/test_dynamic_pattern_scanner.py -v
+
+# 运行专项算法测试
 uv run python -m pytest tests/test_atr_adaptive.py -v
 uv run python -m pytest tests/test_ransac.py -v
 
@@ -44,29 +54,80 @@ uv run mypy .
 
 ### 命令行使用
 ```bash
-# 基本扫描（统一形态类型）
-uv run python main.py --symbols RBL8 --pattern-types flag_pattern
+# 动态基线模式扫描（推荐）
+uv run python main.py --symbols RBL8
+
+# 启用结局追踪的完整动态扫描
+uv run python main.py --symbols AAPL MSFT --start-date 2023-01-01
+
+# 传统模式（向后兼容）
+uv run python main.py --symbols RBL8 --legacy-mode
+
+# 禁用结局追踪的动态扫描
+uv run python main.py --symbols RBL8 --disable-outcome-tracking
 
 # 指定配置文件
 uv run python main.py --config config_multi_timeframe.yaml
-
-# 向后兼容的形态类型指定（会自动转换为flag_pattern）
-uv run python main.py --pattern-types flag pennant --min-confidence 0.4
-
-# 导出数据集并执行突破分析
-uv run python main.py --export-dataset json --analyze-breakthrough
 
 # 时间范围限制
 uv run python main.py --start-date 2023-01-01 --end-date 2023-12-31
 
 # 使用MongoDB数据源
 uv run python main.py --data-source mongodb
+
+# 生成基线汇总和结局图表
+uv run python main.py --symbols RBL8 --no-charts  # 跳过个别图表，只生成汇总
+
+# 向后兼容的形态类型指定（自动转换为动态基线系统）
+uv run python main.py --pattern-types flag pennant --min-confidence 0.4
 ```
 
 ## 核心架构
 
-### 统一形态检测架构（重要变更）
-PatternScout 2.0 采用统一的形态检测架构：
+### 动态基线系统架构（最新重大更新）
+PatternScout 3.0 引入了革命性的动态基线系统，完全重构了形态识别流程：
+
+#### 六阶段动态识别与数据归档流程
+- **阶段0 - 动态基线系统**: 500K线滚动统计，三层鲁棒统计保护，智能市场状态检测
+- **阶段1 - 动态旗杆检测**: 基于动态阈值的旗杆识别，斜率评分和成交量爆发验证
+- **阶段2 - 动态旗面检测**: 百分位通道构建，失效信号预过滤，几何形态分析
+- **阶段3 - 形态结局分析**: 六分类结局监控系统，纯粹的结局分类逻辑
+- **阶段4 - 形态数据输出**: 结构化数据记录，形态DNA特征存储，环境快照归档
+- **阶段5 - 形态可视化及图表输出**: 标准化PNG格式K线图，形态"可视化指纹"生成
+
+#### 核心技术特性
+- **三层鲁棒统计保护**: MAD过滤 + Winsorize + 动态阈值调整，防止异常值污染
+- **智能市场状态检测**: 双状态基线管理，防震荡机制，自适应波动率分析
+- **失效信号识别**: 假突破检测、成交量背离分析、形态变形监控
+- **六分类结局系统**: 强势延续、标准延续、突破停滞、假突破反转、内部瘫解、反向运行
+
+#### 动态基线API接口
+```python
+# 现代动态基线扫描器
+class DynamicPatternScanner:
+    def scan(df, enable_outcome_analysis=True, enable_data_export=True, enable_chart_generation=True) -> Dict[str, Any]:
+        # 完整的六阶段动态识别与数据归档流程
+        # 阶段0: 更新市场状态和动态基线
+        # 阶段1: 动态旗杆检测
+        # 阶段2: 动态旗面检测和失效信号过滤
+        # 阶段3: 形态结局分析（可选）
+        # 阶段4: 形态数据输出（可选）
+        # 阶段5: 形态可视化及图表输出（可选）
+
+# 统一主程序入口（向后兼容）
+class PatternScout(DynamicPatternScout):
+    def scan_patterns(symbols, start_date, end_date) -> List[PatternRecord]:
+        # 自动使用动态基线系统，向后兼容API
+    
+    def run_dynamic(**kwargs) -> dict:
+        # 完整动态模式，包含增强功能
+    
+    def run_legacy(**kwargs) -> dict:
+        # 传统模式，用于向后兼容
+```
+
+### 统一形态检测架构（已更新）
+PatternScout 3.0 在动态基线系统基础上保持统一的形态检测架构：
 
 - **统一形态类型**: `PatternType.FLAG_PATTERN` 包含两个子类型：
   - `FlagSubType.FLAG`: 矩形旗（平行通道）
@@ -283,32 +344,55 @@ cp .env.example .env
 
 ## 项目结构特点
 
-### 分层架构
+### 六阶段分层架构（PatternScout 3.0完整重构）
 ```
 src/
 ├── data/           # 数据层
 │   ├── connectors/ # CSV/MongoDB连接器
-│   └── models/     # Pydantic数据模型
-├── patterns/       # 形态检测层
-│   ├── base/       # 基础组件（检测器基类、质量评分、时间周期管理）
-│   ├── detectors/  # 具体检测器实现（FlagDetector、PatternScanner）
+│   └── models/     # Pydantic数据模型（增强版：失效信号、结局分析、市场快照）
+├── patterns/       # 形态检测层（阶段0-2）
+│   ├── base/       # 基础组件
+│   │   ├── robust_statistics.py      # 三层鲁棒统计保护
+│   │   ├── market_regime_detector.py # 智能市场状态检测
+│   │   └── timeframe_manager.py      # 时间周期管理
+│   ├── detectors/  # 检测器实现
+│   │   ├── dynamic_flagpole_detector.py # 阶段1: 动态旗杆检测器
+│   │   ├── dynamic_flag_detector.py     # 阶段2: 动态旗面检测器
+│   │   ├── dynamic_pattern_scanner.py  # 六阶段统一扫描器
+│   │   └── pattern_scanner.py          # 传统扫描器（兼容）
 │   ├── indicators/ # 技术指标
 │   └── strategies/ # 时间周期策略
-├── analysis/       # 分析层（突破分析）
-├── visualization/  # 图表生成
-├── storage/        # 数据持久化
+├── analysis/       # 结局分析层（阶段3）
+│   ├── pattern_outcome_analyzer.py    # 纯粹的结局分析器
+│   └── pattern_outcome_tracker.py     # 传统结局追踪器（兼容）
+├── storage/        # 数据输出层（阶段4）
+│   ├── pattern_data_exporter.py       # 形态数据输出器
+│   └── dataset_manager.py             # 传统数据集管理器（兼容）
+├── visualization/  # 可视化层（阶段5）
+│   ├── pattern_chart_generator.py     # 专门的形态图表生成器
+│   ├── chart_generator.py             # 传统图表生成器（兼容）
+│   └── dynamic_chart_methods.py       # 动态基线图表方法
 └── utils/         # 工具类（配置管理）
 ```
 
-### 测试体系
+### 测试体系（六阶段系统全覆盖）
 完整的unittest测试套件，覆盖所有核心组件：
-- 技术指标测试
-- 数据连接器测试  
-- 形态检测器测试（已更新为统一架构测试）
-- 数据集管理器测试（已更新模型引用）
-- 向后兼容性测试
+- **动态基线系统测试**: 三层鲁棒统计、市场状态检测、基线管理（阶段0）
+- **动态检测器测试**: 旗杆检测器、旗面检测器、失效信号识别（阶段1-2）
+- **结局分析系统测试**: 六分类结局监控、形态有效性验证（阶段3）
+- **数据输出系统测试**: 结构化数据存储、形态DNA特征、环境快照（阶段4）
+- **可视化系统测试**: 图表生成、标准化可视化、批量处理（阶段5）
+- **集成测试**: 完整六阶段流程、系统状态管理、性能指标
+- **传统模块测试**: 技术指标、数据连接器、向后兼容性
 
-### 专项测试工具
+### 动态基线系统专项测试
+- **tests/test_dynamic_baseline_system.py**: 三层鲁棒统计保护和市场状态检测测试
+- **tests/test_dynamic_flagpole_detector.py**: 动态旗杆检测器完整功能测试
+- **tests/test_dynamic_flag_detector.py**: 动态旗面检测和失效信号识别测试
+- **tests/test_pattern_outcome_tracker.py**: 六分类结局追踪系统测试
+- **tests/test_dynamic_pattern_scanner.py**: 完整三阶段集成流程测试
+
+### 传统专项测试工具
 - **tests/test_atr_adaptive.py**: ATR自适应参数系统测试
 - **tests/test_algorithm_improvements.py**: 算法改进综合测试
 - **tests/test_ransac.py**: RANSAC算法性能和鲁棒性测试
@@ -331,11 +415,41 @@ src/
 
 ## 重构说明
 
-### 2025年重大架构更新
-- **统一检测架构**: 合并FlagDetector和PennantDetector为单一的FlagDetector
-- **数据模型更新**: PatternType改为FLAG_PATTERN，增加FlagSubType区分矩形旗和三角旗
-- **配置文件重构**: 统一flag_pattern配置结构，包含flag和pennant子配置
-- **向后兼容**: 保持API兼容性，legacy方法会自动转换到新架构
-- **测试更新**: 所有测试已更新以使用新的统一架构
+### 2025年1月六阶段系统重大重构
+**PatternScout 3.0** - 完全重构的六阶段动态基线系统实现：
 
-这次重构为未来扩展其他形态类型（如头肩形、双顶等）奠定了良好的架构基础。
+#### 核心系统重构
+- **动态基线系统**: 500K线滚动统计，三层鲁棒统计保护，双状态基线管理
+- **六阶段识别与归档流程**: 基线更新 → 动态旗杆检测 → 动态旗面检测 → 结局分析 → 数据输出 → 图表生成
+- **失效信号系统**: 假突破检测、成交量背离分析、形态变形监控
+- **六分类结局追踪**: 强势延续、标准延续、突破停滞、假突破反转、内部瘫解、反向运行
+- **完整数据归档**: 结构化数据存储、形态DNA特征、环境快照、标准化可视化
+
+#### 数据模型扩展
+- **新增枚举类型**: PatternOutcome、MarketRegime、IndicatorType
+- **增强数据结构**: DynamicBaseline、InvalidationSignal、MarketSnapshot、PatternOutcomeAnalysis
+- **向后兼容**: 保持原有PatternRecord、Flagpole、TrendLine结构
+
+#### 六阶段系统重构
+- **阶段3 - PatternOutcomeAnalyzer**: 纯粹的结局分析器，专注于结局分类逻辑
+- **阶段4 - PatternDataExporter**: 专门的数据输出器，结构化数据存储和导出
+- **阶段5 - PatternChartGenerator**: 专门的图表生成器，标准化可视化图表
+- **DynamicPatternScanner**: 统一六阶段扫描流程，系统状态管理，性能监控
+
+#### 模块化架构升级
+- **独立模块设计**: 每个阶段独立可配置，支持选择性启用/禁用
+- **专业化分工**: 结局分析、数据输出、可视化各司其职，提高代码可维护性
+- **完整向后兼容**: 保持原有API，用户无感知升级
+
+#### API兼容性设计
+- **完全向后兼容**: 原有API自动转换到动态基线系统
+- **双模式支持**: run_dynamic()（推荐）和 run_legacy()（兼容）
+- **渐进式迁移**: 用户可选择启用或禁用动态功能
+
+#### 测试体系完善
+- **全覆盖测试套件**: 六阶段系统所有组件的完整单元测试
+- **集成测试**: 六阶段完整流程测试，系统状态验证，跨模块交互
+- **性能测试**: 扫描性能、内存使用、系统稳定性测试
+- **模块化测试**: 每个阶段独立测试，确保模块间解耦
+
+这次六阶段重构建立了更强大的技术基础，实现了从形态识别到数据归档的完整闭环，为未来扩展更多形态类型（头肩形、双顶双底等）和高级分析功能提供了完善的模块化架构支持。

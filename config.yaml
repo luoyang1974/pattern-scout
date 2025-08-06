@@ -1,6 +1,5 @@
-# Configuration settings for PatternScout
-# 重构说明：统一flag和pennant检测为flag_pattern架构
-# flag: 矩形旗（平行通道），pennant: 三角旗（收敛三角形）
+# Configuration for Dynamic Baseline Flag Pattern Recognition System
+# 动态基线旗形识别系统配置文件
 
 # Data Sources
 data_sources:
@@ -14,85 +13,357 @@ data_sources:
     database: "market_data"
     collection: "ohlcv"
 
-# 统一的旗形形态检测参数（包含矩形旗和三角旗）
+# Dynamic Baseline System Configuration (Stage 0)
+dynamic_baseline:
+  history_window: 500              # 滚动统计样本大小
+  min_stable_samples: 50           # 最少稳定样本数
+  cold_start_threshold: 200        # 冷启动阈值
+  
+  # Robust Statistics Configuration
+  robust_statistics:
+    winsorize_limits: [0.02, 0.98] # 缩尾处理百分位数范围
+    mad_threshold: 2.5             # MAD异常值检测阈值
+    stability_threshold: 0.7       # 稳定性阈值
+    
+  # Market Regime Detection
+  regime_detection:
+    atr_period: 100                # ATR计算周期
+    high_volatility_threshold: 0.65 # 高波动阈值（百分位数）
+    low_volatility_threshold: 0.35  # 低波动阈值（百分位数）
+    stability_buffer: 5             # 状态切换确认次数
+    
+  # Dynamic Thresholds for Different Regimes
+  regime_thresholds:
+    high_volatility:
+      slope_score:
+        p75: 1.0
+        p85: 1.5
+        p90: 2.2
+        p95: 3.0
+      volume_burst:
+        p75: 2.0
+        p85: 2.8
+        p90: 3.5
+        p95: 4.5
+      retrace_depth:
+        p50: 0.25
+        p60: 0.30
+        p75: 0.40
+        p85: 0.50
+      volume_contraction:
+        p40: 0.85
+        p50: 0.75
+        p60: 0.65
+        p75: 0.55
+      volatility_drop:
+        p50: 0.85
+        p75: 0.75
+        p85: 0.65
+      channel_width:
+        p20: 0.15
+        p50: 0.30
+        p80: 0.60
+        
+    low_volatility:
+      slope_score:
+        p75: 0.8
+        p85: 1.2
+        p90: 1.8
+        p95: 2.5
+      volume_burst:
+        p75: 1.8
+        p85: 2.3
+        p90: 2.8
+        p95: 3.5
+      retrace_depth:
+        p50: 0.20
+        p60: 0.25
+        p75: 0.35
+        p85: 0.45
+      volume_contraction:
+        p40: 0.80
+        p50: 0.70
+        p60: 0.60
+        p75: 0.50
+      volatility_drop:
+        p50: 0.80
+        p75: 0.70
+        p85: 0.60
+      channel_width:
+        p20: 0.10
+        p50: 0.25
+        p80: 0.50
+
+# Pattern Detection Configuration (Unified)
 pattern_detection:
-  # 统一的旗形检测配置
   flag_pattern:
+    # Flagpole Configuration (Stage 1)
     flagpole:
-      min_bars: 4                # 最少4个15分钟K线（1小时）
-      max_bars: 20               # 最多20个15分钟K线（5小时）
-      min_height_percent: 1.5    # 最小涨跌幅1.5%
-      max_height_percent: 10.0   # 最大涨跌幅10%
-      volume_surge_ratio: 2.0    # 成交量激增倍数
-      max_retracement: 0.3       # 最大回撤30%
-      min_trend_strength: 0.7    # 最小趋势强度（R²）
+      # Dynamic K-line Range by Timeframe
+      bars_range:
+        "1m": {min: 8, max: 25}
+        "5m": {min: 6, max: 20}
+        "15m": {min: 4, max: 15}
+        "1h": {min: 3, max: 12}
+        "4h": {min: 2, max: 8}
+        "1d": {min: 2, max: 6}
       
-    flag:  # 矩形旗检测参数
-      min_bars: 8                # 最少8个15分钟K线（2小时）
-      max_bars: 48               # 最多48个15分钟K线（12小时）
-      min_slope_angle: 0.5       # 最小倾斜角度0.5度（适应15分钟数据）
-      max_slope_angle: 10        # 最大倾斜角度10度（适应15分钟数据）
-      retracement_range: [0.2, 0.6]  # 回撤范围20%-60%
-      volume_decay_threshold: 0.7     # 成交量衰减阈值
-      parallel_tolerance: 0.15        # 平行度容忍度
-      min_touches: 2                  # 最少触及边界次数
+      # Fixed Validation Thresholds
+      fixed_thresholds:
+        impulse_bar_ratio: 0.70        # 高动量K线占比阈值
+        max_retracement: 0.20          # 最大内部回撤比例
+        min_trend_strength: 0.3        # 最小趋势强度（R²）
+        
+      # Gap Detection Configuration
+      gap_detection:
+        min_gap_percent: 0.02          # 最小缺口百分比
+        max_gap_percent: 0.10          # 最大缺口百分比
+        confirmation_bars: 2           # 缺口后确认K线数
+
+    # Flag Detection Configuration (Stage 2)  
+    flag:
+      # Timeout Rules (adaptive based on regime)
+      timeout_multipliers:
+        high_volatility: 3             # 高波动时的超时倍数
+        low_volatility: 7              # 低波动时的超时倍数
+        default: 5                     # 默认超时倍数
+        
+      # Flag Bars Range by Timeframe
+      flag_bars_range:
+        "1m": {min: 15, max: 60}
+        "5m": {min: 12, max: 48}
+        "15m": {min: 8, max: 40}
+        "1h": {min: 6, max: 30}
+        "4h": {min: 4, max: 20}
+        "1d": {min: 3, max: 15}
+        
+      # Consolidation Filter Thresholds (will use dynamic baselines)
+      consolidation_filter:
+        enable_dynamic_thresholds: true
+        
+      # Geometric Pattern Analysis
+      geometric_analysis:
+        percentile_channel:
+          upper_percentile: 0.95       # 上通道分位数
+          lower_percentile: 0.05       # 下通道分位数
+          min_window: 3                # 最小滚动窗口
+          
+        pattern_classification:
+          parallel_threshold: 0.001     # 平行度阈值（归一化斜率差）
+          convergence_threshold: 0.4   # 收敛度阈值
+          
+      # Pattern Stability Validation
+      stability_validation:
+        min_containment_ratio: 0.80    # 最小包含比例
+        min_touch_count: 2             # 最小触及次数
+        min_r_squared: 0.3             # 最小拟合度
+        
+      # Invalidation Signal Detection
+      invalidation_detection:
+        fake_breakout:
+          volume_multiplier: 1.2       # 假突破成交量倍数阈值
+          return_confirmation: 1       # 回归确认K线数
+          
+        volatility_decay:
+          enable_monitoring: true      # 启用波动衰减监控
+          min_decay_slope: -0.001     # 最小衰减斜率
+          
+        volume_divergence:
+          max_increase_rate: 0.10     # 最大成交量增长率
+
+    # Pennant Configuration (similar structure)
+    pennant:
+      timeout_multipliers:
+        high_volatility: 3
+        low_volatility: 7
+        default: 5
+      flag_bars_range:
+        "1m": {min: 15, max: 60}
+        "5m": {min: 12, max: 48}
+        "15m": {min: 8, max: 40}
+        "1h": {min: 6, max: 30}
+        "4h": {min: 4, max: 20}
+        "1d": {min: 3, max: 15}
+      geometric_analysis:
+        percentile_channel:
+          upper_percentile: 0.95
+          lower_percentile: 0.05
+          min_window: 3
+        pattern_classification:
+          parallel_threshold: 0.001
+          convergence_threshold: 0.4
+
+# Legacy Configuration (for backward compatibility)
+flagpole_detection:
+  # Dynamic K-line Range by Timeframe
+  bars_range:
+    "1m": {min: 8, max: 25}
+    "5m": {min: 6, max: 20}
+    "15m": {min: 4, max: 15}
+    "1h": {min: 3, max: 12}
+    "4h": {min: 2, max: 8}
+    "1d": {min: 2, max: 6}
+  
+  # Fixed Validation Thresholds
+  fixed_thresholds:
+    impulse_bar_ratio: 0.70        # 高动量K线占比阈值
+    max_retracement: 0.20          # 最大内部回撤比例
+    min_trend_strength: 0.3        # 最小趋势强度（R²）
+    
+  # Gap Detection Configuration
+  gap_detection:
+    min_gap_percent: 0.02          # 最小缺口百分比
+    max_gap_percent: 0.10          # 最大缺口百分比
+    confirmation_bars: 2           # 缺口后确认K线数
+
+# Dynamic Flag Detection (Stage 2)
+flag_detection:
+  # Timeout Rules (adaptive based on regime)
+  timeout_multipliers:
+    high_volatility: 3             # 高波动时的超时倍数
+    low_volatility: 7              # 低波动时的超时倍数
+    default: 5                     # 默认超时倍数
+    
+  # Flag Bars Range by Timeframe
+  flag_bars_range:
+    "1m": {min: 15, max: 60}
+    "5m": {min: 12, max: 48}
+    "15m": {min: 8, max: 40}
+    "1h": {min: 6, max: 30}
+    "4h": {min: 4, max: 20}
+    "1d": {min: 3, max: 15}
+    
+  # Consolidation Filter Thresholds (will use dynamic baselines)
+  consolidation_filter:
+    enable_dynamic_thresholds: true
+    
+  # Geometric Pattern Analysis
+  geometric_analysis:
+    percentile_channel:
+      upper_percentile: 0.95       # 上通道分位数
+      lower_percentile: 0.05       # 下通道分位数
+      min_window: 3                # 最小滚动窗口
       
-    pennant:  # 三角旗检测参数
-      min_bars: 8                # 最少8个15分钟K线（2小时）
-      max_bars: 48               # 最多48个15分钟K线（12小时）
-      min_touches: 2             # 最少触及边界次数
-      convergence_ratio: 0.6     # 要求的收敛比例
-      apex_distance_range: [0.3, 4.0]  # 顶点距离范围（相对形态长度的倍数）
-      symmetry_tolerance: 0.6    # 对称性容忍度（0-1，越小越对称）
-      volume_decay_threshold: 0.8     # 成交量衰减阈值
+    pattern_classification:
+      parallel_threshold: 0.001     # 平行度阈值（归一化斜率差）
+      convergence_threshold: 0.4   # 收敛度阈值
       
-    scoring:
-      min_confidence_score: 0.5         # 最小置信度分数阈值
+  # Pattern Stability Validation
+  stability_validation:
+    min_containment_ratio: 0.80    # 最小包含比例
+    min_touch_count: 2             # 最小触及次数
+    min_r_squared: 0.3             # 最小拟合度
+    
+  # Invalidation Signal Detection
+  invalidation_detection:
+    fake_breakout:
+      volume_multiplier: 1.2       # 假突破成交量倍数阈值
+      return_confirmation: 1       # 回归确认K线数
+      
+    volatility_decay:
+      enable_monitoring: true      # 启用波动衰减监控
+      min_decay_slope: -0.001     # 最小衰减斜率
+      
+    volume_divergence:
+      max_increase_rate: 0.10     # 最大成交量增长率
+
+# Pattern Outcome Tracking (Stage 3)
+outcome_tracking:
+  # Monitoring Configuration
+  monitoring:
+    enable_auto_start: true        # 自动开始监控新检测的形态
+    max_concurrent: 100            # 最大并发监控数量
+    
+  # Timeout Configuration
+  timeout_rules:
+    base_multiplier: 8             # 基础超时倍数（相对形态持续时间）
+    max_timeout_hours: 168         # 最大超时时间（7天）
+    
+  # Outcome Classification Thresholds
+  classification_thresholds:
+    target_achievement: 1.0        # 目标达成比例
+    standard_continuation: 1.5     # 标准延续风险距离倍数
+    risk_distance_base: 1.0        # 基础风险距离
+    stagnation_range: 0.5          # 停滞区间（相对风险距离）
+    
+  # Analysis Configuration
+  analysis:
+    enable_statistical_analysis: true
+    export_detailed_results: true
+    generate_performance_reports: true
 
 # Technical Indicators
-indicators:
-  moving_averages: [5, 10, 20, 50]
-  rsi_period: 14
-  macd_fast: 12
-  macd_slow: 26
-  macd_signal: 9
-  bollinger_period: 20
-  bollinger_std: 2
+technical_indicators:
+  atr_period: 14
+  volume_ma_period: 20
+  volatility_window: 20
+  trend_strength_window: 10
 
-# 统一的评分系统权重配置
-scoring_weights:
-  flag_pattern:
-    flag:  # 矩形旗评分权重
-      slope_direction: 0.25             # 斜率方向权重（旗形应与旗杆方向相反）
-      parallel_quality: 0.25            # 平行度质量权重（上下边界线平行程度）
-      volume_pattern: 0.25              # 成交量模式权重（成交量应逐渐衰减）
-      channel_containment: 0.15         # 通道包含性权重（价格在通道内的程度）
-      time_proportion: 0.10             # 时间比例权重（形态持续时间合理性）
-    pennant:  # 三角旗评分权重
-      convergence_quality: 0.30         # 收敛质量权重（三角形收敛程度）
-      symmetry: 0.25                    # 对称性权重（上下边界对称程度）
-      volume_pattern: 0.25              # 成交量模式权重
-      size_proportion: 0.10             # 尺寸比例权重（相对旗杆的大小）
-      apex_validity: 0.10               # 顶点有效性权重（交点位置合理性）
-
-# Output Settings
+# Output Configuration
 output:
   base_path: "output"
   data_path: "output/data"
   charts_path: "output/charts"
   reports_path: "output/reports"
+  
+  # Chart Generation
   charts:
     format: "png"
-    width: 1200
-    height: 800
+    width: 1400
+    height: 900
     dpi: 300
-  dataset:
+    enable_outcome_charts: true    # 生成结局分析图表
+    
+  # Data Export
+  data_export:
     format: "json"
     backup_enabled: true
+    export_baselines: true         # 导出基线数据
+    export_outcomes: true          # 导出结局数据
+    
+  # Database Configuration
+  database:
+    enable_sqlite: true
+    db_path: "output/data/patterns.db"
+    enable_baseline_storage: true  # 存储基线数据
+    enable_outcome_storage: true   # 存储结局数据
 
-# Logging
+# Logging Configuration
 logging:
   level: "INFO"
   file: "logs/pattern_scout.log"
-  max_size: "10MB"
-  backup_count: 5
+  max_size: "20MB"
+  backup_count: 10
+  
+  # Component-specific logging levels
+  component_levels:
+    dynamic_baseline: "DEBUG"
+    regime_detector: "INFO"
+    flagpole_detector: "INFO"
+    flag_detector: "INFO"
+    outcome_tracker: "INFO"
+
+# Performance Configuration
+performance:
+  enable_caching: true
+  cache_size_limit: 1000           # 缓存条目数限制
+  enable_parallel_processing: false # 并行处理（实验性）
+  max_workers: 4                   # 最大工作线程数
+
+# Advanced Features
+advanced_features:
+  enable_machine_learning: false   # 机器学习增强（预留）
+  enable_real_time_monitoring: false # 实时监控（预留）
+  enable_alert_system: false       # 告警系统（预留）
+  
+# Validation and Quality Control
+validation:
+  enable_data_validation: true     # 启用数据验证
+  min_data_points: 100            # 最少数据点数
+  enable_sanity_checks: true      # 启用合理性检查
+  
+  # Quality Filters
+  quality_filters:
+    min_confidence_score: 0.6     # 最小置信度
+    min_pattern_quality: "medium" # 最小形态质量
+    enable_invalidation_filter: true # 启用失效过滤器
