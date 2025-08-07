@@ -5,14 +5,13 @@
 import unittest
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from src.patterns.detectors.dynamic_flag_detector import DynamicFlagDetector
 from src.patterns.base.market_regime_detector import DualRegimeBaselineManager
 from src.data.models.base_models import (
     MarketRegime, Flagpole, PatternRecord, FlagSubType, 
-    TrendLine, InvalidationSignal
+    TrendLine
 )
 
 

@@ -19,6 +19,7 @@ class CSVDataConnector(BaseDataConnector):
         """
         self.data_directory = Path(data_directory)
         self.connected = False
+        self._data_range_cache = {}  # 缓存数据时间范围
         
     def connect(self) -> bool:
         """建立连接（检查目录是否存在）"""
@@ -36,14 +37,14 @@ class CSVDataConnector(BaseDataConnector):
             logger.error(f"Failed to connect to CSV data source: {e}")
             return False
     
-    def get_data(self, symbol: str, start_date: datetime, end_date: datetime) -> pd.DataFrame:
+    def get_data(self, symbol: str, start_date: datetime = None, end_date: datetime = None) -> pd.DataFrame:
         """
         从CSV文件获取价格数据
         
         Args:
             symbol: 品种代码
-            start_date: 开始日期
-            end_date: 结束日期
+            start_date: 开始日期（可选，默认使用数据的实际开始时间）
+            end_date: 结束日期（可选，默认使用数据的实际结束时间）
             
         Returns:
             包含OHLCV数据的DataFrame
@@ -97,14 +98,40 @@ class CSVDataConnector(BaseDataConnector):
             else:
                 raise ValueError("No timestamp column found")
             
+            # 排序以确保时间顺序
+            df = df.sort_values('timestamp').reset_index(drop=True)
+            
+            # 获取数据的实际时间范围
+            actual_start = df['timestamp'].min()
+            actual_end = df['timestamp'].max()
+            
+            # 如果没有指定时间范围，使用数据的实际范围
+            if start_date is None:
+                start_date = actual_start
+                logger.info(f"Using actual data start date: {start_date}")
+            
+            if end_date is None:
+                end_date = actual_end
+                logger.info(f"Using actual data end date: {end_date}")
+            
+            # 验证时间范围是否合理
+            if start_date > actual_end or end_date < actual_start:
+                logger.warning(f"Requested date range ({start_date} to {end_date}) does not overlap with data range ({actual_start} to {actual_end})")
+                logger.warning("Using full data range instead")
+                start_date = actual_start
+                end_date = actual_end
+            
             # 按时间范围过滤
             mask = (df['timestamp'] >= start_date) & (df['timestamp'] <= end_date)
             df = df.loc[mask].copy()
             
-            # 排序
-            df = df.sort_values('timestamp').reset_index(drop=True)
+            # 检查过滤后的数据量
+            if len(df) == 0:
+                raise ValueError(f"No data found for {symbol} in date range {start_date} to {end_date}")
             
             logger.info(f"Loaded {len(df)} records for {symbol} from {start_date} to {end_date}")
+            logger.info(f"Data covers period: {df['timestamp'].min()} to {df['timestamp'].max()}")
+            
             return df
             
         except Exception as e:
@@ -132,6 +159,68 @@ class CSVDataConnector(BaseDataConnector):
         except Exception as e:
             logger.error(f"Failed to get symbols list: {e}")
             return []
+    
+    def get_data_range(self, symbol: str) -> tuple:
+        """
+        获取指定品种的数据时间范围
+        
+        Args:
+            symbol: 品种代码
+            
+        Returns:
+            (start_date, end_date) 元组
+        """
+        if symbol in self._data_range_cache:
+            return self._data_range_cache[symbol]
+        
+        try:
+            # 查找CSV文件
+            csv_files = list(self.data_directory.glob(f"*{symbol}*.csv"))
+            if not csv_files:
+                csv_file = self.data_directory / f"{symbol}.csv"
+                if not csv_file.exists():
+                    raise FileNotFoundError(f"No CSV file found for symbol: {symbol}")
+                csv_files = [csv_file]
+            
+            csv_file = max(csv_files, key=os.path.getmtime)
+            
+            # 读取前几行来确定时间戳列
+            df_sample = pd.read_csv(csv_file, nrows=5)
+            
+            # 找到时间戳列名（优先匹配原始列名）
+            timestamp_col = None
+            original_columns = df_sample.columns.tolist()
+            
+            # 按优先级检查可能的时间列名
+            possible_timestamp_cols = ['Datetime', 'Date', 'Timestamp', 'Time', 
+                                     'datetime', 'date', 'timestamp', 'time']
+            
+            for col in possible_timestamp_cols:
+                if col in original_columns:
+                    timestamp_col = col
+                    break
+            
+            if timestamp_col is None:
+                raise ValueError(f"No timestamp column found. Available columns: {original_columns}")
+            
+            logger.info(f"Using timestamp column: {timestamp_col}")
+            
+            # 读取完整时间戳列
+            df_time = pd.read_csv(csv_file, usecols=[timestamp_col])
+            df_time[timestamp_col] = pd.to_datetime(df_time[timestamp_col])
+            
+            start_date = df_time[timestamp_col].min()
+            end_date = df_time[timestamp_col].max()
+            
+            # 缓存结果
+            self._data_range_cache[symbol] = (start_date, end_date)
+            
+            logger.info(f"Data range for {symbol}: {start_date} to {end_date}")
+            return start_date, end_date
+            
+        except Exception as e:
+            logger.error(f"Failed to get data range for {symbol}: {e}")
+            return None, None
     
     def validate_data(self, data: pd.DataFrame) -> bool:
         """验证数据有效性"""

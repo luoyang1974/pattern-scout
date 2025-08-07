@@ -1,6 +1,6 @@
 """
-动态旗面检测器（阶段2）
-实现基于动态基线的旗面识别算法和失效前置判别
+旗面检测器（阶段2）
+实现基于基线的旗面识别算法和失效前置判别
 """
 import pandas as pd
 import numpy as np
@@ -12,22 +12,22 @@ from src.data.models.base_models import (
     Flagpole, TrendLine, PatternRecord, FlagSubType, PatternType,
     MarketRegime, IndicatorType, InvalidationSignal
 )
-from src.patterns.base.market_regime_detector import DualRegimeBaselineManager
+from src.patterns.base.market_regime_detector import BaselineManager
 from src.patterns.indicators.technical_indicators import TechnicalIndicators
 
 
-class DynamicFlagDetector:
+class FlagPatternDetector:
     """
-    动态旗面检测器
-    实现基于动态基线的旗面识别和失效前置判别
+    旗面检测器
+    实现基于基线的旗面识别和失效前置判别
     """
     
-    def __init__(self, baseline_manager: DualRegimeBaselineManager):
+    def __init__(self, baseline_manager: BaselineManager):
         """
-        初始化动态旗面检测器
+        初始化旗面检测器
         
         Args:
-            baseline_manager: 双状态基线管理器
+            baseline_manager: 基线管理器
         """
         self.baseline_manager = baseline_manager
         self.tech_indicators = TechnicalIndicators()
@@ -576,7 +576,7 @@ class DynamicFlagDetector:
                                 trigger_time=row['timestamp'],
                                 trigger_price=row['close'],
                                 severity=0.8,
-                                description=f"Fake breakout with insufficient volume",
+                                description="Fake breakout with insufficient volume",
                                 is_critical=True
                             )
                             signals.append(signal)
@@ -647,7 +647,7 @@ class DynamicFlagDetector:
                             trigger_time=flag_data.iloc[-1]['timestamp'],
                             trigger_price=flag_data.iloc[-1]['close'],
                             severity=0.5,
-                            description=f"Volume increasing instead of contracting",
+                            description="Volume increasing instead of contracting",
                             is_critical=False
                         )
                         signals.append(signal)

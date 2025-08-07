@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from loguru import logger
 
 from src.data.models.base_models import (
-    PatternRecord, PatternOutcome, PatternOutcomeAnalysis, MarketSnapshot
+    PatternRecord, PatternOutcome, PatternOutcomeAnalysis
 )
 
 

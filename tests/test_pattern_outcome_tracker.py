@@ -6,7 +6,6 @@ import unittest
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
-from unittest.mock import Mock, patch
 
 from src.analysis.pattern_outcome_tracker import PatternOutcomeTracker
 from src.data.models.base_models import (

@@ -2,7 +2,7 @@
 简单参数适配器
 替代strategies目录，直接从配置文件读取时间周期相关参数
 """
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from loguru import logger
 
 

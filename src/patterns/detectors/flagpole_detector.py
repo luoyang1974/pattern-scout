@@ -1,32 +1,32 @@
 """
-动态旗杆检测器（阶段1）
-基于动态基线的"短暂而暴力"旗杆识别算法
+旗杆检测器（阶段1）
+基于基线的"短暂而暴力"旗杆识别算法
 """
 import pandas as pd
 import numpy as np
 from typing import List, Optional, Dict, Any, Tuple
-from datetime import datetime, timedelta
+from datetime import datetime
 from loguru import logger
 
 from src.data.models.base_models import (
-    Flagpole, MarketRegime, IndicatorType, TrendLine
+    Flagpole, MarketRegime, IndicatorType
 )
-from src.patterns.base.market_regime_detector import DualRegimeBaselineManager
+from src.patterns.base.market_regime_detector import BaselineManager
 from src.patterns.indicators.technical_indicators import TechnicalIndicators
 
 
-class DynamicFlagpoleDetector:
+class FlagpoleDetector:
     """
-    动态旗杆检测器
-    实现基于动态基线的旗杆识别算法
+    旗杆检测器
+    实现基于基线的旗杆识别算法
     """
     
-    def __init__(self, baseline_manager: DualRegimeBaselineManager):
+    def __init__(self, baseline_manager: BaselineManager):
         """
-        初始化动态旗杆检测器
+        初始化旗杆检测器
         
         Args:
-            baseline_manager: 双状态基线管理器
+            baseline_manager: 基线管理器
         """
         self.baseline_manager = baseline_manager
         self.tech_indicators = TechnicalIndicators()
@@ -121,10 +121,10 @@ class DynamicFlagpoleDetector:
         return thresholds
     
     def _get_fallback_thresholds(self) -> Dict[str, float]:
-        """获取备用阈值"""
+        """获取备用阈值（调整为更适合实际数据的值）"""
         return {
-            'slope_score_p90': 2.0,
-            'volume_burst_p85': 2.5,
+            'slope_score_p90': 0.5,  # 大幅降低斜率阈值
+            'volume_burst_p85': 1.5,  # 适当降低量能阈值  
             'retrace_depth_p75': 0.3,
         }
     
@@ -231,18 +231,18 @@ class DynamicFlagpoleDetector:
             logger.debug(f"Volume burst {volume_burst:.2f} below threshold {volume_threshold:.2f}")
             return None
         
-        # 3. 高动量K线占比验证（固定70%阈值）
+        # 3. 高动量K线占比验证（降低阈值到30%）
         impulse_bar_ratio = self._calculate_impulse_bar_ratio(candidate_data)
         
-        if impulse_bar_ratio < 0.7:
-            logger.debug(f"Impulse bar ratio {impulse_bar_ratio:.2%} below 70%")
+        if impulse_bar_ratio < 0.3:
+            logger.debug(f"Impulse bar ratio {impulse_bar_ratio:.2%} below 30%")
             return None
         
-        # 4. 低内部回撤验证（固定20%阈值）
+        # 4. 低内部回撤验证（放宽到30%阈值）
         retracement_ratio = self._calculate_retracement_ratio(candidate_data)
         
-        if retracement_ratio > 0.2:
-            logger.debug(f"Retracement ratio {retracement_ratio:.2%} above 20%")
+        if retracement_ratio > 0.3:
+            logger.debug(f"Retracement ratio {retracement_ratio:.2%} above 30%")
             return None
         
         # 5. 缺口处理

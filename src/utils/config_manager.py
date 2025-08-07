@@ -382,7 +382,7 @@ class ConfigManager:
             for cat, info in categories.items():
                 logger.info(f"  {cat}: {info.get('timeframes', [])}")
         else:
-            logger.info("Multi-timeframe mode: DISABLED (using legacy config)")
+            logger.info("Multi-timeframe mode: DISABLED")
         
         # 数据源
         data_sources = self.config.get('data_sources', {})

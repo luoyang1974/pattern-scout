@@ -5,8 +5,7 @@
 import unittest
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from src.patterns.detectors.dynamic_flagpole_detector import DynamicFlagpoleDetector
 from src.patterns.base.market_regime_detector import DualRegimeBaselineManager

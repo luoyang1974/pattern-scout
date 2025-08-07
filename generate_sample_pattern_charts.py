@@ -7,11 +7,10 @@
 import sys
 import os
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime, timedelta
-from typing import List, Dict, Optional, Tuple
+from typing import Dict, Optional
 import json
 from pathlib import Path
 
@@ -113,7 +112,7 @@ class SamplePatternChartGenerator:
             'summary_file': summary_file
         }
         
-        print(f"\\n✅ 示例图表生成完成!")
+        print("\\n✅ 示例图表生成完成!")
         print(f"   可用形态总数: {result['total_patterns_available']}")
         print(f"   生成示例图表: {result['charts_generated']} 个")
         print(f"   高质量: {result['high_quality_charts']} 个")

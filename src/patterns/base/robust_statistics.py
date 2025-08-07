@@ -6,7 +6,6 @@
 import numpy as np
 import pandas as pd
 from typing import Tuple, Optional, List, Dict
-from scipy import stats
 from loguru import logger
 
 

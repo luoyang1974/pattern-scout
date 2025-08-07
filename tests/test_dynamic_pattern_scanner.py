@@ -5,11 +5,8 @@
 import unittest
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
-from unittest.mock import Mock, patch, MagicMock
 
 from src.patterns.detectors.dynamic_pattern_scanner import DynamicPatternScanner
-from src.data.models.base_models import MarketRegime, PatternType, FlagSubType
 
 
 class TestDynamicPatternScanner(unittest.TestCase):

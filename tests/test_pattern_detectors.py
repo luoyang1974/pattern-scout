@@ -6,8 +6,8 @@ import unittest
 import pandas as pd
 import numpy as np
 
-from src.patterns.detectors import FlagDetector, PatternScanner
-from src.data.models.base_models import PatternType, FlagSubType
+from src.patterns.detectors import FlagDetector
+from src.data.models.base_models import PatternType
 
 
 class TestFlagDetector(unittest.TestCase):
@@ -253,91 +253,6 @@ class TestPennantDetector(unittest.TestCase):
         self.assertEqual(len(patterns), 0)
 
 
-class TestPatternScanner(unittest.TestCase):
-    """测试统一的形态扫描器"""
-    
-    def setUp(self):
-        """设置测试环境"""
-        self.scanner = PatternScanner()
-        
-        # 创建包含多种形态的测试数据
-        dates = pd.date_range(start='2024-01-01', periods=100, freq='15min')
-        
-        # 简单的价格数据
-        np.random.seed(42)
-        base_prices = 100 + np.cumsum(np.random.normal(0, 0.1, 100))
-        
-        opens = base_prices + np.random.uniform(-0.5, 0.5, 100)
-        highs = base_prices + np.random.uniform(0.2, 1.0, 100)
-        lows = base_prices - np.random.uniform(0.2, 1.0, 100)
-        closes = base_prices
-        volumes = np.random.uniform(1000000, 3000000, 100)
-        
-        # 确保OHLC逻辑正确
-        for i in range(100):
-            highs[i] = max(opens[i], closes[i], highs[i])
-            lows[i] = min(opens[i], closes[i], lows[i])
-        
-        self.test_data = pd.DataFrame({
-            'timestamp': dates,
-            'symbol': ['SCANNER_TEST'] * 100,
-            'open': opens,
-            'high': highs,
-            'low': lows,
-            'close': closes,
-            'volume': volumes
-        })
-    
-    def test_scan_all_patterns(self):
-        """测试扫描所有形态"""
-        results = self.scanner.scan(self.test_data, timeframe='15m')
-        
-        self.assertIsInstance(results, dict)
-        
-        # 应该包含所有支持的形态类型
-        expected_patterns = [PatternType.FLAG, PatternType.PENNANT]
-        for pattern_type in expected_patterns:
-            self.assertIn(pattern_type, results)
-            self.assertIsInstance(results[pattern_type], list)
-    
-    def test_scan_specific_pattern(self):
-        """测试扫描特定形态"""
-        flag_patterns = self.scanner.scan_single_pattern(
-            self.test_data, PatternType.FLAG, '15m'
-        )
-        
-        self.assertIsInstance(flag_patterns, list)
-        
-        # 验证所有检测到的形态都是正确类型
-        for pattern in flag_patterns:
-            self.assertEqual(pattern.pattern_type, PatternType.FLAG)
-    
-    def test_multi_timeframe_scan(self):
-        """测试多周期扫描"""
-        timeframes = ['15m', '1h']
-        results = self.scanner.scan_multi_timeframe(
-            self.test_data, timeframes, [PatternType.FLAG]
-        )
-        
-        self.assertIsInstance(results, dict)
-        self.assertIn(PatternType.FLAG, results)
-        
-        flag_results = results[PatternType.FLAG]
-        for tf in timeframes:
-            self.assertIn(tf, flag_results)
-            self.assertIsInstance(flag_results[tf], list)
-    
-    def test_get_detector(self):
-        """测试获取检测器实例"""
-        flag_detector = self.scanner.get_detector(PatternType.FLAG)
-        pennant_detector = self.scanner.get_detector(PatternType.PENNANT)
-        
-        self.assertIsInstance(flag_detector, FlagDetector)
-        self.assertIsInstance(pennant_detector, PennantDetector)
-        
-        # 测试未知形态类型
-        unknown_detector = self.scanner.get_detector('unknown_pattern')
-        self.assertIsNone(unknown_detector)
 
 
 class TestTimeframeAdaptation(unittest.TestCase):
@@ -380,25 +295,12 @@ class TestTimeframeAdaptation(unittest.TestCase):
             'volume': np.random.uniform(5000000, 20000000, 60)
         })
         
-        detector = PennantDetector()
+        detector = FlagDetector()
         patterns = detector.detect(test_data, '1d')
         
         self.assertIsInstance(patterns, list)
 
 
-class TestBackwardCompatibility(unittest.TestCase):
-    """测试向后兼容性"""
-    
-    def test_pennant_pattern_type(self):
-        """测试 Pennant 形态类型"""
-        # 确保 PENNANT 形态类型正确
-        self.assertEqual(PatternType.PENNANT, "pennant")
-        
-        # 确保 PennantDetector 正常工作
-        from src.patterns.detectors import PennantDetector
-        detector = PennantDetector()
-        self.assertIsInstance(detector, PennantDetector)
-        self.assertEqual(detector.get_pattern_type(), PatternType.PENNANT)
 
 
 if __name__ == '__main__':

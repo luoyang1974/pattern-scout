@@ -218,7 +218,7 @@ def generate_outcome_analysis_report(outcomes: List[OutcomeAnalysis]):
         outcome_type = outcome.outcome_type.value
         outcome_counts[outcome_type] = outcome_counts.get(outcome_type, 0) + 1
     
-    print(f"\n=== 形态结局分析汇总 ===")
+    print("\n=== 形态结局分析汇总 ===")
     print(f"总分析形态数量: {total_patterns}")
     
     print("\n六分类结局统计:")

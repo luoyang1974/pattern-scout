@@ -6,7 +6,6 @@
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
-from datetime import datetime
 import os
 
 # 设置中文字体
@@ -35,36 +34,36 @@ def generate_pattern_report():
     
     # 按类型统计
     type_counts = df['pattern_type'].value_counts()
-    print(f"\n按形态类型统计:")
+    print("\n按形态类型统计:")
     for pattern_type, count in type_counts.items():
         print(f"  {pattern_type}: {count} 个")
     
     # 按质量统计
     quality_counts = df['pattern_quality'].value_counts()
-    print(f"\n按质量等级统计:")
+    print("\n按质量等级统计:")
     for quality, count in quality_counts.items():
         print(f"  {quality}: {count} 个")
     
     # 置信度统计
-    print(f"\n置信度统计:")
+    print("\n置信度统计:")
     print(f"  平均置信度: {df['confidence_score'].mean():.3f}")
     print(f"  最高置信度: {df['confidence_score'].max():.3f}")
     print(f"  最低置信度: {df['confidence_score'].min():.3f}")
     
     # 旗杆方向统计
     direction_counts = df['flagpole_direction'].value_counts()
-    print(f"\n旗杆方向统计:")
+    print("\n旗杆方向统计:")
     for direction, count in direction_counts.items():
         print(f"  {direction}: {count} 个")
     
     # 旗杆高度统计
-    print(f"\n旗杆高度统计 (%):")
+    print("\n旗杆高度统计 (%):")
     print(f"  平均高度: {df['flagpole_height_percent'].mean():.2f}%")
     print(f"  最大高度: {df['flagpole_height_percent'].max():.2f}%")
     print(f"  最小高度: {df['flagpole_height_percent'].min():.2f}%")
     
     # 形态持续时间统计
-    print(f"\n形态持续时间统计 (K线数):")
+    print("\n形态持续时间统计 (K线数):")
     print(f"  平均持续时间: {df['pattern_duration'].mean():.1f} K线")
     print(f"  最长持续时间: {df['pattern_duration'].max()} K线")
     print(f"  最短持续时间: {df['pattern_duration'].min()} K线")

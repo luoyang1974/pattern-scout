@@ -54,16 +54,13 @@ uv run mypy .
 
 ### 命令行使用
 ```bash
-# 动态基线模式扫描（推荐）
+# 基线模式扫描（推荐）
 uv run python main.py --symbols RBL8
 
-# 启用结局追踪的完整动态扫描
+# 启用结局追踪的完整扫描
 uv run python main.py --symbols AAPL MSFT --start-date 2023-01-01
 
-# 传统模式（向后兼容）
-uv run python main.py --symbols RBL8 --legacy-mode
-
-# 禁用结局追踪的动态扫描
+# 禁用结局追踪的扫描
 uv run python main.py --symbols RBL8 --disable-outcome-tracking
 
 # 指定配置文件
@@ -78,56 +75,53 @@ uv run python main.py --data-source mongodb
 # 生成基线汇总和结局图表
 uv run python main.py --symbols RBL8 --no-charts  # 跳过个别图表，只生成汇总
 
-# 向后兼容的形态类型指定（自动转换为动态基线系统）
+# 形态类型指定
 uv run python main.py --pattern-types flag pennant --min-confidence 0.4
 ```
 
 ## 核心架构
 
-### 动态基线系统架构（最新重大更新）
-PatternScout 3.0 引入了革命性的动态基线系统，完全重构了形态识别流程：
+### 基线系统架构
+PatternScout 采用先进的基线系统，完全重构了形态识别流程：
 
-#### 六阶段动态识别与数据归档流程
-- **阶段0 - 动态基线系统**: 500K线滚动统计，三层鲁棒统计保护，智能市场状态检测
-- **阶段1 - 动态旗杆检测**: 基于动态阈值的旗杆识别，斜率评分和成交量爆发验证
-- **阶段2 - 动态旗面检测**: 百分位通道构建，失效信号预过滤，几何形态分析
+#### 六阶段识别与数据归档流程
+- **阶段0 - 基线系统**: 500K线滚动统计，三层鲁棒统计保护，智能市场状态检测
+- **阶段1 - 旗杆检测**: 基于阈值的旗杆识别，斜率评分和成交量爆发验证
+- **阶段2 - 旗面检测**: 百分位通道构建，失效信号预过滤，几何形态分析
 - **阶段3 - 形态结局分析**: 六分类结局监控系统，纯粹的结局分类逻辑
 - **阶段4 - 形态数据输出**: 结构化数据记录，形态DNA特征存储，环境快照归档
 - **阶段5 - 形态可视化及图表输出**: 标准化PNG格式K线图，形态"可视化指纹"生成
 
 #### 核心技术特性
-- **三层鲁棒统计保护**: MAD过滤 + Winsorize + 动态阈值调整，防止异常值污染
-- **智能市场状态检测**: 双状态基线管理，防震荡机制，自适应波动率分析
+- **三层鲁棒统计保护**: MAD过滤 + Winsorize + 阈值调整，防止异常值污染
+- **智能市场状态检测**: 基线管理，防震荡机制，自适应波动率分析
 - **失效信号识别**: 假突破检测、成交量背离分析、形态变形监控
 - **六分类结局系统**: 强势延续、标准延续、突破停滞、假突破反转、内部瘫解、反向运行
 
-#### 动态基线API接口
+#### 基线API接口
 ```python
-# 现代动态基线扫描器
-class DynamicPatternScanner:
+# 现代基线扫描器
+class PatternScanner:
     def scan(df, enable_outcome_analysis=True, enable_data_export=True, enable_chart_generation=True) -> Dict[str, Any]:
-        # 完整的六阶段动态识别与数据归档流程
-        # 阶段0: 更新市场状态和动态基线
-        # 阶段1: 动态旗杆检测
-        # 阶段2: 动态旗面检测和失效信号过滤
+        # 完整的六阶段识别与数据归档流程
+        # 阶段0: 更新市场状态和基线
+        # 阶段1: 旗杆检测
+        # 阶段2: 旗面检测和失效信号过滤
         # 阶段3: 形态结局分析（可选）
         # 阶段4: 形态数据输出（可选）
         # 阶段5: 形态可视化及图表输出（可选）
 
-# 统一主程序入口（向后兼容）
-class PatternScout(DynamicPatternScout):
+# 主程序入口
+class PatternScout:
     def scan_patterns(symbols, start_date, end_date) -> List[PatternRecord]:
-        # 自动使用动态基线系统，向后兼容API
+        # 使用基线系统
     
-    def run_dynamic(**kwargs) -> dict:
-        # 完整动态模式，包含增强功能
-    
-    def run_legacy(**kwargs) -> dict:
-        # 传统模式，用于向后兼容
+    def run(**kwargs) -> dict:
+        # 完整模式，包含所有功能
 ```
 
-### 统一形态检测架构（已更新）
-PatternScout 3.0 在动态基线系统基础上保持统一的形态检测架构：
+### 统一形态检测架构
+PatternScout 在基线系统基础上保持统一的形态检测架构：
 
 - **统一形态类型**: `PatternType.FLAG_PATTERN` 包含两个子类型：
   - `FlagSubType.FLAG`: 矩形旗（平行通道）

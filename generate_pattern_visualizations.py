@@ -7,11 +7,10 @@
 import sys
 import os
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime, timedelta
-from typing import List, Dict, Optional, Tuple
+from typing import List, Optional
 
 # 设置控制台编码（Windows）
 if sys.platform.startswith('win'):
@@ -48,7 +47,6 @@ class PatternVisualizer:
             return []
             
         # 获取价格数据
-        from datetime import datetime
         start_date = datetime(2019, 1, 1)
         end_date = datetime.now()
         price_data = self.data_connector.get_data('RBL8', start_date, end_date)
@@ -435,7 +433,7 @@ def main():
     # 生成综合仪表板
     dashboard_path = generate_pattern_summary_dashboard()
     
-    print(f"\n✅ 形态可视化生成完成！")
+    print("\n✅ 形态可视化生成完成！")
     print(f"   • 生成个别形态图表: {len(top_charts)} 个")
     if dashboard_path:
         print(f"   • 综合仪表板: {dashboard_path}")

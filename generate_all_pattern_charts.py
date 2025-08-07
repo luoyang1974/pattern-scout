@@ -7,11 +7,10 @@
 import sys
 import os
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime, timedelta
-from typing import List, Dict, Optional, Tuple
+from typing import Dict, Optional
 import json
 from pathlib import Path
 
@@ -105,7 +104,7 @@ class PatternChartGenerator:
                     total_generated += 1
                     if total_generated % 50 == 0:  # 中等质量数量多，每50个输出一次
                         print(f"已生成 {total_generated} 个图表...")
-            except Exception as e:
+            except Exception:
                 failed_count += 1
         
         # 生成低质量形态图表
@@ -118,7 +117,7 @@ class PatternChartGenerator:
                 if chart_info:
                     self.generated_charts.append(chart_info)
                     total_generated += 1
-            except Exception as e:
+            except Exception:
                 failed_count += 1
         
         # 生成映射文件
@@ -133,7 +132,7 @@ class PatternChartGenerator:
             'output_directory': str(output_dir)
         }
         
-        print(f"\\n✅ 图表生成完成!")
+        print("\\n✅ 图表生成完成!")
         print(f"   总形态数: {result['total_patterns']}")
         print(f"   成功生成: {result['charts_generated']} 个")
         print(f"   失败数量: {result['failed_count']} 个") 
@@ -399,7 +398,7 @@ class PatternChartGenerator:
         csv_file = output_dir / 'pattern_chart_mapping.csv'
         pd.DataFrame(csv_data).to_csv(csv_file, index=False, encoding='utf-8-sig')
         
-        print(f"映射文件已保存:")
+        print("映射文件已保存:")
         print(f"  JSON格式: {mapping_file}")
         print(f"  CSV格式: {csv_file}")
         
@@ -414,9 +413,9 @@ def generate_summary_report(result: Dict):
         'generated_at': datetime.now().isoformat(),
         'execution_summary': result,
         'directory_structure': {
-            'high_quality': f"output/pattern_charts/high_quality/ - 高质量形态图表",
-            'medium_quality': f"output/pattern_charts/medium_quality/ - 中等质量形态图表", 
-            'low_quality': f"output/pattern_charts/low_quality/ - 低质量形态图表"
+            'high_quality': "output/pattern_charts/high_quality/ - 高质量形态图表",
+            'medium_quality': "output/pattern_charts/medium_quality/ - 中等质量形态图表", 
+            'low_quality': "output/pattern_charts/low_quality/ - 低质量形态图表"
         },
         'file_naming_convention': {
             'format': '{PATTERN_TYPE}_{DIRECTION}_{TIMESTAMP}_conf{CONFIDENCE}.png',

@@ -6,7 +6,6 @@
 """
 import sys
 import os
-import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 
@@ -22,8 +21,7 @@ if sys.platform.startswith('win'):
 # 添加src到Python路径
 sys.path.append(str(__file__).replace('regenerate_baseline_chart.py', ''))
 
-from src.visualization.chart_generator import DynamicChartGenerator
-from src.data.models.base_models import MarketRegime
+from src.visualization.pattern_chart_generator import PatternChartGenerator
 from loguru import logger
 
 # 配置loguru日志格式
@@ -91,7 +89,7 @@ def generate_baseline_summary():
             }
         }
         
-        generator = DynamicChartGenerator(config)
+        generator = PatternChartGenerator(config)
         logger.info("图表生成器初始化成功")
         
         # 创建模拟数据

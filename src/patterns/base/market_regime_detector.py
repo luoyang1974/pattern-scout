@@ -26,8 +26,8 @@ class RegimeTransition:
     trigger_value: float
     
 
-class SmartRegimeDetector:
-    """智能市场状态检测器（防震荡版）"""
+class RegimeDetector:
+    """市场状态检测器（防震荡版）"""
     
     def __init__(self, 
                  atr_period: int = 100,
@@ -93,8 +93,10 @@ class SmartRegimeDetector:
             self.atr_history = self.atr_history[-self.history_window:]
         
         # 需要足够的历史数据进行分析
-        if len(self.atr_history) < 50:
-            logger.debug(f"Insufficient ATR history: {len(self.atr_history)} < 50")
+        min_atr_history = min(50, max(20, len(df) // 5))  # 自适应最小ATR历史要求
+        if len(self.atr_history) < min_atr_history:
+            logger.debug(f"Insufficient ATR history: {len(self.atr_history)} < {min_atr_history}")
+            logger.debug(f"Consider using more data for better regime detection")
             return MarketRegime.UNKNOWN
         
         # 使用稳健化方法计算阈值
@@ -424,15 +426,15 @@ class SmartRegimeDetector:
         self.regime_transitions.clear()
         self.regime_stability_score = 1.0
         self.last_transition_time = None
-        logger.info("Smart regime detector reset")
+        logger.info("Regime detector reset")
 
 
-class DualRegimeBaselineManager:
-    """双状态基线管理器（增强版）"""
+class BaselineManager:
+    """基线管理器（增强版）"""
     
     def __init__(self, history_window: int = 500):
         """
-        初始化双状态基线管理器
+        初始化基线管理器
         
         Args:
             history_window: 历史数据窗口大小
@@ -551,10 +553,10 @@ class DualRegimeBaselineManager:
                          f"P{percentile} in {regime.value} regime")
             return fallback_value
         
-        # 返回一个合理的默认值
+        # 返回一个合理的默认值（调整为更适合实际数据的阈值）
         default_values = {
-            IndicatorType.SLOPE_SCORE: {90: 2.0, 85: 1.5, 75: 1.0},
-            IndicatorType.VOLUME_BURST: {90: 3.0, 85: 2.5, 75: 2.0},
+            IndicatorType.SLOPE_SCORE: {90: 0.5, 85: 0.3, 75: 0.2},  # 大幅降低斜率阈值
+            IndicatorType.VOLUME_BURST: {90: 2.0, 85: 1.5, 75: 1.2},  # 适当降低量能阈值
             IndicatorType.RETRACE_DEPTH: {75: 0.4, 60: 0.3, 50: 0.25},
             IndicatorType.VOLUME_CONTRACTION: {60: 0.7, 50: 0.8, 40: 0.9},
         }

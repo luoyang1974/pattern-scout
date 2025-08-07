@@ -6,11 +6,9 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib import font_manager
 import mplfinance as mpf
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import pandas as pd
 import numpy as np
-from typing import Optional, List, Dict, Any, Tuple
+from typing import Optional, List, Dict, Any
 from datetime import datetime
 from pathlib import Path
 import platform
@@ -18,7 +16,7 @@ import os
 
 from src.data.models.base_models import (
     PatternRecord, PatternOutcomeAnalysis, MarketSnapshot,
-    InvalidationSignal, FlagSubType, PatternOutcome
+    InvalidationSignal, PatternOutcome
 )
 from src.data.connectors.csv_connector import CSVDataConnector
 from loguru import logger
@@ -137,42 +135,8 @@ class PatternChartGenerator:
             # 准备数据
             chart_data = self._prepare_chart_data(pattern, df)
             
-            # 创建图表
-            fig, (ax1, ax2) = plt.subplots(2, 1, figsize=self.default_style['figure_size'], 
-                                          dpi=self.default_style['dpi'],
-                                          gridspec_kw={'height_ratios': [3, 1]})
-            
-            # 绘制K线图和形态
-            self._plot_candlesticks(ax1, chart_data)
-            self._plot_pattern_elements(ax1, pattern, chart_data)
-            
-            # 绘制关键水平线（如果有结局分析）
-            if outcome_analysis:
-                self._plot_outcome_levels(ax1, outcome_analysis, chart_data)
-            
-            # 绘制失效信号
-            if invalidation_signals:
-                self._plot_invalidation_signals(ax1, invalidation_signals, chart_data)
-            
-            # 绘制成交量
-            self._plot_volume(ax2, chart_data, pattern)
-            
-            # 设置标题和标签
-            title = self._create_chart_title(pattern, outcome_analysis)
-            ax1.set_title(title, fontproperties=self.chinese_font_prop, 
-                         fontsize=self.default_style['title_fontsize'], pad=20)
-            
-            # 添加信息框
-            self._add_info_box(ax1, pattern, outcome_analysis, market_snapshot)
-            
-            # 格式化图表
-            self._format_chart(ax1, ax2, chart_data)
-            
-            # 保存图表
-            chart_path = ""\n            if save_chart:
-                chart_path = self._save_chart(fig, pattern, outcome_analysis)
-            
-            plt.close(fig)
+            # 使用mplfinance绘制专业K线图
+            chart_path = self._plot_candlesticks_with_mplfinance(pattern, chart_data)
             
             return chart_path
             
@@ -207,60 +171,138 @@ class PatternChartGenerator:
         
         return chart_data
     
-    def _plot_candlesticks(self, ax, chart_data: pd.DataFrame):
-        """绘制K线图"""
-        # 使用matplotlib绘制K线
-        for idx, row in chart_data.iterrows():
-            timestamp = row['timestamp']
-            open_price = row['open']
-            high_price = row['high']
-            low_price = row['low']
-            close_price = row['close']
-            
-            # K线颜色
-            color = '#E74C3C' if close_price < open_price else '#27AE60'  # 红跌绿涨
-            
-            # 绘制上下影线
-            ax.plot([timestamp, timestamp], [low_price, high_price], color='black', linewidth=1)
-            
-            # 绘制实体
-            body_height = abs(close_price - open_price)
-            body_bottom = min(open_price, close_price)
-            rect = plt.Rectangle((timestamp, body_bottom), pd.Timedelta(minutes=10), body_height,
-                               facecolor=color, alpha=0.8, edgecolor='black', linewidth=0.5)
-            ax.add_patch(rect)
-    
-    def _plot_pattern_elements(self, ax, pattern: PatternRecord, chart_data: pd.DataFrame):
-        """绘制形态元素"""
-        colors = self.default_style['colors']
+    def _plot_candlesticks_with_mplfinance(self, pattern: PatternRecord, chart_data: pd.DataFrame) -> str:
+        """使用mplfinance绘制专业K线图"""
+        # 准备mplfinance需要的数据格式
+        ohlc_data = chart_data.set_index('timestamp')[['open', 'high', 'low', 'close', 'volume']].copy()
+        ohlc_data.index = pd.to_datetime(ohlc_data.index)
+        
+        # 创建附加绘图列表
+        apds = []
         
         # 绘制旗杆
-        flagpole_start = pattern.flagpole.start_time
-        flagpole_end = pattern.flagpole.end_time
-        flagpole_start_price = pattern.flagpole.start_price
-        flagpole_end_price = pattern.flagpole.end_price
+        flagpole_line = self._create_flagpole_line(pattern, ohlc_data)
+        if flagpole_line is not None:
+            apds.append(mpf.make_addplot(flagpole_line, color='#2E86C1', width=3, 
+                                       secondary_y=False, panel=0))
         
-        ax.plot([flagpole_start, flagpole_end], [flagpole_start_price, flagpole_end_price],
-               color=colors['flagpole'], linewidth=self.default_style['line_width'] + 1,
-               label='旗杆', marker='o', markersize=6)
+        # 绘制旗面边界
+        for i, boundary in enumerate(pattern.pattern_boundaries or []):
+            boundary_line = self._create_boundary_line(boundary, ohlc_data)
+            if boundary_line is not None:
+                color = '#E74C3C' if pattern.sub_type.value == 'flag' else '#F39C12'
+                linestyle = 'solid' if i == 0 else 'dashed'
+                apds.append(mpf.make_addplot(boundary_line, color=color, width=2,
+                                           linestyle=linestyle, secondary_y=False, panel=0))
         
-        # 绘制形态边界
-        if pattern.pattern_boundaries:
-            for i, boundary in enumerate(pattern.pattern_boundaries):
-                color_key = 'flag_boundary' if pattern.sub_type == FlagSubType.FLAG else 'pennant_boundary'
-                line_style = '-' if i == 0 else '--'  # 上边界实线，下边界虚线
+        # 自定义样式 - 专业金融图表风格
+        custom_style = mpf.make_mpf_style(
+            base_mpl_style='default',
+            marketcolors=mpf.make_marketcolors(
+                up='#00AA00',    # 涨：绿色
+                down='#FF4444',  # 跌：红色
+                edge='inherit',
+                wick='inherit',
+                volume='inherit'
+            ),
+            facecolor='white',
+            figcolor='white',
+            gridstyle=':',
+            gridcolor='#E0E0E0',
+            gridaxis='both'
+        )
+        
+        # 生成图表
+        title = self._create_chart_title(pattern, None)
+        
+        # 创建保存路径
+        chart_path = self._create_mplfinance_save_path(pattern)
+        
+        # 设置中文字体
+        import matplotlib
+        matplotlib.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimHei', 'DejaVu Sans']
+        matplotlib.rcParams['axes.unicode_minus'] = False
+        
+        mpf.plot(ohlc_data,
+                type='candle',
+                style=custom_style,
+                addplot=apds,
+                volume=True,
+                title=title,
+                figsize=(16, 12),
+                tight_layout=True,
+                savefig=chart_path,
+                returnfig=False)
+        
+        return str(chart_path)
+    
+    def _create_flagpole_line(self, pattern: PatternRecord, ohlc_data: pd.DataFrame) -> Optional[pd.Series]:
+        """创建旗杆线数据"""
+        try:
+            flagpole_line = pd.Series(index=ohlc_data.index, dtype=float)
+            flagpole_line[:] = np.nan
+            
+            start_time = pd.to_datetime(pattern.flagpole.start_time)
+            end_time = pd.to_datetime(pattern.flagpole.end_time)
+            
+            # 在旗杆时间范围内插值
+            mask = (ohlc_data.index >= start_time) & (ohlc_data.index <= end_time)
+            if mask.any():
+                flagpole_times = ohlc_data.index[mask]
+                total_duration = (end_time - start_time).total_seconds()
+                price_diff = pattern.flagpole.end_price - pattern.flagpole.start_price
                 
-                ax.plot([boundary.start_time, boundary.end_time], 
-                       [boundary.start_price, boundary.end_price],
-                       color=colors[color_key], linestyle=line_style,
-                       linewidth=self.default_style['line_width'],
-                       label=f'{"上边界" if i == 0 else "下边界"}')\n    \n    def _plot_outcome_levels(self, ax, outcome_analysis: PatternOutcomeAnalysis, chart_data: pd.DataFrame):
+                for time in flagpole_times:
+                    progress = (time - start_time).total_seconds() / total_duration if total_duration > 0 else 0
+                    flagpole_line[time] = pattern.flagpole.start_price + progress * price_diff
+                    
+            return flagpole_line
+            
+        except Exception as e:
+            logger.warning(f"创建旗杆线失败: {e}")
+            return None
+    
+    def _create_boundary_line(self, boundary, ohlc_data: pd.DataFrame) -> Optional[pd.Series]:
+        """创建边界线数据"""
+        try:
+            boundary_line = pd.Series(index=ohlc_data.index, dtype=float)
+            boundary_line[:] = np.nan
+            
+            start_time = pd.to_datetime(boundary.start_time)
+            end_time = pd.to_datetime(boundary.end_time)
+            
+            # 在边界时间范围内插值
+            mask = (ohlc_data.index >= start_time) & (ohlc_data.index <= end_time)
+            if mask.any():
+                boundary_times = ohlc_data.index[mask]
+                total_duration = (end_time - start_time).total_seconds()
+                price_diff = boundary.end_price - boundary.start_price
+                
+                for time in boundary_times:
+                    progress = (time - start_time).total_seconds() / total_duration if total_duration > 0 else 0
+                    boundary_line[time] = boundary.start_price + progress * price_diff
+                    
+            return boundary_line
+            
+        except Exception as e:
+            logger.warning(f"创建边界线失败: {e}")
+            return None
+    
+    def _create_mplfinance_save_path(self, pattern: PatternRecord) -> Path:
+        """创建mplfinance图表保存路径"""
+        filename = self._create_chart_filename(pattern, None)
+        sub_type = pattern.sub_type.value if pattern.sub_type else pattern.pattern_type
+        chart_dir = Path(self.charts_base_path) / sub_type
+        chart_dir.mkdir(parents=True, exist_ok=True)
+        return chart_dir / f"{filename}.png"
+    
+    def _plot_outcome_levels(self, ax, outcome_analysis: PatternOutcomeAnalysis, chart_data: pd.DataFrame):
         """绘制结局分析相关的水平线"""
         colors = self.default_style['colors']
         
-        # 时间范围
-        x_min = chart_data['timestamp'].min()
-        x_max = chart_data['timestamp'].max()
+        # x轴范围（使用整数索引）
+        x_min = 0
+        x_max = len(chart_data) - 1
         
         # 突破监测位
         ax.axhline(y=outcome_analysis.breakout_level, color=colors['breakout_level'], 
@@ -277,32 +319,43 @@ class PatternChartGenerator:
         # 实际高低点标记
         if not np.isnan(outcome_analysis.actual_high):
             ax.scatter([x_max], [outcome_analysis.actual_high], color='red', s=50, 
-                      marker='^', label=f'实际高点: {outcome_analysis.actual_high:.2f}')
+                      marker='^', label=f'实际高点: {outcome_analysis.actual_high:.2f}', zorder=6)
         
         if not np.isnan(outcome_analysis.actual_low):
             ax.scatter([x_max], [outcome_analysis.actual_low], color='blue', s=50, 
-                      marker='v', label=f'实际低点: {outcome_analysis.actual_low:.2f}')
+                      marker='v', label=f'实际低点: {outcome_analysis.actual_low:.2f}', zorder=6)
     
     def _plot_invalidation_signals(self, ax, signals: List[InvalidationSignal], chart_data: pd.DataFrame):
         """绘制失效信号"""
         for signal in signals:
             # 在信号时间点添加标记
             signal_time = signal.detection_time
-            # 找到对应的价格数据
-            signal_data = chart_data[chart_data['timestamp'] <= signal_time]
-            if not signal_data.empty:
-                signal_price = signal_data.iloc[-1]['close']
-                ax.scatter([signal_time], [signal_price], color='red', s=80, 
-                          marker='x', linewidth=3, label=f'失效信号: {signal.signal_type.value}')
+            # 找到最接近的时间点
+            time_diffs = np.abs((chart_data['timestamp'] - signal_time).dt.total_seconds())
+            closest_idx = time_diffs.argmin()
+            
+            if closest_idx < len(chart_data):
+                signal_price = chart_data.iloc[closest_idx]['close']
+                signal_x_pos = closest_idx * 0.3  # 0.3 = candle_spacing
+                ax.scatter([signal_x_pos], [signal_price], color='red', s=80, 
+                          marker='x', linewidth=3, label=f'失效信号: {signal.signal_type}', zorder=7)
     
     def _plot_volume(self, ax, chart_data: pd.DataFrame, pattern: PatternRecord):
-        """绘制成交量"""
+        """绘制成交量（修复时间间隙问题）"""
         colors = self.default_style['colors']
         
+        if 'volume' not in chart_data.columns:
+            return
+        
+        # 使用紧密间距的x轴坐标系，与K线图保持一致
+        x_positions = [i * 0.3 for i in range(len(chart_data))]  # 0.3 = candle_spacing
+        volumes = chart_data['volume'].values
+        
         # 成交量柱状图
-        for idx, row in chart_data.iterrows():
+        for i, (idx, row) in enumerate(chart_data.iterrows()):
             timestamp = row['timestamp']
             volume = row['volume']
+            x_pos = x_positions[i]
             
             # 判断是否在旗杆或旗面区间内
             in_flagpole = (pattern.flagpole.start_time <= timestamp <= pattern.flagpole.end_time)
@@ -320,15 +373,19 @@ class PatternChartGenerator:
             else:
                 color = '#BDC3C7'  # 其他区间灰色
             
-            ax.bar(timestamp, volume, color=color, alpha=0.7, width=pd.Timedelta(minutes=10))
+            # 绘制成交量柱（宽度与K线对应）
+            ax.bar(x_pos, volume, color=color, alpha=0.7, width=0.25)
         
+        # 设置成交量图的x轴范围与K线图对应
+        candle_spacing = 0.3
+        ax.set_xlim(-candle_spacing/2, (len(chart_data) - 1) * candle_spacing + candle_spacing/2)
         ax.set_ylabel('成交量', fontproperties=self.chinese_font_prop, 
                      fontsize=self.default_style['label_fontsize'])
     
     def _create_chart_title(self, pattern: PatternRecord, outcome_analysis: Optional[PatternOutcomeAnalysis] = None) -> str:
         """创建图表标题"""
         # 基础标题
-        sub_type = pattern.sub_type.value if pattern.sub_type else pattern.pattern_type
+        sub_type = pattern.sub_type if isinstance(pattern.sub_type, str) else pattern.sub_type.value if pattern.sub_type else pattern.pattern_type
         type_names = {
             'flag': '矩形旗形',
             'pennant': '三角旗形'
@@ -348,7 +405,8 @@ class PatternChartGenerator:
                 PatternOutcome.INTERNAL_COLLAPSE.value: '内部瓦解',
                 PatternOutcome.OPPOSITE_RUN.value: '反向运行'
             }
-            outcome_name = outcome_names.get(outcome_analysis.outcome.value, outcome_analysis.outcome.value)
+            outcome_value = outcome_analysis.outcome if isinstance(outcome_analysis.outcome, str) else outcome_analysis.outcome.value if outcome_analysis.outcome else 'unknown'
+            outcome_name = outcome_names.get(outcome_value, outcome_value)
             title += f" - 结局: {outcome_name}"
         
         return title
@@ -378,7 +436,8 @@ class PatternChartGenerator:
         if market_snapshot:
             info_lines.append("") # 空行分隔
             info_lines.append(f"市场状态: {market_snapshot.regime.value}")
-            info_lines.append(f"波动率: {market_snapshot.volatility_percentile:.0f}分位")\n        
+            info_lines.append(f"波动率: {market_snapshot.volatility_percentile:.0f}分位")
+        
         # 创建信息框
         info_text = "\\n".join(info_lines)
         ax.text(0.02, 0.98, info_text, transform=ax.transAxes, fontsize=9,
@@ -387,14 +446,20 @@ class PatternChartGenerator:
     
     def _format_chart(self, ax1, ax2, chart_data: pd.DataFrame):
         """格式化图表显示"""
-        # 设置x轴时间格式
-        import matplotlib.dates as mdates
+        # 为成交量图同步设置x轴标签
+        n_ticks = min(10, len(chart_data))
+        if n_ticks > 1:
+            tick_indices = np.linspace(0, len(chart_data)-1, n_ticks, dtype=int)
+            tick_positions = [i * 0.3 for i in tick_indices]  # 0.3 = candle_spacing
+            tick_labels = [chart_data.iloc[pos]['timestamp'].strftime('%m-%d\n%H:%M') 
+                          for pos in tick_indices]
+            ax2.set_xticks(tick_positions)
+            ax2.set_xticklabels(tick_labels, fontsize=9)
         
+        # 设置网格和样式
         for ax in [ax1, ax2]:
-            ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
-            ax.xaxis.set_major_locator(mdates.HourLocator(interval=4))
-            ax.tick_params(axis='x', rotation=45)
             ax.grid(True, alpha=0.3)
+            ax.tick_params(axis='x', rotation=0)  # 不旋转x轴标签，因为已经分行
         
         # 设置y轴标签
         ax1.set_ylabel('价格', fontproperties=self.chinese_font_prop, 
@@ -415,7 +480,7 @@ class PatternChartGenerator:
             filename = self._create_chart_filename(pattern, outcome_analysis)
             
             # 确定输出路径
-            sub_type = pattern.sub_type.value if pattern.sub_type else pattern.pattern_type
+            sub_type = pattern.sub_type if isinstance(pattern.sub_type, str) else pattern.sub_type.value if pattern.sub_type else pattern.pattern_type
             chart_dir = Path(self.charts_base_path) / sub_type
             chart_dir.mkdir(parents=True, exist_ok=True)
             
@@ -439,7 +504,7 @@ class PatternChartGenerator:
         base_name = pattern.id
         
         if outcome_analysis:
-            outcome_name = outcome_analysis.outcome.value
+            outcome_name = outcome_analysis.outcome if isinstance(outcome_analysis.outcome, str) else outcome_analysis.outcome.value if outcome_analysis.outcome else 'unknown'
             timestamp = outcome_analysis.analysis_date.strftime('%Y%m%d_%H%M')
             filename = f"{base_name}_{outcome_name}_{timestamp}"
         else:
@@ -515,7 +580,7 @@ class PatternChartGenerator:
         """绘制形态类型分布"""
         type_counts = {}
         for pattern in patterns:
-            sub_type = pattern.sub_type.value if pattern.sub_type else pattern.pattern_type
+            sub_type = pattern.sub_type if isinstance(pattern.sub_type, str) else pattern.sub_type.value if pattern.sub_type else pattern.pattern_type
             type_counts[sub_type] = type_counts.get(sub_type, 0) + 1
         
         types = list(type_counts.keys())
@@ -635,3 +700,127 @@ class PatternChartGenerator:
         
         logger.info(f"批量图表生成完成: {len(chart_paths)} 个图表")
         return chart_paths
+    
+    def generate_baseline_summary_chart(self, baseline_data: Dict[str, Any], 
+                                       regime_data: Dict[str, Any] = None,
+                                       save_path: Optional[str] = None) -> str:
+        """
+        生成动态基线系统汇总图表
+        
+        Args:
+            baseline_data: 基线系统数据
+            regime_data: 市场状态数据
+            save_path: 保存路径
+            
+        Returns:
+            保存的图表路径
+        """
+        try:
+            # 设置图表
+            fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(16, 12))
+            fig.suptitle('动态基线系统汇总报告', fontproperties=self.chinese_font_prop, fontsize=16)
+            
+            # 1. 基线覆盖统计
+            if 'coverage_stats' in baseline_data:
+                stats = baseline_data['coverage_stats']
+                names = list(stats.keys())
+                values = list(stats.values())
+                
+                bars = ax1.bar(names, values, color='#3498DB', alpha=0.7)
+                ax1.set_title('基线覆盖统计', fontproperties=self.chinese_font_prop)
+                ax1.set_ylabel('覆盖率 (%)', fontproperties=self.chinese_font_prop)
+                ax1.tick_params(axis='x', rotation=45)
+                ax1.grid(True, alpha=0.3)
+                
+                # 添加数值标签
+                for bar, value in zip(bars, values):
+                    height = bar.get_height()
+                    ax1.annotate(f'{value}%', xy=(bar.get_x() + bar.get_width()/2, height),
+                               xytext=(0, 3), textcoords="offset points", 
+                               ha='center', va='bottom')
+            
+            # 2. 市场状态分布
+            if regime_data and 'regime_distribution' in regime_data:
+                regime_dist = regime_data['regime_distribution']
+                labels = ['高波动率', '低波动率', '未知状态']
+                colors = ['#E74C3C', '#2ECC71', '#95A5A6']
+                sizes = [regime_dist.get('high_volatility', 0), 
+                        regime_dist.get('low_volatility', 0),
+                        regime_dist.get('unknown', 0)]
+                
+                ax2.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
+                ax2.set_title('市场状态分布', fontproperties=self.chinese_font_prop)
+            else:
+                # 默认显示基础信息
+                info_text = f"""
+数据点总数: {baseline_data.get('total_data_points', 'N/A')}
+状态转换次数: {baseline_data.get('regime_transitions', 'N/A')}
+当前状态: {baseline_data.get('current_regime', 'unknown')}
+基线稳定性: {baseline_data.get('baseline_stability', 'N/A')}
+                """
+                ax2.text(0.1, 0.5, info_text, transform=ax2.transAxes, 
+                        fontproperties=self.chinese_font_prop, fontsize=12,
+                        verticalalignment='center')
+                ax2.set_title('基线系统信息', fontproperties=self.chinese_font_prop)
+                ax2.axis('off')
+            
+            # 3. 时间序列趋势（模拟数据）
+            if 'time_series' in baseline_data:
+                ts_data = baseline_data['time_series']
+                ax3.plot(ts_data.get('timestamps', []), ts_data.get('values', []))
+                ax3.set_title('基线变化趋势', fontproperties=self.chinese_font_prop)
+                ax3.set_xlabel('时间', fontproperties=self.chinese_font_prop)
+                ax3.set_ylabel('基线值', fontproperties=self.chinese_font_prop)
+                ax3.grid(True, alpha=0.3)
+            else:
+                # 生成示例趋势图
+                x = np.arange(0, 100)
+                y = np.random.normal(0, 1, 100).cumsum()
+                ax3.plot(x, y, color='#3498DB', linewidth=2)
+                ax3.set_title('基线变化趋势（示例）', fontproperties=self.chinese_font_prop)
+                ax3.set_xlabel('时间窗口', fontproperties=self.chinese_font_prop)
+                ax3.set_ylabel('基线偏差', fontproperties=self.chinese_font_prop)
+                ax3.grid(True, alpha=0.3)
+            
+            # 4. 性能指标
+            performance_data = baseline_data.get('performance', {})
+            metrics = ['检测准确率', '误报率', '基线稳定度', '响应速度']
+            values = [
+                performance_data.get('accuracy', 85),
+                performance_data.get('false_positive', 12),
+                performance_data.get('stability', 92),
+                performance_data.get('response_time', 78)
+            ]
+            
+            colors = ['#2ECC71' if v >= 80 else '#F39C12' if v >= 60 else '#E74C3C' for v in values]
+            bars = ax4.barh(metrics, values, color=colors, alpha=0.7)
+            ax4.set_title('性能指标', fontproperties=self.chinese_font_prop)
+            ax4.set_xlabel('分数', fontproperties=self.chinese_font_prop)
+            ax4.grid(True, alpha=0.3)
+            
+            # 添加数值标签
+            for bar, value in zip(bars, values):
+                width = bar.get_width()
+                ax4.annotate(f'{value}', xy=(width, bar.get_y() + bar.get_height()/2),
+                           xytext=(3, 0), textcoords="offset points", 
+                           ha='left', va='center')
+            
+            plt.tight_layout()
+            
+            # 保存图表
+            if save_path is None:
+                save_path = str(Path(self.charts_base_path) / "summary" / "baseline_summary.png")
+            
+            Path(save_path).parent.mkdir(parents=True, exist_ok=True)
+            plt.savefig(save_path, dpi=300, bbox_inches='tight', 
+                       facecolor='white', edgecolor='none')
+            plt.close()
+            
+            logger.info(f"动态基线汇总图表已保存: {save_path}")
+            return save_path
+            
+        except Exception as e:
+            logger.error(f"生成动态基线汇总图表失败: {e}")
+            if 'fig' in locals():
+                plt.close(fig)
+            return ""

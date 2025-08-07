@@ -8,7 +8,6 @@ import sys
 import os
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
 
 # 设置控制台编码
 if sys.platform.startswith('win'):
@@ -32,7 +31,6 @@ from src.patterns.detectors.dynamic_pattern_scanner import DynamicPatternScanner
 from src.analysis.pattern_outcome_tracker import PatternOutcomeTracker
 from src.patterns.base.robust_statistics import RobustStatistics
 from src.patterns.base.market_regime_detector import SmartRegimeDetector
-from src.data.models.base_models import MarketRegime
 
 
 def create_test_data():
@@ -257,7 +255,7 @@ def test_system_integration():
     total_patterns = sum(r.get('patterns_detected', 0) for r in results if r.get('success'))
     successful_scans = sum(1 for r in results if r.get('success'))
     
-    logger.info(f"集成测试结果：")
+    logger.info("集成测试结果：")
     logger.info(f"  成功扫描：{successful_scans}/3")
     logger.info(f"  总形态数：{total_patterns}个")
     

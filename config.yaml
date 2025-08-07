@@ -16,8 +16,8 @@ data_sources:
 # Dynamic Baseline System Configuration (Stage 0)
 dynamic_baseline:
   history_window: 500              # 滚动统计样本大小
-  min_stable_samples: 50           # 最少稳定样本数
-  cold_start_threshold: 200        # 冷启动阈值
+  min_stable_samples: 20           # 最少稳定样本数 (降低从50)
+  cold_start_threshold: 100        # 冷启动阈值 (降低从200)
   
   # Robust Statistics Configuration
   robust_statistics:
@@ -110,9 +110,9 @@ pattern_detection:
       
       # Fixed Validation Thresholds
       fixed_thresholds:
-        impulse_bar_ratio: 0.70        # 高动量K线占比阈值
-        max_retracement: 0.20          # 最大内部回撤比例
-        min_trend_strength: 0.3        # 最小趋势强度（R²）
+        impulse_bar_ratio: 0.30        # 高动量K线占比阈值 (降低从0.70)
+        max_retracement: 0.30          # 最大内部回撤比例 (放宽从0.20)
+        min_trend_strength: 0.2        # 最小趋势强度（R²） (降低从0.3)
         
       # Gap Detection Configuration
       gap_detection:
@@ -206,9 +206,9 @@ flagpole_detection:
   
   # Fixed Validation Thresholds
   fixed_thresholds:
-    impulse_bar_ratio: 0.70        # 高动量K线占比阈值
-    max_retracement: 0.20          # 最大内部回撤比例
-    min_trend_strength: 0.3        # 最小趋势强度（R²）
+    impulse_bar_ratio: 0.30        # 高动量K线占比阈值 (降低从0.70)
+    max_retracement: 0.30          # 最大内部回撤比例 (放宽从0.20)
+    min_trend_strength: 0.2        # 最小趋势强度（R²） (降低从0.3)
     
   # Gap Detection Configuration
   gap_detection:

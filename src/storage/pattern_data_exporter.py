@@ -10,11 +10,10 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 import uuid
-from dataclasses import asdict
 
 from src.data.models.base_models import (
     PatternRecord, PatternOutcomeAnalysis, MarketSnapshot,
-    InvalidationSignal, PatternOutcome, MarketRegime
+    InvalidationSignal
 )
 from loguru import logger
 

@@ -4,7 +4,6 @@
 检查数据库中的旗形记录
 """
 import sqlite3
-import pandas as pd
 
 def check_database():
     conn = sqlite3.connect('output/data/patterns.db')
