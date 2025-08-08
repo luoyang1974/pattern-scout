@@ -98,6 +98,15 @@ class CSVDataConnector(BaseDataConnector):
             else:
                 raise ValueError("No timestamp column found")
             
+            # 数据去重处理（基于timestamp列去重，保留最后一条记录）
+            original_count = len(df)
+            df = df.drop_duplicates(subset=['timestamp'], keep='last')
+            deduplicated_count = len(df)
+            
+            if original_count > deduplicated_count:
+                logger.info(f"Data deduplication: removed {original_count - deduplicated_count} duplicate records")
+                logger.info(f"After deduplication: {deduplicated_count} records")
+            
             # 排序以确保时间顺序
             df = df.sort_values('timestamp').reset_index(drop=True)
             
